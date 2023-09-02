@@ -1,0 +1,15 @@
+::-webkit-scrollbar {
+  width: 0.5em;
+  height: 0.5em;
+  display: none; /* Esta línea oculta la barra de desplazamiento */
+}
+
+
+#sidebarLeft{
+  overflow: auto;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+}

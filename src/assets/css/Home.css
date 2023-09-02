@@ -1,0 +1,14 @@
+
+:where(.css-dev-only-do-not-override-byeoj0).ant-menu-dark, :where(.css-dev-only-do-not-override-byeoj0).ant-menu-dark>.ant-menu {
+  color: rgba(255, 255, 255, 0.65);
+  background: #00353d;
+}
+:where(.css-dev-only-do-not-override-byeoj0).ant-layout .ant-layout-sider {
+  position: relative;
+  min-width: 0;
+  background: #00353d;
+  transition: all 0.2s,background 0s;
+}
+:where(.css-dev-only-do-not-override-byeoj0).ant-menu .ant-menu-item, :where(.css-dev-only-do-not-override-byeoj0).ant-menu .ant-menu-submenu, :where(.css-dev-only-do-not-override-byeoj0).ant-menu .ant-menu-submenu-title {
+  border-radius: 5px;
+}
