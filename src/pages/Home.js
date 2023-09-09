@@ -5,9 +5,15 @@ const Titulo = "Inicio";
 
 const Home = memo(() => {
   return (    
-    <Main.Antlayout>
-      <Main.Helmet title={`${process.env.REACT_APP_TITULO} - ${Titulo}` }/>      
-    </Main.Antlayout>
+    <>
+      <Main.Helmet title={`${process.env.REACT_APP_TITULO} - ${Titulo}` }/>     
+      <Main.AntLayout defaultOpenKeys={[]} defaultSelectedKeys={['home']}>
+        <>
+          Home
+        </>
+      </Main.AntLayout>
+    </>
+    
   );
 });
 

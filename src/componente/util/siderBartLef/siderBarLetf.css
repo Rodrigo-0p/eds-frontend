@@ -1,0 +1,109 @@
+.spaceAvatar{
+  margin: 0px 0px 0px 14px;
+}
+.contentUserName{
+  padding: 8px;  
+  font-size: 10px;
+  margin-left: -15px;  
+  display: flex;
+  align-items: center;
+  position: absolute;
+}
+
+.nombreDeusuario{
+  max-width: 130px;
+  padding: 5px; 
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.user{
+  font-weight: 700;
+}
+
+.buttonDropdown{
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  height:100%;
+}
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-menu-light:not(.ant-menu-horizontal) .ant-menu-submenu-title:hover, :where(.css-dev-only-do-not-override-nnuwmp).ant-menu-light>.ant-menu:not(.ant-menu-horizontal) .ant-menu-submenu-title:hover {
+  background-color: rgb(62 72 109 / 31%);
+}
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-menu-light .ant-menu-item-selected, :where(.css-dev-only-do-not-override-nnuwmp).ant-menu-light>.ant-menu .ant-menu-item-selected {
+  background-color: #767a8d;
+}
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-menu-light .ant-menu-item-selected, :where(.css-dev-only-do-not-override-nnuwmp).ant-menu-light>.ant-menu .ant-menu-item-selected {
+  color: #ebebeb;
+}
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-menu-light .ant-menu-submenu-selected >.ant-menu-submenu-title, :where(.css-dev-only-do-not-override-nnuwmp).ant-menu-light>.ant-menu .ant-menu-submenu-selected >.ant-menu-submenu-title {
+  color: #c4c7cb;
+}
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-menu-light .ant-menu-item:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected):hover, :where(.css-dev-only-do-not-override-nnuwmp).ant-menu-light>.ant-menu .ant-menu-item:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected):hover, :where(.css-dev-only-do-not-override-nnuwmp).ant-menu-light .ant-menu-item:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected) >.ant-menu-submenu-title:hover, :where(.css-dev-only-do-not-override-nnuwmp).ant-menu-light>.ant-menu .ant-menu-item:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected) >.ant-menu-submenu-title:hover {
+  color: rgb(255 255 255 / 88%);
+}
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-menu-inline .ant-menu-item {
+  height: 35px;
+}
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-menu-inline .ant-menu-sub.ant-menu-inline>.ant-menu-submenu>.ant-menu-submenu-title {
+  height: 35px;
+}
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-menu-inline >.ant-menu-item, :where(.css-dev-only-do-not-override-nnuwmp).ant-menu-vertical >.ant-menu-item, :where(.css-dev-only-do-not-override-nnuwmp).ant-menu-inline >.ant-menu-submenu>.ant-menu-submenu-title, :where(.css-dev-only-do-not-override-nnuwmp).ant-menu-vertical >.ant-menu-submenu>.ant-menu-submenu-title{
+  height: 35px;
+}
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-menu-light, :where(.css-dev-only-do-not-override-nnuwmp).ant-menu-light>.ant-menu {
+  color: rgb(255 255 255 / 88%);
+  background: #ab9e9e00;
+}
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-layout-header{
+  background: #60667e;
+}
+
+
+/* #sidebarLeft{
+  overflow: auto;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-image:url('../../../assets/img/sidebar.jpg');
+  background-size: cover;
+  background: linear-gradient(0deg, #464d69e0 0%, #464d69d4 100%);
+
+  &:before {    
+    content: "";
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(0deg,#464d69e0 0%,#464d69d4 100%);
+  }
+  
+} */
+
+#sidebarLeft {
+  overflow: auto;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(0deg,#464d69e0 0%,#464d69d4 100%),
+    url('../../../assets/img/sidebar.jpg') no-repeat center center;
+  background-size: cover;
+}

@@ -4,13 +4,14 @@ import axios                   from 'axios';
 import { message,Spin }        from 'antd';
 import { activarSpinner
        , desactivarSpinner }   from './sppiner';
-import Antlayout               from './antLayout';
+import AntLayout                from "./antLayout";
 import Helmet                  from 'react-helmet';
+import {DireccionMenu
+       ,Menu}                  from './FocusMenu/FocusMenu'
 
 const mayuscula    = (e) => {
     e.target.value = ("" + e.target.value).toUpperCase();
 };
-
 
 const Main = {
     _,
@@ -21,8 +22,10 @@ const Main = {
     activarSpinner,
     desactivarSpinner,
     Spin,
-    Antlayout,
-    Helmet
+    Helmet,
+    DireccionMenu,
+    Menu,
+    AntLayout
 }
 
 

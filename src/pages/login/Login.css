@@ -69,24 +69,24 @@ body {
 
 
 
-:where(.css-dev-only-do-not-override-byeoj0).ant-btn-primary {
+:where(.css-dev-only-do-not-override-nnuwmp).ant-btn-primary {
   background-color: #0a4b55;
 }
-:where(.css-dev-only-do-not-override-byeoj0).ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+:where(.css-dev-only-do-not-override-nnuwmp).ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
   background-color: #265259e8;
 }
-:where(.css-dev-only-do-not-override-byeoj0).ant-btn:not(:disabled):focus-visible {
+:where(.css-dev-only-do-not-override-nnuwmp).ant-btn:not(:disabled):focus-visible {
   outline: 4px solid #0a4b5536;
 }
 
-:where(.css-dev-only-do-not-override-byeoj0).ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
+:where(.css-dev-only-do-not-override-nnuwmp).ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
   border-color: #587f85;
 }
-:where(.css-dev-only-do-not-override-byeoj0).ant-btn-primary:not(:disabled):not(.ant-btn-disabled):active{
+:where(.css-dev-only-do-not-override-nnuwmp).ant-btn-primary:not(:disabled):not(.ant-btn-disabled):active{
   background-color: #265259e8;
 }
 
-:where(.css-dev-only-do-not-override-byeoj0).ant-input-affix-wrapper:focus, :where(.css-dev-only-do-not-override-byeoj0).ant-input-affix-wrapper-focused{
+:where(.css-dev-only-do-not-override-nnuwmp).ant-input-affix-wrapper:focus, :where(.css-dev-only-do-not-override-nnuwmp).ant-input-affix-wrapper-focused{
   border-color: #3e99a7;
 }
 
@@ -163,16 +163,16 @@ body {
 }
 
 /*---------Spiner ---------------*/
-:where(.css-dev-only-do-not-override-byeoj0).ant-spin-nested-loading .ant-spin-blur::after {
+:where(.css-dev-only-do-not-override-nnuwmp).ant-spin-nested-loading .ant-spin-blur::after {
   opacity: 0;
   pointer-events: auto;
 }
 
-:where(.css-dev-only-do-not-override-byeoj0).ant-spin .ant-spin-dot-spin{
+:where(.css-dev-only-do-not-override-nnuwmp).ant-spin .ant-spin-dot-spin{
   visibility: hidden;
 }
 
-:where(.css-dev-only-do-not-override-byeoj0).ant-spin-nested-loading .ant-spin-blur{
+:where(.css-dev-only-do-not-override-nnuwmp).ant-spin-nested-loading .ant-spin-blur{
   opacity: 1;
 }
 
@@ -186,4 +186,9 @@ body {
           user-select: none;
   pointer-events: none;
   cursor: wait;  
+}
+:where(.css-dev-only-do-not-override-nnuwmp).ant-btn-primary {
+  color: #fff;
+  background-color: #0a4b55;
+  box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1);
 }

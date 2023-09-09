@@ -4,7 +4,7 @@ import Lg from "../../pages/login/Login";
 
 const Route = [
     {
-        path: '/',
+        path: '/login',
         component: Lg,
     },
 ]

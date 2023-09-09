@@ -4,12 +4,19 @@
   display: none; /* Esta línea oculta la barra de desplazamiento */
 }
 
+body{
+  margin: 0px;
+}
 
-#sidebarLeft{
-  overflow: auto;
-  height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
+:where(.css-dev-only-do-not-override-byeoj0).ant-menu-light, :where(.css-dev-only-do-not-override-byeoj0).ant-menu-light>.ant-menu {
+  color: rgb(255 255 255);
+  background: rgba(0, 0, 0, 0);
+}
+
+.site-layout{
+  margin-left: 250px;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  transition: all 0.2s ease;
 }
