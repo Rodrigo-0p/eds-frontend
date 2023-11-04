@@ -18,5 +18,89 @@ body{
   -webkit-transition: all 0.2s ease;
   -moz-transition: all 0.2s ease;
   -o-transition: all 0.2s ease;
-  transition: all 0.2s ease;
+  transition: all 0.2s ease;  
+}
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-layout{
+  background: linear-gradient(0deg,#eff3ffe0 0%,#bfc1cc 100%);
+}
+
+.paper-style{
+  border-radius: 5px !important;
+  box-shadow: 0px 0px 10px 1px rgb(0 0 0 / 40%) !important;
+}
+
+.paper-header{
+  background: linear-gradient(0deg,#78819de0 0%,#61677f 100%);
+  box-shadow: -2px 3px 10px 0px rgb(0 0 0 / 40%);
+  padding: 4px 4px 0px 10px;
+  font-size:15px;
+  width:100%;
+  height: 40px;
+  border-radius: 5px 5px 0px 0px !important;
+}
+
+h4:where(.css-dev-only-do-not-override-nnuwmp).ant-typography, 
+div:where(.css-dev-only-do-not-override-nnuwmp).ant-typography-h4, 
+div:where(.css-dev-only-do-not-override-nnuwmp).ant-typography-h4>textarea, 
+:where(.css-dev-only-do-not-override-nnuwmp).ant-typography h4 {
+  margin-bottom: 0.5em;
+  color: rgb(254 254 254);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.4;
+  margin: 0px;
+}
+.conatainer-form{
+  background: #e3e3e3;
+  box-shadow: 2px 0px 10px 0px rgb(0 0 0 / 40%);
+  padding-bottom: 15px;
+  border-radius: 5px;
+  height: calc(100vh - 165px);
+}
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-form label {
+  font-size: 11px;
+}
+
+/* MODAL CONFIRMAR ANT */
+:where(.css-dev-only-do-not-override-nnuwmp).ant-modal-confirm .ant-modal-confirm-body .ant-modal-confirm-title{
+  display: contents;
+}
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-modal-confirm .ant-modal-confirm-body .ant-modal-confirm-title +.ant-modal-confirm-content {
+  border-top: 1px solid #0a4b5526;
+  border-bottom: 1px solid #0a4b5533;
+  margin: 6px;
+  padding: 10px;
+}
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-modal-confirm .ant-modal-confirm-btns{
+  margin-top:1px;
+}
+
+/* -------------------------------------------- */
+
+
+.ProgressBar-completed{  
+  height: 20px; 
+  width: 2%; 
+  background: #5a6978; 
+  transition: width 1s ease-in-out 0s; 
+  border-radius: inherit; 
+  display: flex; 
+  align-items: center; 
+  justify-content: flex-end
+}
+
+.ProgressBar-content{
+	height: 20px;
+	background: rgb(224, 224, 222);
+	border-radius: 50px;
+	width: 100%;
+	overflow: hidden;
+	visibility: hidden;
+	visibility: hidden;
+  position: fixed;
+	transition: width 2s ease-in-out 0s; 
 }

@@ -1,0 +1,11 @@
+.card_persona{
+  display: grid;
+  place-items: center;
+}
+.card_persona > .ant-card-body{
+  padding: 0px;
+}
+
+.total_registro_pg{
+  color: #96a2b2;
+}

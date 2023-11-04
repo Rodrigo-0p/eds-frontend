@@ -5,7 +5,11 @@ import Sider        from './siderBartLef/siderBartLetf';
 import { Redirect,
        useHistory } from 'react-router-dom';
 import Navbar       from './navbar/navbar';
+
+// CSS GENERICO
 import '../../assets/css/styles.css';
+import '../../assets/css/form.css';
+
 const { Content } = Layout;
 
 const AntLayout = (props) => {
@@ -24,7 +28,7 @@ const AntLayout = (props) => {
   }
 
   return (
-    <Layout>
+    <Layout  >
        {/* className="main-layout" */}
       <SessionTime CloseSession={CloseSession} />
       <Sider defaultOpenKeys={defaultOpenKeys} defaultSelectedKeys={defaultSelectedKeys} CloseSession={CloseSession} />
@@ -42,7 +46,7 @@ const AntLayout = (props) => {
               margin: 5,
               marginBottom:'0px',
               overflow:'auto',
-              scrollbarWidth: 'none',
+              scrollbarWidth: 'none',              
             }}
           > 
           {props.children}          

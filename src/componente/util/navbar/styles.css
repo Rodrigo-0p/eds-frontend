@@ -3,5 +3,9 @@
   padding-inline: 50px;
   color: #265259e8;
   line-height: 64px;
-  background: #545971cc;
+  background: linear-gradient(0deg,#464d69e0 0%,#464d69d4 100%);
+}
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-layout-header{
+  background: linear-gradient(0deg,#78819de0 0%,#61677f 100%);
 }

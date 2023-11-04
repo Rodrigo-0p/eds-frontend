@@ -3,7 +3,7 @@ import axios from "axios";
 export const Request = async(url, method, data ) =>{
     return await axios({
         method: method,
-        url: url,
+        url: process.env.REACT_APP_BASEURL + url,
         data: data,
         headers:{
                     Authorization : sessionStorage.getItem("token"),

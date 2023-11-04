@@ -109,6 +109,7 @@ const Login = memo(({history}) => {
         const { token } = resp.data;
         sessionStorage.setItem("token"            , token                   );
         sessionStorage.setItem("hash"             , resp.data.CRYPTPASS     );
+        sessionStorage.setItem("ruta_logo"        , resp.data.RUTA_LOGO     );
         sessionStorage.setItem("cod_empresa"      , resp.data.COD_EMPRESA   );
         sessionStorage.setItem("desc_empresa"     , resp.data.DESC_EMPRESA  );
         sessionStorage.setItem("cod_sucursal"     , resp.data.COD_SUCURSAL  );

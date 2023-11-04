@@ -1,6 +1,12 @@
 import { Result, Button } from 'antd';
-import{ Link } from 'react-router-dom';
+import{ Link,Redirect }   from 'react-router-dom';
+
 const NotFound = () =>{
+
+    if (!sessionStorage.getItem("hash")) {
+        return <Redirect to="/login" />;
+    }
+
     return (
         <Result
             status="404"
