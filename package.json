@@ -24,6 +24,7 @@
     "react-helmet": "^6.1.0",
     "react-hotkeys-hook": "^4.4.1",
     "react-idle-timer": "^5.7.2",
+    "react-number-format": "^4.9.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "5.0.1",
     "styled-components": "^6.0.7",

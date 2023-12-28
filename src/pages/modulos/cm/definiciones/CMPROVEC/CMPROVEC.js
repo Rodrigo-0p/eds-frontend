@@ -68,9 +68,9 @@ const [mdiasant  , setMdiasant ] = React.useState('N')
           'COD_USUARIO': sessionStorage.getItem('cod_usuario')
       }); 
       setMdiasant(result.data.outBinds ? result.data.outBinds.IND_MODIFICA_DIAS_ANT : 'N')
-  } catch (error) {
-    console.log(error) 
-  }
+    } catch (error) {
+      console.log(error) 
+    }
   }
   const inicialForm = async (data, url) => {
     try {
@@ -98,7 +98,6 @@ const [mdiasant  , setMdiasant ] = React.useState('N')
     }
   };
   const searchChange = (e)=>{
-    console.log(e.target.value);
     setTimeout(async()=>{
       var value = e.target.value;
       if(value.trim().length === 0){
@@ -251,7 +250,9 @@ const [mdiasant  , setMdiasant ] = React.useState('N')
             },4)
           }else{
             Main.desactivarSpinner();
-            Main.alert(resp.data.p_mensaje, '¡Atención!', 'alert', 'OK')
+            setTimeout(()=>{
+              Main.alert(resp.data.p_mensaje, '¡Atención!', 'alert', 'OK')  
+            },120)
           }            
         });
         
@@ -294,13 +295,14 @@ const [mdiasant  , setMdiasant ] = React.useState('N')
     }
 
     Main.modifico(FormName);
-    let rowValue           = Main.g_getRowFocus(idComp);
-    let rowIndex           = index !== false ? index.index + 1 : rowValue[0].rowIndex === -1 ? 0 : rowValue[0].rowIndex;
+    let rowValue            = Main.g_getRowFocus(idComp);
+    let rowIndex            = index !== false ? index.index + 1 : rowValue[0].rowIndex === -1 ? 0 : rowValue[0].rowIndex;
 
-    let newRowData         = {...objetoinicial} 
-    newRowData.COD_EMPRESA = cod_empresa;
-    newRowData.ESTADO      = 'I';
-    newRowData.TIP_FLETE   = 'N';
+    let newRowData          = {...objetoinicial} 
+    newRowData.COD_EMPRESA  = cod_empresa;
+    newRowData.ESTADO       = 'I';
+    newRowData.TIP_FLETE    = 'N';
+    newRowData.CANT_DIA_ANT = '';
     newRowData.MODIFICA_DIAS_ANT = mdiasant;
     
     refData.current.hotInstance.alter('insert_row', rowIndex);    

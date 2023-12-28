@@ -11,7 +11,6 @@ import error           			     		 from '../../assets/icons/error.svg';
 import confirmar 								  	 from '../../assets/icons/icon-Exclamacion.png';
 import alerta          					  	 from '../../assets/icons/advertencia.svg';
 import { v4 as uuidID } 			 			 from "uuid";
-
 import {  Typography } 				    	 from 'antd'
 import {  modifico, setModifico 	}  from './ButtonCancelar/cancelar'
 import 	  FormModalSearch 					 from './ModalForm/FormModalSearch';
@@ -22,12 +21,15 @@ import    moment										 from 'moment'
 import    validarCamposRequeridos,
 			 {  quitarClaseRequerido		}	 from './campoRequerido/mainCampRequerido'
 import {  useHotkeys 							}  from 'react-hotkeys-hook';
+import NumberFormat 								 from "react-number-format";
 import {  GeneraUpdateInsertCab
 		  	, GeneraUpdateInsertDet 	}  from './generaInsertUpdate/mainGeneraUpdateInsert';	
 import {  activarSpinner 
 	      , desactivarSpinner				}  from './sppiner';
 import ProgressBar                   from "@ramonak/react-progress-bar";
 import { setBuscar,getViewBuscar	}  from './HeaderMenu/iconButtonBuscar';
+import Fieldset                      from './Fieldset/Fieldset';
+
 // Handsontable
 import HandsontableGrid,{	
 		   g_getRowFocus  , setFocusedRowIndex
@@ -41,11 +43,11 @@ import HandsontableGrid,{
 import { hotTableRequerido } 			  from './handsontable/hotTableRequerido';
 // FORM 1
 import {
-	message	, Spin	  , Row	  , Col	   ,
-	Form		, Card	  , Input , Button ,
-	Modal		, Divider , Radio , Select ,
-	Checkbox, List } from 'antd';
-
+	message	, Spin	  , Row	    , Col	   ,
+	Form		, Card	  , Input   , Button ,
+	Modal		, Divider , Radio   , Select ,
+	Checkbox, List 		, Tooltip	, Tabs } from 'antd';
+const { TabPane } = Tabs;
 const { Title } = Typography;
 
 
@@ -80,6 +82,10 @@ const format_h = (date_time) => {
 	return DateUtc.format('DD/MM/YYYY HH:mm:ss');
 }
 
+const soloNumero = (e) =>{
+	var key = window.event ? e.which : e.keyCode;
+	if (key < 48 || key > 57) e.preventDefault();
+}
 
 var interval = 0
 const clearLoadingProgressBar = (idComp) => {        
@@ -150,7 +156,6 @@ const startLoadingProgressBar = (idComp, colorCarga = '#5a6978',tiempo = 1000) =
         }
     },tiempo); 
 };
-
 const ProgressBarMain = (props)=>{
     return(
         <ProgressBar {...props} 
@@ -160,6 +165,33 @@ const ProgressBarMain = (props)=>{
            className={`${props.idComp}-ProgressBar-content ProgressBar-content`}
         />
     )
+}
+const numerico = (valor, decimales = null)=>{
+	if (typeof valor === 'string') {	
+		// Redondear el valor y convertirlo a cadena
+		let result = Math.round(valor).toString();
+		if(result == "NaN") valor = valor;
+		
+		// Eliminar puntos y reemplazar comas por puntos
+		valor = valor.split('.').join('');
+		valor = valor.split(',').join('.');
+	
+		// Convertir la cadena a un número
+		let numero = Number(valor.replace(/[^0-9.]/g, ""));
+	
+		// Verificar si el resultado de parseFloat es un número válido
+		if (!isNaN(numero)) {
+			// Redondear a la cantidad de decimales especificada (si se proporciona)
+			if (decimales !== null) {
+				numero = parseFloat(numero.toFixed(decimales));
+			}
+			return numero;
+		} else {
+			return null;
+		}
+	} else {
+		return valor; 
+	}	
 }
 
 var Guardar = 'f10';
@@ -193,6 +225,10 @@ const Main = {
 	, GeneraUpdateInsertDet
 	, setBuscar
 	, getViewBuscar
+	, Fieldset
+	, soloNumero
+	, NumberFormat
+	, numerico
 	// ANT
 	, Spin
 	, message
@@ -208,6 +244,9 @@ const Main = {
 	, Select
 	, Checkbox
 	, List
+	, Tooltip
+	, Tabs
+	, TabPane
 	//----------------   
 	, ProgressBarMain
 	, startLoadingProgressBar

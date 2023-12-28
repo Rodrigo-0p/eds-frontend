@@ -3,6 +3,7 @@ export const objetoinicial = {
   , COD_EMPRESA             : ''
   , COD_PROVEEDOR           : ''
   , COD_PERSONA             : ''
+  , COD_PERSONA_ANT         : ''
   , PLAZO                   : ''
   , COD_RUBRO               : ''
   , DESC_RUBRO              : ''

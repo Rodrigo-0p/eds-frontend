@@ -9,3 +9,12 @@
 :where(.css-dev-only-do-not-override-nnuwmp).ant-layout-header{
   background: linear-gradient(0deg,#78819de0 0%,#61677f 100%);
 }
+
+.layout-header{
+  height: 53px;
+}
+
+.header-nabvar-icon{
+  margin-top: 8px;
+  padding: 4px;
+}

@@ -34,18 +34,16 @@ export const hotTableRequerido = async (ref,formName,importa_insertDefault = fal
 
           for (let i = 0; i < rowDet.length; i++) {
             const items = rowDet[i];
-            if(items[element.data]){              
-              if(items[element.data] === ''){
-                Addband  = true;
-                let IndexColumn  =  ref.grid[formName].current.hotInstance.propToCol(element.data);
-                columnaRequerido = {'label':element.title,'ID':element.data, indexRow:i, indexComun:IndexColumn}
-                break
-              }
-
-            }else if( items[element.data]?.length < 0   || 
+            
+            if(items[element.data] === ''){
+              Addband  = true;
+              let IndexColumn  =  ref.grid[formName].current.hotInstance.propToCol(element.data);
+              columnaRequerido = {'label':element.title,'ID':element.data, indexRow:i, indexComun:IndexColumn}
+              break          
+            }else if( (items[element.data]?.length < 0  || 
                       items[element.data] === undefined || 
                       items[element.data] === null      || 
-                      items[element.data] === ""        ){//vtmonocr
+                      items[element.data] === ""        ) && !items.insertDefault){//vtmonocr
               Addband  = true;
               var IndexColumn  =  ref.grid[formName].current.hotInstance.propToCol(element.data);              ;
               columnaRequerido = {'label':element.title,'ID':element.data, indexRow:i, indexComun:IndexColumn}

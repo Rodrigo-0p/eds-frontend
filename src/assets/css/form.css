@@ -45,3 +45,7 @@
 :where(.css-dev-only-do-not-override-nnuwmp).ant-input-disabled, :where(.css-dev-only-do-not-override-nnuwmp).ant-input[disabled]{
 	color: rgba(0, 0, 0, 0.605);
 }
+
+input:disabled {
+	background: white !important;
+}

@@ -594,6 +594,7 @@ const MainBs = memo(() => {
           refCab.current.data[getIndice()][key] = data[key]
         }
       }
+      Main.modifico(FormName)
       typeEvent()
     })    
   }

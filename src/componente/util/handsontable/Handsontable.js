@@ -112,8 +112,8 @@ export const columnDependencia = async (dependencia,refData,row,columnModal,row_
 
     if(items?.remove === true || items?.remove === undefined){
       if(rowDelete){
-        let columnIndex1 = refData.current.hotInstance.propToCol(rowDelete[0].ID)
-        let columnIndex2 = refData.current.hotInstance.propToCol(rowDelete[1].ID)
+        let columnIndex1 = refData.current.hotInstance.propToCol(rowDelete[0].data)
+        let columnIndex2 = refData.current.hotInstance.propToCol(rowDelete[1].data)
         
         if(!Main._.isNull(refData.current.__hotInstance.toVisualColumn(columnIndex1))){
           refData.current.__hotInstance.setDataAtCell(rowIndex,columnIndex1,"")
@@ -292,11 +292,11 @@ export var ArrayDependenciaGlobal = [];
 const HandsontableGrid = ({ refData                    , columns = []        , columnModal= false ,  idComp = '',FormName = '' , setfocusRowIndex = false,
                             height                     , columnNavigationEnter = [] , 
                             setUpdateValue_ant = false , setUpdateValue_desp , setLastFocusNext  = false, columBuscador = ''  ,buttomAccion = false,
-                            maxFocus                   , dataCabecera        , setClickCell       , multipleHeader, nextFocus = false ,
+                            maxFocus                   , dataCabecera        , setClickCell       , multipleHeader, nextFocus = false , setUpdateEdit,
                             colorButtom = false}) => {
 
   const refModal            = React.useRef({  modalColumn : []
-                                            , data        : []
+                                            , data        : []                                            
                                             , ModalTitle  : ''
                                             , idInput     : ''
                                             , dataParams  : ''
@@ -368,7 +368,7 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
       let nameColumn = columns[focusValida.columnIndex].data
       let valorIndex = [focusValida.rowIndex,focusValida.columnIndex,focusValida.rowIndex,focusValida.columnIndex] 
       let e          = { keyCode : 13}
-      validaInput(row[nameColumn],valorIndex,e)
+      if(row[nameColumn]) validaInput(row[nameColumn],valorIndex,e);
     }
     
     // let valor = refData.current.__hotInstance.getSourceDataAtRow(coords.row)
@@ -440,7 +440,7 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
               },
             });
           },10)       
-          return true
+          return {valor:true, nameColumn:dataName}
         }else{
           ArrayDataDependencia = [...ArrayDataDependencia,{
             [dataName]:infoData[dataName]
@@ -548,8 +548,10 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
           var AuxDatamodal = await getRowDataModal(url,'POST', {} ,ArrayDataDependencia)
           
      
-          setShows(true);
-          
+          setShows(true);          
+          refModal.current.dataParams   = { dependencia : ArrayDataDependencia
+                                          , cod_empresa:sessionStorage.cod_empresa
+                                          }
           refModal.current.idInput      = element.prop;
           refModal.current.ModalTitle   = columnModal.title[0][element.prop];
           refModal.current.modalColumn  = columnModal[element.prop];
@@ -626,7 +628,7 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
         
         if(columns[rowColumn].type !== 'date'){
             if(evet1.length > 0){
-              let value = refData.current.__hotInstance.view.settings.data[valorIndex[0]]
+              let value = refData.current.__hotInstance.view.settings.data[valorIndex[0] !== -1 ? valorIndex[0] : 0]
               if(value.insertDefault){
                 value.inserted      = true;
                 value.insertDefault = false;
@@ -910,9 +912,9 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
           setFocusedRowIndex(rowIndex,false,refData,idComp);
           if(nextFocus && (e.key === 'Enter' || e.key  === 'Tab') ){
             const totalColumns = refData.current.hotInstance.countCols() - 1;
-            let rowIndex       = g_getRowFocus(idComp)[0];
-            if(totalColumns === rowIndex.columnIndex_ant){
-              refData.current.hotInstance.selectCell(rowIndex.rowIndex_ant, rowIndex.columnIndex_ant)
+            let row           = g_getRowFocus(idComp)[0];
+            if(totalColumns === row.columnIndex_ant || totalColumns === rowIndex){
+              refData.current.hotInstance.selectCell(row.rowIndex_ant, totalColumns === row.columnIndex_ant ? row.columnIndex_ant : rowIndex )
               refData.current.hotInstance.deselectCell();              
               refData.current.hotInstance.removeHook("beforeKeyDown", KeyDown);
               refKeyDown.current.KeyDown = true;
@@ -1006,19 +1008,54 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
       console.log(error);
     }
   }  
+  // const afterChange = (changes, source)=>{
+  //   if(changes){
+  //     if(source === 'edit'){
+  //       var columIndex = refData.current.hotInstance.propToCol(changes[0][1])
+
+  //       if(columns[columIndex].type === 'numeric' || columns[columIndex].type === 'checkbox' || columns[columIndex].type === 'date' || columns[columIndex].type === 'select'){
+  //         if(changes[0][2] !== changes[0][3]){
+  //           Main.modifico(FormName);
+  //           setCambiosPendiente(idComp,true)
+
+  //           if(columns[columIndex].type === 'date' || columns[columIndex].type === 'checkbox'){
+  //             let value = refData.current.__hotInstance.view.settings.data[changes[0][0]]
+              
+  //             if(value.insertDefault){
+  //               value.inserted      = true;
+  //               value.insertDefault = false;
+  //             }else if(value.inserted){
+  //               value.inserted      = true;
+  //               value.insertDefault = false;
+  //             }else if(!value.inserted || !value.insertDefault){
+  //               value.updated       = true;
+  //             }
+  //           }
+  //         }
+  //         if(columns[columIndex].type !== 'date' && columns[columIndex].type !== "select"){
+  //           setFocusedRowIndex(changes[0][0],false,refData,idComp);  
+  //         }else{
+  //           setFocusedRowIndex(changes[0].rowIndex,false,refData,idComp);
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
   const afterChange = (changes, source)=>{
     if(changes){
       if(source === 'edit'){
         var columIndex = refData.current.hotInstance.propToCol(changes[0][1])
 
+        if(columns[columIndex].edit && setUpdateEdit) setUpdateEdit(changes)
+
         if(columns[columIndex].type === 'numeric' || columns[columIndex].type === 'checkbox' || columns[columIndex].type === 'date' || columns[columIndex].type === 'select'){
           if(changes[0][2] !== changes[0][3]){
-            Main.modifico(FormName);
+            Main.modifico(FormName)
             setCambiosPendiente(idComp,true)
 
-            if(columns[columIndex].type === 'date'){
+            if(columns[columIndex].type === 'date' || columns[columIndex].type === 'checkbox'){
               let value = refData.current.__hotInstance.view.settings.data[changes[0][0]]
-              
+              // changes[0][0]
               if(value.insertDefault){
                 value.inserted      = true;
                 value.insertDefault = false;
@@ -1034,6 +1071,23 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
             setFocusedRowIndex(changes[0][0],false,refData,idComp);  
           }else{
             setFocusedRowIndex(changes[0].rowIndex,false,refData,idComp);
+          }
+        }else{
+          if(changes[0][2] !== changes[0][3]){
+            Main.modifico(FormName);
+            setCambiosPendiente(idComp,true)
+            let value = refData.current.__hotInstance.view.settings.data[changes[0][0]]
+          
+            if(value.insertDefault){
+              value.inserted      = true;
+              value.insertDefault = false;
+            }else if(value.inserted){
+              value.inserted      = true;
+              value.insertDefault = false;
+            }else if(!value.inserted || !value.insertDefault){
+              value.updated       = true;
+            }
+
           }
         }
       }
@@ -1076,26 +1130,54 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
     }
 
     for (let i = 0; i < changes.length; i++) {
-      const [prop, newVal] = changes[i];
+      // eslint-disable-next-line
+      const [row, prop, oldVal, newVal] = changes[i];
       let columnIndex = refData.current.hotInstance.propToCol(prop)
-      if (columns[columnIndex]){
-        if (columns[columnIndex].type === 'numeric' && !isNumeric(newVal)) {
-          // Rechazar el cambio si el nuevo valor no es numérico
-          if(newVal !== "") return false;
-        }else if(columns[columnIndex].type === 'date'){
-          let valor = isValidDate(newVal)
-          if(valor.isDate){
-            changes[i][3] = valor.date;
-          }else{
-            return false
-          }        
-        }else if(columns[columnIndex].type === 'select'){
-          const item = columns[columnIndex].options.find(({ id }) => id === newVal);
-          if(!item) return false
-        }
+      if (columns[columnIndex].type === 'numeric' && !isNumeric(newVal)) {
+        // Rechazar el cambio si el nuevo valor no es numérico
+        if(newVal !== "") return false;
+      }else if(columns[columnIndex].type === 'date'){
+        let valor = isValidDate(newVal)
+        if(valor.isDate){
+          changes[i][3] = valor.date;
+        }else{
+          return false
+        }        
+      }else if(columns[columnIndex].type === 'select'){
+        const item = columns[columnIndex].options.find(({ id }) => id === newVal);
+        if(!item) return false
       }
     }
   };
+  // const onBeforeChange = (changes,source) => {
+    
+  //   // Antes de que se realice un cambio, almacenamos el valor actual de la celda en previousValueRef.
+  //   if (changes && changes.length > 0) {
+  //     const [row, prop] = changes[0];
+  //     previousEditRef.current = { row, prop };
+  //   }
+
+  //   for (let i = 0; i < changes.length; i++) {
+  //     const [prop, newVal] = changes[i];
+  //     let columnIndex = refData.current.hotInstance.propToCol(prop)
+  //     if (columns[columnIndex]){
+  //       if (columns[columnIndex].type === 'numeric' && !isNumeric(newVal)) {
+  //         // Rechazar el cambio si el nuevo valor no es numérico
+  //         if(newVal !== "") return false;
+  //       }else if(columns[columnIndex].type === 'date'){
+  //         let valor = isValidDate(newVal)
+  //         if(valor.isDate){
+  //           changes[i][3] = valor.date;
+  //         }else{
+  //           return false
+  //         }        
+  //       }else if(columns[columnIndex].type === 'select'){
+  //         const item = columns[columnIndex].options.find(({ id }) => id === newVal);
+  //         if(!item) return false
+  //       }
+  //     }
+  //   }
+  // };
 
   const getHeaderAlignment = (col) => {
     switch (columns[col]?.className) {
@@ -1300,7 +1382,7 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
               readOnly={col.readOnly}              
               correctFormat={true}
               columnSorting={col.sorter === true ? {headerAction:true} : {headerAction:false}}
-              dateFormat="DD/MM/YYYY"
+              dateFormat={col.hora ? "DD/MM/YYYY HH:mm" : "DD/MM/YYYY"}
               datePickerConfig={{
                 showOnFocus: false, // Desactivar el calendario al enfocar el campo
                 showWeekNumber: false,

@@ -1,0 +1,17 @@
+
+.STARTICU_Divider{
+  font-family: 'Roboto', sans-serif;
+  padding-bottom: 3px;
+  font-weight: bold !important;
+  width: auto;
+  color: #737a92;
+  padding: 0 10px;
+  border-bottom: none;
+  margin-bottom: 0px !important;
+  margin: 6px 0 !important;
+  font-size: 15px !important;
+}
+
+.STARTICU_Divider > span{
+  color: rgb(115 122 146) !important;  
+}

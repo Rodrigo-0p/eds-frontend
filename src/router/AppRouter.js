@@ -9,11 +9,13 @@ import Home                   from '../pages/Home';
 
 import bs                     from '../router/modulosRouter/bs';
 import cm                     from '../router/modulosRouter/cm';
+import vt                     from '../router/modulosRouter/vt';
+import st                     from '../router/modulosRouter/st';
 
 // import TEST                   from '../pages/modulos/test/prueba'
 
 const Router = () => {
-    const route = _.union(Lgn,bs,cm);
+    const route = _.union(Lgn,bs,cm,vt,st);
     return (
         <BrowserRouter>       
             <Switch>
