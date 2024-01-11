@@ -167,6 +167,10 @@
   width: auto !important; 
 }
 
+.handsontable col.rowHeader {
+  width: 100px;
+}
+
 .htDropdownMenu .ht_master table.htCore{
   border-color: #fff0;
 }
@@ -266,8 +270,8 @@ select.ht_editor_visible{
 }
 
 .handsontable_opcion > .ht_master > .wtHolder > .wtHider > .wtSpreader > .htCore > tbody > tr > td.handsontable_opcion  {
-  background: #2d3b48;
-  color: aliceblue;
+  background: #ffffff;
+  color: black;
   font-size: 12px;
 }
 

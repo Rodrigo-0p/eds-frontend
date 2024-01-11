@@ -69,7 +69,7 @@ const columnModal = {
 };
 
 export const columns = [
-  { data: 'COD_SUBCLIENTE'  , title: 'Sub Cliente'    , width : 20  , type:'numeric'        , className: 'htLeft'                 , readOnly:false }, 
+  { data: 'COD_SUBCLIENTE'  , title: 'Sub Cliente'    , width : 20  , type:'numeric'        , className: 'htLeft'                 , readOnly:true }, 
   { data: 'DESCRIPCION'     , title: 'Descripción'    , width : 130 , readOnly:false        , filter:false    , textWrap:true     , requerido:true , upper:true}, 
   { data: 'COD_LISTA_PRECIO', title: 'Lista de Precio', width : 20  , className: 'htLeft'   , readOnly:false  , sorter:false      , requerido:true}, 
   { data: 'COD_PAIS'        , title: 'Pais'           , width : 20  , className: 'htLeft'   , readOnly:false  , filter:false      , requerido:true , sorter: false ,upper:true },  
@@ -105,7 +105,7 @@ const VTCLIENT = ({ form     , refGrid  , FormName         , idComp             
               onKeyUp={handleKeyUp} 
               onChange={handleInputChange} 
               onKeyDown={handleKeyDown} 
-              // ref={refs.refCodPersona} 
+              ref={stateRef.bloqueoPersona} 
               className='search_input requerido' name="COD_PERSONA" />
             </Main.Form.Item>
           </Main.Col>

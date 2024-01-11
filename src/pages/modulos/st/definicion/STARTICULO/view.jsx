@@ -26,7 +26,7 @@ const columnModal = {
 };
 
 export const columns = [
-  { data: 'COD_UNIDAD_REL' , title: 'U.M'            , width : 25  , className: 'htLeft'   , requerido:true  , readOnly:false   }, 
+  { data: 'COD_UNIDAD_REL' , title: 'U.M'            , width : 25  , className: 'htLeft'   , requerido:true  , readOnly:true   }, 
   { data: 'REFERENCIA'     , title: 'Referencia'     , width : 130 , readOnly:false        , requerido:true  , filter:false    , textWrap:true    }, 
   { data: 'MULT'           , title: 'Cantidad'       , width : 40  , type:'numeric'        , requerido:true  , className: 'htLeft',edit:true       , readOnly:false }, 
   { data: 'KG_PESO_NETO'   , title: 'Peso(Kg)'       , width : 40  , type:'numeric'        , requerido:true  , className: 'htLeft',edit:true       , readOnly:false }, 
@@ -76,6 +76,29 @@ const STARTICU = memo(({form     , refGrid  , FormName     , idComp     , dataRe
                   <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className='requerido'  />
               </Main.Form.Item>
               <Main.Form.Item name="DESC_MARCA" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
+                  <Main.Input disabled />
+              </Main.Form.Item>
+            </Main.Form.Item>
+          </Main.Col>
+
+          <Main.Col  span={24}>
+            <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Linea</label>}>
+              <Main.Form.Item name="COD_LINEA" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
+                  <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className='requerido'  />
+              </Main.Form.Item>
+              <Main.Form.Item name="DESC_LINEA" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
+                  <Main.Input disabled />
+              </Main.Form.Item>
+            </Main.Form.Item>
+          </Main.Col>
+
+
+          <Main.Col  span={24}>
+            <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Categoria</label>}>
+              <Main.Form.Item name="COD_CATEGORIA" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
+                  <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className='requerido'  />
+              </Main.Form.Item>
+              <Main.Form.Item name="DESC_CATEGORIA" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
                   <Main.Input disabled />
               </Main.Form.Item>
             </Main.Form.Item>
@@ -142,7 +165,7 @@ const STARTICU = memo(({form     , refGrid  , FormName     , idComp     , dataRe
               columns={columns}
               FormName={FormName}
               idComp={idComp}// id del componente
-              height={280}
+              height={220}
               setfocusRowIndex={setfocusRowIndex}
               columnNavigationEnter={columnNavigationEnter}
               colorButtom={false}

@@ -316,9 +316,6 @@ const MainVt = memo(({history, location, match}) => {
       });  
       refData.current.hotInstance.selectCell(rowIndex, 0);
     }
-    setTimeout(()=>{
-      typeEvent();
-    })
   }
   const deleteRow = async ()=>{
     if(!refAdd.current.bandNew){

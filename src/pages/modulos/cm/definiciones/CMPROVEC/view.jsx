@@ -14,11 +14,17 @@ const columnModal = {
   config: {} 
 };
 
+const concepto    = [   
+  { id:'N' , label:'Ninguno' , isNew:true}, 
+  { id:'C' , label:'C.I.F'  }, 
+  { id:'F' , label:'F.O.B'  },   
+]
+
 export const columns = [
   { data: 'COD_PROVEEDOR' , title: 'código'    , width : 5  , className: 'htLeft'   , readOnly:true   , sorter:false      , searchIcon:true}, 
-  { data: 'COD_PERSONA'   , title: 'Persona'   , width : 5  , className: 'htLeft'   , readOnly:false  , filter:true       , searchIcon:true , requerido:true  , sorter: false  },  
+  { data: 'COD_PERSONA'   , title: 'Persona'   , width : 5  , className: 'htLeft'   , readOnly:true   , filter:true       , searchIcon:true , requerido:true  , sorter: false  },  
   { data: 'DESC_PERSONA'  , title: 'Nombre'    , width : 45 , className: 'htLeft'   , readOnly:true   , filter:true       , searchIcon:true , requerido:true }, 
-  { data: 'TIP_FLETE'     , title: 'Tip.Flete' , width : 5  , className: 'htLeft'   , readOnly:false  , filter:false     },
+  { data: 'TIP_FLETE'     , title: 'Tip.Flete' , width : 5  , className: 'htLeft'   , readOnly:false  , filter:false      , options:concepto,  type:'select'},
   { data: 'ESTADO'        , title: 'Estado'    , width : 5  , className: 'htCenter' , type:'checkbox' , checkbox:['A','I'], readOnly:false }, 
 ]
 

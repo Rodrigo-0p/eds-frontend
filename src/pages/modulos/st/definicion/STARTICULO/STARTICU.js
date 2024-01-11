@@ -4,7 +4,7 @@ import STARTICU,{columns} from './view.jsx';
 import mainUrl            from './url/mainUrl';
 import mainInput          from './inputValida/mainInputValida'
 import {objetoInicialCab,
-        objetoInicialDet} from './ObjetoInicila/mainInicial'
+        objetoInicialDet} from './ObjetoInicial/mainInicial'
 import './styles/STARTICU.css'
 const FormName     = 'STARTICU';
 const TituloList   = "Articulos";
@@ -300,6 +300,9 @@ const MainST = memo(({history, location, match}) => {
       refData.current.hotInstance.updateSettings({      
         cellRow:rowIndex,
       });  
+
+      habilitar_columna(rowIndex)
+
       refData.current.hotInstance.selectCell(rowIndex, 0);
 
       setTimeout(()=>{        
@@ -378,6 +381,9 @@ const MainST = memo(({history, location, match}) => {
     if(info?.data?.rows?.length === 0 || info?.data?.rows === undefined){
       let valor = await getParamsDetalle(idCabecera,indexRow)
       content   = [valor]
+      setTimeout(()=>{
+        habilitar_columna(0)  
+      },100)      
     }else{
       content = info.data.rows;
     }
@@ -385,6 +391,22 @@ const MainST = memo(({history, location, match}) => {
     refData.current?.hotInstance.loadData(content)
     Main.setFocusedRowIndex(0,undefined,refData,idComp);
     ver_bloqueo(f7)
+  }
+  const habilitar_columna = (rowIndex)=>{
+    const meta = refData.current.hotInstance.getCellMetaAtRow(rowIndex);
+    if(meta.length > 0){
+      meta[0].readOnly = false
+      meta[1].readOnly = false
+      meta[2].readOnly = false
+      meta[3].readOnly = false
+      meta[4].readOnly = false
+      meta[5].readOnly = false
+      meta[6].readOnly = false  
+      meta[7].readOnly = false 
+      meta[8].readOnly = false  
+    }  
+    refData.current.hotInstance.setCellMetaObject(rowIndex, meta);
+    refData.current.hotInstance.updateSettings({});
   }
   const manejaF7 = (idFocus)=>{
     Main.activarSpinner()
@@ -452,6 +474,8 @@ const MainST = memo(({history, location, match}) => {
                    , COD_PROVEEDOR_DFLT  : info?.COD_PROVEEDOR_DFLT  ? info?.COD_PROVEEDOR_DFLT  : ''
                    , COD_RUBRO      : info?.COD_RUBRO      ? info?.COD_RUBRO      : ''
                    , COD_MARCA      : info?.COD_MARCA      ? info?.COD_MARCA      : ''
+                   , COD_LINEA      : info?.COD_LINEA      ? info?.COD_LINEA      : ''
+                   , COD_CATEGORIA  : info?.COD_CATEGORIA  ? info?.COD_CATEGORIA  : ''
                    , COD_GRUPO      : info?.COD_GRUPO      ? info?.COD_GRUPO      : ''
                    , COD_IVA        : info?.COD_IVA        ? info?.COD_IVA        : ''
                 }
@@ -668,7 +692,7 @@ const MainST = memo(({history, location, match}) => {
         default:
           break;
       }
-      if (['COD_PROVEEDOR_DFLT','COD_MARCA','COD_RUBRO','COD_GRUPO','COD_IVA'].includes(e.target.id)) {
+      if (['COD_PROVEEDOR_DFLT','COD_MARCA','COD_RUBRO','COD_GRUPO','COD_IVA','COD_LINEA','COD_CATEGORIA'].includes(e.target.id)) {
         ValidarUnico(e.target.id, e.target.value);      
       }
     }else if (['F7', 'F8'].includes(e.key)) {
@@ -685,7 +709,7 @@ const MainST = memo(({history, location, match}) => {
         Main.alert('Hay cambios pendientes. ¿Desea guardar los cambios?','Atencion!','confirm','Guardar','Cancelar',guardar,funcionCancelar)
       }
     } else if (e.key === 'F9' && 
-      ['COD_PROVEEDOR_DFLT','COD_MARCA','COD_RUBRO','COD_GRUPO','COD_IVA'].includes(e.target.id)) {
+      ['COD_PROVEEDOR_DFLT','COD_MARCA','COD_RUBRO','COD_GRUPO','COD_IVA','COD_LINEA','COD_CATEGORIA'].includes(e.target.id)) {
         e.preventDefault()
       let aux = '';
 
@@ -695,6 +719,7 @@ const MainST = memo(({history, location, match}) => {
       refModal.current.ModalTitle   = items.title;
       refModal.current.modalColumn  = items.column;
       refModal.current.url_buscador = items.url;
+      
       Main.activarSpinner()
       switch (e.target.id) {
         case "COD_PROVEEDOR_DFLT":
@@ -707,6 +732,16 @@ const MainST = memo(({history, location, match}) => {
           refModal.current.data = aux
           refModal.current.dataParams = { cod_empresa }
           break;
+        case "COD_LINEA":
+          aux = await getData({ valor: 'null',cod_empresa,cod_marca:form.getFieldValue('COD_MARCA')}, mainUrl.url_buscar_linea);
+          refModal.current.data = aux
+          refModal.current.dataParams = { cod_empresa,cod_marca:form.getFieldValue('COD_MARCA') }
+          break;
+        case "COD_CATEGORIA":
+        aux = await getData({ valor: 'null',cod_empresa,cod_linea:form.getFieldValue('COD_LINEA')}, mainUrl.url_buscar_segmento);
+        refModal.current.data = aux
+        refModal.current.dataParams = { cod_empresa,cod_linea:form.getFieldValue('COD_LINEA') }
+        break;
         case "COD_RUBRO":
           aux = await getData({ valor: 'null',cod_empresa }, mainUrl.url_buscar_rubro);
           refModal.current.data = aux

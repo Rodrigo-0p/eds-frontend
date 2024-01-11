@@ -536,6 +536,7 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
       if(columnModal.urlBuscador.length === 0) return
       if(!element.readOnly && columnModal.urlBuscador[0][element.prop]){
         setTimeout(async()=>{
+
           var ArrayDataDependencia = await validarDependencia(element.prop);
           if(ArrayDataDependencia.valor === true){
             let columIndex = refData.current.hotInstance.propToCol(ArrayDataDependencia.nameColumn)
@@ -968,7 +969,10 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
     }
 
     setTimeout(()=>{
-      
+    
+      const meta = refData.current.hotInstance.getCellMetaAtRow(row[0].rowIndex);
+      if(meta.length > 0 && meta[row[0].columnIndex].readOnly) meta[row[0].columnIndex].readOnly = false
+
       if (Object.keys(data).length > 0) {
         for (let key in data) {          
           let columnIndex = refData.current.hotInstance.propToCol(key)
@@ -992,6 +996,20 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
 
       refData?.current?.hotInstance?.selectCell(row[0].rowIndex,row[0].columnIndex);
     })    
+  }
+  const cerrarModal = async (e)=>{
+    setShows(e)
+    let row     = Main.g_getRowFocus(idComp);
+    refData?.current?.hotInstance?.selectCell(row[0].rowIndex,row[0].columnIndex);
+    
+    setTimeout(() => {
+      const meta = refData.current.hotInstance.getCellMetaAtRow(row[0].rowIndex);
+      if(meta.length > 0 && meta[row[0].columnIndex].readOnly){
+        meta[row[0].columnIndex].readOnly = false
+        // Actualiza los metadatos para la fila
+        refData.current.hotInstance.setCellMetaObject(row[0].rowIndex, meta);
+      }       
+    });
   }
   const onChangeModal = async (e) => {
     let valor = e.target.value;
@@ -1121,6 +1139,46 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
   
     return valor
   }
+  const isValidDateHoraMin = (dateString) =>{
+    let valor = { isDateTime: false, dateTime: '' };
+  
+    // Expresión regular para validar el formato DD/MM/YYYY HH:mm
+    const dateTimeRegex = /^(\d{2})(\/)?(\d{2})\2(\d{4}) (\d{2}):(\d{2})$/;
+  
+    // Verificar si la cadena no cumple con el formato
+    if (!dateTimeRegex.test(dateString)) {
+      return valor;
+    }
+  
+    try {
+      // Desestructurar la cadena para obtener día, mes, año, hora y minutos
+      const [, day, , month, year, hour, minute] = dateString.match(dateTimeRegex);
+  
+      // Crear un objeto de fecha
+      const dateObject = new Date(`${year}-${month}-${day}T${hour}:${minute}:00`);
+  
+      // Verificar si los componentes de la fecha y hora coinciden
+      if (
+        dateObject.getDate() === parseInt(day, 10) &&
+        dateObject.getMonth() === parseInt(month, 10) - 1 &&
+        dateObject.getFullYear() === parseInt(year, 10) &&
+        dateObject.getHours() === parseInt(hour, 10) &&
+        dateObject.getMinutes() === parseInt(minute, 10)
+      ) {
+        // Reformatear la fecha al formato DD/MM/YYYY HH:mm
+        let dateTime = `${day}/${month}/${year} ${hour}:${minute}`;
+        valor.dateTime = dateTime;
+        valor.isDateTime = true;
+      } else {
+        throw new Error('Fecha y hora no válidas');
+      }
+    } catch (error) {
+      console.error('Error al procesar la fecha y hora:', error);
+    }
+  
+    return valor;
+  }
+  
   const onBeforeChange = (changes,source) => {
     
     // Antes de que se realice un cambio, almacenamos el valor actual de la celda en previousValueRef.
@@ -1137,13 +1195,14 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
         // Rechazar el cambio si el nuevo valor no es numérico
         if(newVal !== "") return false;
       }else if(columns[columnIndex].type === 'date'){
-        let valor = isValidDate(newVal)
-        if(valor.isDate){
-          changes[i][3] = valor.date;
+        let valor =  columns[columnIndex].hora ? isValidDateHoraMin(newVal) : isValidDate(newVal);
+        if(valor.isDate || valor.isDateTime){
+          changes[i][3] = valor.date ? valor.date : valor.dateTime;
         }else{
           return false
         }        
-      }else if(columns[columnIndex].type === 'select'){
+      }
+      else if(columns[columnIndex].type === 'select'){
         const item = columns[columnIndex].options.find(({ id }) => id === newVal);
         if(!item) return false
       }
@@ -1303,7 +1362,7 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
   return (
     <div className={ `${colorButtom ? 'componente-handsontable' : '' } componente-${idComp}`}>
       <Main.FormModalSearch
-        setShowsModal={setShows}
+        setShowsModal={(e)=>cerrarModal(e)}
         open={shows}
         title={shows ? refModal.current.ModalTitle : refModal.current.ModalTitle}
         className='Modal-contenet'
@@ -1375,7 +1434,7 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
             <HotColumn
               key={indice}
               data={col.data}
-              type={col.type}
+              type={'date'}
               title={col.title}
               width={col.width}
               className={col.className}

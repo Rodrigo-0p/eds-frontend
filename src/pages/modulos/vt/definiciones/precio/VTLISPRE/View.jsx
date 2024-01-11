@@ -32,9 +32,9 @@ const columnModal = {
 
 export const columns = [
   { data: 'COD_ARTICULO'      , title: 'Articulo'     , width : 35  , className: 'htLeft'   , requerido:true   , filter:true   }, 
-  { data: 'DESC_ARTICULO'     , title: 'Descripcion'  , width : 100 , readOnly:false        , requerido:false  , filter:true   }, 
+  { data: 'DESC_ARTICULO'     , title: 'Descripcion'  , width : 100 , readOnly:true         , requerido:false  , filter:true    , textWrap:true}, 
   { data: 'COD_UNIDAD_MEDIDA' , title: 'Unidad Medida', width : 35  , className: 'htLeft'   , requerido:true   , readOnly:false}, 
-  { data: 'DESC_UNIDAD_MEDIDA', title: 'Descripcion'  , width : 100 , readOnly:false        , requerido:false  , filter:false  }, 
+  { data: 'DESC_UNIDAD_MEDIDA', title: 'Descripcion'  , width : 100 , readOnly:true         , requerido:false  , filter:false  }, 
   { data: 'FEC_VIGENCIA'      , title: 'Fecha'        , width : 40  , className: 'htLeft '  , readOnly:false   , type:'date'    , hora:true},
   { data: 'PRECIO_FIJO'       , title: 'Precio Venta' , width : 40  , className: 'htRight'  , requerido:true   , type:'numeric' , format:{pattern: '0,0.00'}}, 
 ]

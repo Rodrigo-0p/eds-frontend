@@ -102,6 +102,7 @@ export const objetoinicialCab = {
   NRO_DOCUMENTO                     :'',
   NRO_DIG_VER                       :'',
   PAIS                              :'',
+  CIUDAD                            :  '',
   insertDefault                     : true,
 }
 
@@ -114,7 +115,7 @@ export const objetoInicialDet = {
   COD_IDENT	          :  '',			
   ES_CLIENTE_PRI	    :  'N',			
   COD_PROVINCIA	      :  '',			
-  COD_CIUDAD	        :  '',			
+  COD_CIUDAD	        :  '',			  
   COD_CLUSTER	        :  '',			
   CERCA_DE	          :  '',			
   COD_MONEDA_LIMITE	  :  '',			

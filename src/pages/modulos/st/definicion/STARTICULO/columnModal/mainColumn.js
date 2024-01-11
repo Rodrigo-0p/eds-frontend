@@ -20,12 +20,23 @@ const columns_iva = [
   { data: 'DESC_IVA'       , title: 'Descripción'  ,className:'htLeft' 	 },
 ]
 
+const columns_linea = [
+	{ data: 'COD_LINEA'			, title: 'Código'			   , className: "htLeft" },
+	{ data: 'DESC_LINEA'		, title: 'Descripción'   , className: "htLeft" },
+];
+const column_segmento = [
+	{ data: 'COD_CATEGORIA'	, title: 'Código'			   , className: "htLeft" },
+	{ data: 'DESC_CATEGORIA', title: 'Descripción'   , className: "htLeft" },
+];
+
 const main = {
   	columns_proveedor
 	, columns_rubro
 	, columns_marca
 	, columns_grupo
 	, columns_iva
+	, columns_linea
+	, column_segmento
 	}
 
 export default main;

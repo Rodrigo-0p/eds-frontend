@@ -130,7 +130,7 @@ const SiderBartLef = memo(({ defaultSelectedKeys, defaultOpenKeys, CloseSession,
                 open={isModalVisible}
                 onOk={()=>setModalVisible(false)}
                 onCancel={()=>setModalVisible(false)}
-                footer={false}
+                footer={false}                
             >
 
                 <Main.List
@@ -170,27 +170,25 @@ const SiderBartLef = memo(({ defaultSelectedKeys, defaultOpenKeys, CloseSession,
                
             </Main.Modal>
         
-        
             <Layout.Sider id="sidebarLeft" width="250">
                 <Menu
-                    id="sidebarLeftMenu"        
+                    id="sidebarLeftMenu"                          
                     mode={'inline'}
                     defaultOpenKeys={defaultOpenKeys}
                     defaultSelectedKeys={defaultSelectedKeys}
                     triggerSubMenuAction={"click"}
+                    inlineCollapsed={false}
                 >
                      
-                        <Menu.Item key="logo" style={{alignItems:'end',height:'50px ',background: 'linear-gradient(0deg,#9597a0e0 0%,#61677f 100%)'}} >
+                    <Menu.Item key="logo" style={{alignItems:'end',height:'50px ',background: 'linear-gradient(0deg,#9597a0e0 0%,#61677f 100%)'}} >
                         <Main.Tooltip placement="bottom" title={`Empresa - ${sessionStorage.desc_empresa}`}>
                             <img src={ Logo }
                                 alt='logo'
                                 className="img-Empresa"
                                 style={{ width: "50%",height:'50px',float:"left", marginLeft: "32px",cursor: 'pointer',}}
-                                onClick={showEmpresa}
-                            />
-                            
-                     </Main.Tooltip> 
-                        </Menu.Item>                   
+                                onClick={showEmpresa}/>                            
+                         </Main.Tooltip> 
+                    </Menu.Item>                   
                     
                     <Dropdown menu={{ items }} placement="bottomLeft" trigger={['click']} arrow>
                         <div>

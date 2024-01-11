@@ -321,11 +321,13 @@ const [mdiasant  , setMdiasant ] = React.useState('N')
       meta[3].readOnly = false
       meta[4].readOnly = false  
     }
-
+    
     // Actualiza los metadatos para la fila
     refData.current.hotInstance.setCellMetaObject(rowIndex, meta);
+
+    refData.current.hotInstance.updateSettings({});
     // focus    
-    refData.current.hotInstance.selectCell(rowIndex, 1);    
+    refData.current.hotInstance.selectCell(rowIndex, 1);
   }
   const deleteRow = ()=>{
     let Permiso  = Main.VerificaPermiso(FormName);

@@ -21,7 +21,7 @@ var validaInput = [
     out:[ 'DESC_MARCA'],
     data:['COD_EMPRESA'],
     rel:[],
-    next: 'COD_RUBRO', 
+    next: 'COD_LINEA', 
     // ---
     requerido : false ,
     valor_ant : null  ,
@@ -29,6 +29,33 @@ var validaInput = [
     idFocus   : true  ,
     idSelect  : false ,    
   },{
+    input: 'COD_LINEA',
+    url: mainUrl.url_valida_linea,  
+    out:[ 'DESC_LINEA'],
+    data:['COD_EMPRESA','COD_MARCA'],
+    rel:[],
+    next: 'COD_CATEGORIA', 
+    // ---
+    requerido : false ,
+    valor_ant : null  ,
+    validaNull: true  ,
+    idFocus   : true  ,
+    idSelect  : false ,    
+  },{
+    input: 'COD_CATEGORIA',
+    url: mainUrl.url_valida_segmento,  
+    out:[ 'DESC_CATEGORIA'],
+    data:['COD_EMPRESA','COD_LINEA'],
+    rel:[],
+    next: 'COD_RUBRO', 
+    // ---
+    requerido : false ,
+    valor_ant : null  ,
+    validaNull: true  ,
+    idFocus   : true  ,
+    idSelect  : false ,    
+  },
+  {
     input: 'COD_RUBRO',
     url: mainUrl.url_valida_rubro,  
     out:[ 'DESC_RUBRO'],
@@ -77,10 +104,12 @@ const restablecerValida = ()=>{
 
 const ModalF9 = {
   "COD_PROVEEDOR_DFLT" : {title: 'Proveedor' , column: mainColumn.columns_proveedor , url: mainUrl.url_buscar_proveedor  },
-  "COD_MARCA"     : {title: 'Marca'     , column: mainColumn.columns_marca     , url: mainUrl.url_buscar_marca      },
-  "COD_RUBRO"     : {title: 'Rubro'     , column: mainColumn.columns_rubro     , url: mainUrl.url_buscar_rubro      },
-  "COD_GRUPO"     : {title: 'Grupo'     , column: mainColumn.columns_grupo     , url: mainUrl.url_buscar_grupo      },
-  "COD_IVA"       : {title: 'Iva'       , column: mainColumn.columns_iva       , url: mainUrl.url_buscar_iva        },
+  "COD_MARCA"          : {title: 'Marca'     , column: mainColumn.columns_marca     , url: mainUrl.url_buscar_marca      },
+  "COD_LINEA"          : {title: 'Linea'     , column: mainColumn.columns_linea     , url: mainUrl.url_buscar_linea      },
+  "COD_CATEGORIA"      : {title: 'Segmento'  , column: mainColumn.column_segmento   , url: mainUrl.url_buscar_segmento   },
+  "COD_RUBRO"          : {title: 'Rubro'     , column: mainColumn.columns_rubro     , url: mainUrl.url_buscar_rubro      },
+  "COD_GRUPO"          : {title: 'Grupo'     , column: mainColumn.columns_grupo     , url: mainUrl.url_buscar_grupo      },
+  "COD_IVA"            : {title: 'Iva'       , column: mainColumn.columns_iva       , url: mainUrl.url_buscar_iva        },
 }
 
 const main = {

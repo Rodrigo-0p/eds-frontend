@@ -71,6 +71,7 @@ const MainVt = memo(() => {
 
   // bloqueo
   const bloqueoCliente      = React.useRef(false);
+  const bloqueoPersona      = React.useRef(false);
 
   //  UseRef
   const buttonSaveRef       = React.useRef();
@@ -123,8 +124,7 @@ const MainVt = memo(() => {
 		});
     document.getElementById("indice").textContent         = "1"
 		document.getElementById("total_registro").textContent = "?";
-		document.getElementById("mensaje").textContent 				= "";
-    // ver_bloqueo(f7_delete) 
+		document.getElementById("mensaje").textContent 				= "";     
   }
   // -----------------------------------------------------------------------------------------------
   const guardar = async ()=>{
@@ -335,6 +335,9 @@ const MainVt = memo(() => {
       refGrid.current.hotInstance.updateSettings({      
         cellRow:rowIndex,
       });  
+
+      habilitar_columna(rowIndex)
+
       refGrid.current.hotInstance.selectCell(rowIndex, 0);
 
       setTimeout(()=>{        
@@ -632,6 +635,9 @@ const MainVt = memo(() => {
     }
     if(info?.data?.rows?.length === 0 || info?.data?.rows === undefined){
       let valor = await getParamsDetalle(idCabecera,indexRow)
+      setTimeout(()=>{
+        habilitar_columna(0)
+      },100);      
       content   = [valor]
     }else{
       content = info.data.rows;
@@ -649,10 +655,25 @@ const MainVt = memo(() => {
         DESC_LISTA_PRECIO : content[0].DESC_LISTA_PRECIO ? content[0].DESC_LISTA_PRECIO : '',
         BARRIO            : content[0].BARRIO            ? content[0].BARRIO            : '',
       }); 
-      ver_bloqueo(f7)
+      let p_bloqueo = form.getFieldValue('COD_PERSONA') ? true : false;
+      ver_bloqueo(f7,p_bloqueo)
     },10)
   }
-
+  const habilitar_columna = (rowIndex)=>{
+    const meta = refGrid.current.hotInstance.getCellMetaAtRow(rowIndex);
+    if(meta.length > 0){
+      meta[0].readOnly = false
+      meta[1].readOnly = false
+      meta[2].readOnly = false
+      meta[3].readOnly = false
+      meta[4].readOnly = false
+      meta[5].readOnly = false
+      meta[6].readOnly = false  
+      meta[7].readOnly = false  
+    }  
+    refGrid.current.hotInstance.setCellMetaObject(rowIndex, meta);
+    refGrid.current.hotInstance.updateSettings({});
+  }
   const manejaF7 = (idFocus)=>{
     Main.activarSpinner()
     form.resetFields(); 
@@ -731,6 +752,8 @@ const MainVt = memo(() => {
         Main.alert('Usted no tiene permiso para bloquear el cliente', '¡Atención!', 'alert', 'OK');
         return
       }
+
+      if('COD_PERSONA' === e.target.id && bloqueoPersona.current.input.readOnly) return
 
       refModal.current.idInput = e.target.id
       let items = mainInput.ModalF9[e.target.id]
@@ -849,8 +872,9 @@ const MainVt = memo(() => {
     }    
   }
   // ----------------------------- BLOQUEO INPUT --------------------------------------------------- 
-  const ver_bloqueo = (f7 = false)=>{
+  const ver_bloqueo = (f7 = false,bpersona = false)=>{
     bloqueoCliente.current.input.readOnly = !f7;
+    bloqueoPersona.current.input.readOnly = bpersona;
   }
   //********** MODAL F9  ***************************/ 
   const eventoClick = async (data) => {
@@ -1031,7 +1055,7 @@ const MainVt = memo(() => {
             refGrid={refGrid} 
             FormName={FormName} 
             idComp={idComp}
-            stateRef={{bloqueoCliente}}
+            stateRef={{bloqueoCliente,bloqueoPersona}}
             // ---
             handleKeyDown={handleKeyDow}
             handleKeyUp={handleKeyUp}
