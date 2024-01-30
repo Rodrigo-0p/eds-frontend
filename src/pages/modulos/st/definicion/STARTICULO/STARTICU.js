@@ -360,12 +360,12 @@ const MainST = memo(({history, location, match}) => {
   }
   // -----------------------------------------------------------------------------------------------
   const getParamsDetalle = async (idCabecera = false, indexRow = 0)=>{
-    var newKey              = Main.uuidID();
-    var valor               = await {...objetoInicialDet};
-    valor.ID	              = newKey;
-    valor.COD_EMPRESA	      = refCab.current.data[indexRow === false ? 0 : indexRow].COD_EMPRESA
-    valor.COD_ARTICULO      = refCab.current.data[indexRow === false ? 0 : indexRow].COD_ARTICULO
-    valor.idCabecera        = idCabecera ? idCabecera : refCab.current.data[indexRow]?.ID;
+    var newKey               = Main.uuidID();
+    var valor                = await {...objetoInicialDet};
+    valor.ID	               = newKey;
+    valor.COD_EMPRESA	       = refCab.current.data[indexRow === false ? 0 : indexRow].COD_EMPRESA
+    valor.COD_ARTICULO       = refCab.current.data[indexRow === false ? 0 : indexRow].COD_ARTICULO    
+    valor.idCabecera         = idCabecera ? idCabecera : refCab.current.data[indexRow]?.ID;
     return valor;
   }
   const getDetalle = async (idCabecera, data = false,indexRow = 0,f7 = false)=>{
@@ -429,8 +429,15 @@ const MainST = memo(({history, location, match}) => {
   };
   const getParmas = (retornaNull = false) =>{
     var data = {
-      COD_EMPRESA    : sessionStorage.getItem('cod_empresa'),
-      COD_ARTICULO   : retornaNull ? '' : form.getFieldValue('COD_ARTICULO')  !== undefined ? form.getFieldValue('COD_ARTICULO') : '',
+      COD_EMPRESA        : sessionStorage.getItem('cod_empresa'),
+      COD_ARTICULO       : retornaNull ? '' : form.getFieldValue('COD_ARTICULO')       !== undefined ? form.getFieldValue('COD_ARTICULO')       : '',
+      COD_PROVEEDOR_DFLT : retornaNull ? '' : form.getFieldValue('COD_PROVEEDOR_DFLT') !== undefined ? form.getFieldValue('COD_PROVEEDOR_DFLT') : '',
+      COD_MARCA          : retornaNull ? '' : form.getFieldValue('COD_MARCA')          !== undefined ? form.getFieldValue('COD_MARCA')          : '',
+      COD_LINEA          : retornaNull ? '' : form.getFieldValue('COD_LINEA')          !== undefined ? form.getFieldValue('COD_LINEA')          : '',
+      COD_CATEGORIA      : retornaNull ? '' : form.getFieldValue('COD_CATEGORIA')      !== undefined ? form.getFieldValue('COD_CATEGORIA')      : '',
+      COD_RUBRO          : retornaNull ? '' : form.getFieldValue('COD_RUBRO')          !== undefined ? form.getFieldValue('COD_RUBRO')          : '',
+      COD_GRUPO          : retornaNull ? '' : form.getFieldValue('COD_GRUPO')          !== undefined ? form.getFieldValue('COD_GRUPO')          : '',
+      COD_IVA            : retornaNull ? '' : form.getFieldValue('COD_IVA')            !== undefined ? form.getFieldValue('COD_IVA')            : '',
     }
     return data
   } 

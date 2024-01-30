@@ -289,11 +289,11 @@ export const limpiar_CambiosPendiente = (idCom)=>{
 export var ArrayDependenciaGlobal = [];
 
 
-const HandsontableGrid = ({ refData                    , columns = []        , columnModal= false ,  idComp = '',FormName = '' , setfocusRowIndex = false,
+const HandsontableGrid = ({ refData                    , columns = []         , columnModal= false ,  idComp = '',FormName = '' , setfocusRowIndex = false,
                             height                     , columnNavigationEnter = [] , 
-                            setUpdateValue_ant = false , setUpdateValue_desp , setLastFocusNext  = false, columBuscador = ''  ,buttomAccion = false,
-                            maxFocus                   , dataCabecera        , setClickCell       , multipleHeader, nextFocus = false , setUpdateEdit,
-                            colorButtom = false}) => {
+                            setUpdateValue_ant = false , setUpdateValue_desp  , setLastFocusNext  = false, columBuscador = ''  ,buttomAccion = false,
+                            maxFocus                   , dataCabecera         , setClickCell       , multipleHeader, nextFocus = false , setUpdateEdit,
+                            colorButtom = false        , validaExterno = false, focusEditMode}) => {
 
   const refModal            = React.useRef({  modalColumn : []
                                             , data        : []                                            
@@ -440,7 +440,7 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
               },
             });
           },10)       
-          return {valor:true, nameColumn:dataName}
+          return {valor:true,externo:true,nameColumn:dataName}
         }else{
           ArrayDataDependencia = [...ArrayDataDependencia,{
             [dataName]:infoData[dataName]
@@ -456,17 +456,24 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
         const items  = columnModal.config[nameData].depende_de[i];
         let dataName = items.id
           if(info[dataName] === "" || Main._.isUndefined(info[dataName]) || Main._.isNull(info[dataName])){
-            setTimeout(()=>{
-              Main.message.info({
-                content  : `Favor complete el campo ${items.label} antes de continuar!!`,
-                className: 'custom-class',
-                duration : `${2}`,
-                style    : {
-                  marginTop: '2vh',
-                },
-              });
-            },10)            
-            return {valor:true, nameColumn:dataName}
+            if(!items.isNull){
+              setTimeout(()=>{
+                Main.message.info({
+                  content  : `Favor complete el campo ${items.label} antes de continuar!!`,
+                  className: 'custom-class',
+                  duration : `${2}`,
+                  style    : {
+                    marginTop: '2vh',
+                  },
+                });
+              },10)                        
+              return {valor:true,externo:false,nameColumn:dataName}
+            }else{
+              ArrayDataDependencia = [...ArrayDataDependencia,{
+                [dataName]:info[dataName]
+              }]
+              ArrayDependenciaGlobal = ArrayDataDependencia;  
+            }
           }else{
             ArrayDataDependencia = [...ArrayDataDependencia,{
               [dataName]:info[dataName]
@@ -538,13 +545,24 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
         setTimeout(async()=>{
 
           var ArrayDataDependencia = await validarDependencia(element.prop);
-          if(ArrayDataDependencia.valor === true){
+          if(ArrayDataDependencia.valor === true && !ArrayDataDependencia.externo){
             let columIndex = refData.current.hotInstance.propToCol(ArrayDataDependencia.nameColumn)
             if(!Main._.isNull(refData.current.__hotInstance.toVisualColumn(columIndex))){
             refData.current.__hotInstance.selectCell(valor[0].rowIndex,columIndex)          
             }
             return
-          } 
+          }else if(ArrayDataDependencia.valor === true && ArrayDataDependencia.externo){
+            if(document.getElementById(ArrayDataDependencia.nameColumn)){
+              setTimeout(()=>{
+                document.getElementById(ArrayDataDependencia.nameColumn).focus();
+              },1)              
+            }
+            e.preventDefault()
+            refData.current.__hotInstance.deselectCell()
+            refKeyDown.current.KeyDown = true;
+            refData.current.hotInstance.removeHook('beforeKeyDown',KeyDown)            
+            return
+          }
           var url          = columnModal.urlBuscador[0][element.prop]
           var AuxDatamodal = await getRowDataModal(url,'POST', {} ,ArrayDataDependencia)
           
@@ -756,7 +774,7 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
       Main.modifico(FormName);
       if((setUpdateValue_ant)){
         setUpdateValue_ant(false,valorIndex,nameColumn)
-      }else{    
+      }else{ 
         if(columnModal.urlValidar[0][nameColumn]){
           var ArrayDataDependencia = await validarDependencia(nameColumn);
           
@@ -766,13 +784,36 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
             }
           }  
   
-          if( ArrayDataDependencia.valor === true){
+          if( ArrayDataDependencia.valor === true && !ArrayDataDependencia.externo){
             let columIndex = refData.current.hotInstance.propToCol(ArrayDataDependencia.nameColumn)
             if(!Main._.isNull(refData.current.__hotInstance.toVisualColumn(columIndex))){
               refData.current.__hotInstance.selectCell(valorIndex[0],columIndex)          
             }                          
             return
-          }  
+          }else if(ArrayDataDependencia.valor === true && ArrayDataDependencia.externo){
+            e.stopImmediatePropagation();
+            if(document.getElementById(ArrayDataDependencia.nameColumn)){
+              setTimeout(()=>{
+                document.getElementById(ArrayDataDependencia.nameColumn).focus();
+              },1)              
+            }            
+            let columIndex = refData.current.hotInstance.propToCol(nameColumn)
+            if(!Main._.isNull(refData.current.__hotInstance.toVisualColumn(columIndex))){              
+              if(columns[columIndex].type === 'numeric'){
+                const rowIndex = row[0] && row[0].rowIndex && row[0].rowIndex > 0 ? row[0].rowIndex : 0;
+                refData.current.hotInstance.setDataAtCell(rowIndex, columIndex, '');
+              }else{
+                refData.current.hotInstance.setDataAtCell(row[0].rowIndex && row[0].rowIndex > 0 ? row[0].rowIndex : 0,columIndex,'')
+              }              
+            }
+            e.preventDefault()            
+            setTimeout(()=>{
+              refData.current.__hotInstance.deselectCell()
+              refKeyDown.current.KeyDown = true
+              refData.current.hotInstance.removeHook('beforeKeyDown',KeyDown)                          
+            }) 
+            return
+          }
   
           Main.activarSpinner()
           var columIndex = refData.current.hotInstance.propToCol(nameColumn)
@@ -865,6 +906,7 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
       }
   }
   const navegacion = (e,validate = false)=>{
+    if(refKeyDown.current.KeyDown) return
     if (((e.keyCode === 13 || e.keyCode === 9) || (e.key === 'Enter' && e.shiftKey)) && columnNavigationEnter.length > 0) {
       const totalColumns = refData.current.hotInstance.countCols();
       let row            = g_getRowFocus(idComp);
@@ -905,10 +947,32 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
       }
       
       let nameColum = columns[row[0].columnIndex].data
-      let evet1     = document.getElementsByClassName('ht_clone_master')
-      if(columnModal.urlValidar){
+      let evet1     = document.getElementsByClassName('ht_clone_master') 
+
+      let p_valor   = focusEditMode === false ? focusEditMode : focusEditMode === true ? focusEditMode : undefined
+
+      if(columns[row[0].columnIndex].validaExterno && (evet1.length > 0 || p_valor === false)){
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        
+        row[0][nameColum] = e.target.value.trim().length > 0 ? e.target.value : row[0][nameColum]
+        setTimeout(()=>{
+          refKeyDown.current.KeyDown = true;
+          refData.current.hotInstance.removeHook('beforeKeyDown',KeyDown);          
+        })
+        if(validaExterno)validaExterno(row[0],nameColum)
+      }else if(columnModal.urlValidar){
         if(!columnModal.urlValidar[0][nameColum] || evet1.length === 0 || validate){
           refData.current.hotInstance.selectCell(rowIndex, currentColumn); // Cambiar la celda seleccionada
+          if(columns[currentColumn]?.editFocus){
+            let activeEditor = refData.current?.hotInstance?.getActiveEditor();
+            if(activeEditor){
+              activeEditor.enableFullEditMode();
+              setTimeout(()=>{
+                activeEditor.beginEditing();
+              },5);
+            }            
+          } 
           if(e?.stopImmediatePropagation)e?.stopImmediatePropagation(); // Detener la propagación del evento para evitar la navegación por defecto  
           setFocusedRowIndex(rowIndex,false,refData,idComp);
           if(nextFocus && (e.key === 'Enter' || e.key  === 'Tab') ){
@@ -939,7 +1003,6 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
         }
       }
 
-      
     }else if(nextFocus && (e.key === 'Enter' || e.key  === 'Tab') ){
       const totalColumns = refData.current.hotInstance.countCols() - 1;
       let rowIndex       = g_getRowFocus(idComp)[0];
@@ -1462,10 +1525,9 @@ const HandsontableGrid = ({ refData                    , columns = []        , c
             title={col.title}
             width={col.width}
             className={col.className}
-            readOnly={col.readOnly}              
-            // ={{headerAction: false}}
+            readOnly={col.readOnly}
             columnSorting={col.sorter === true ? {headerAction:true} : {headerAction:false}}
-            numericFormat={ col.format ?  col.format : { pattern:'0',culture:'de-DE' }}
+            numericFormat={ col.format ? col.format : { pattern:'0',culture:'de-DE' }}
           />     
         : col.type === 'BUTTON' ?
           <HotColumn

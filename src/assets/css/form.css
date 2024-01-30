@@ -49,3 +49,11 @@
 input:disabled {
 	background: white !important;
 }
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-picker .ant-picker-input >input-disabled, :where(.css-dev-only-do-not-override-nnuwmp).ant-picker .ant-picker-input >input[disabled] {
+	color: rgb(0 0 0 / 54%);
+}
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-radio-wrapper-disabled {
+	color: rgb(0 0 0);
+}

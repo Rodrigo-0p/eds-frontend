@@ -2,7 +2,7 @@
 import starticu  from "../../pages/modulos/st/definicion/STARTICULO/STARTICU";
 
 // MOVIMIENTO
-import stensal   from "../../pages/modulos/st/movimiento/STENSAL/STENSAL";
+import stentsal  from "../../pages/modulos/st/movimiento/STENTSAL/STENTSAL";
 
 const Route = [
   // DEFINICION
@@ -11,8 +11,8 @@ const Route = [
   }
   // MOVIMIENTO
   ,{
-    path: '/st/stensal',
-    component: stensal
+    path: '/st/stentsal',
+    component: stentsal
   }
 ];
 export default Route;

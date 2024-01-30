@@ -11,7 +11,7 @@ import error           			     		 from '../../assets/icons/error.svg';
 import confirmar 								  	 from '../../assets/icons/icon-Exclamacion.png';
 import alerta          					  	 from '../../assets/icons/advertencia.svg';
 import { v4 as uuidID } 			 			 from "uuid";
-import {  Typography } 				    	 from 'antd'
+import currency											 from "currency.js"
 import {  modifico, setModifico 	}  from './ButtonCancelar/cancelar'
 import 	  FormModalSearch 					 from './ModalForm/FormModalSearch';
 import 	  ModalHadsontable					 from './ModalForm/ModalHadsontable';
@@ -43,10 +43,12 @@ import HandsontableGrid,{
 import { hotTableRequerido } 			  from './handsontable/hotTableRequerido';
 // FORM 1
 import {
-	message	, Spin	  , Row	    , Col	   ,
-	Form		, Card	  , Input   , Button ,
-	Modal		, Divider , Radio   , Select ,
-	Checkbox, List 		, Tooltip	, Tabs } from 'antd';
+	message		, Spin	    , Row	    , Col	   ,
+	Form			, Card	    , Input   , Button ,
+	Modal			, Divider   , Radio   , Select ,
+	Checkbox	, List 		  , Tooltip	, Tabs 	 , 
+	Typography, DatePicker,	ConfigProvider} from 'antd';
+import locale	 		  			  			       	from 'antd/lib/locale/es_ES';
 const { TabPane } = Tabs;
 const { Title } = Typography;
 
@@ -170,7 +172,8 @@ const numerico = (valor, decimales = null)=>{
 	if (typeof valor === 'string') {	
 		// Redondear el valor y convertirlo a cadena
 		let result = Math.round(valor).toString();
-		if(result == "NaN") valor = valor;
+		// eslint-disable-next-line
+		if(result === "NaN") valor = valor;
 		
 		// Eliminar puntos y reemplazar comas por puntos
 		valor = valor.split('.').join('');
@@ -192,6 +195,49 @@ const numerico = (valor, decimales = null)=>{
 	} else {
 		return valor; 
 	}	
+}
+// BLOQUEO Y DESBLOQUEO DE FECHA
+const setBloqueoFecha = (className,valor)=>{
+	
+	let inputDate = document?.getElementsByClassName(`${className}`)[0]?.querySelector('input')
+	inputDate.disabled = valor
+	let inputDate2 = document?.getElementsByClassName(`${className}`)[0]	
+
+	if(inputDate2.querySelectorAll('span')[2]){
+		if(valor){
+			inputDate2.querySelectorAll('span')[2].style.visibility = 'collapse'
+		}else{
+			inputDate2.querySelectorAll('span')[2].style.visibility = 'visible'		
+		}
+	}
+}
+const openStart = (className)=>{
+	let valor = getBloqueoFecha(className)
+	if(!valor){
+		if(document.getElementsByClassName('ant-picker-dropdown')[0])document.getElementsByClassName('ant-picker-dropdown')[0].style.visibility = 'visible';
+	}else{
+		setTimeout(()=>{
+			if(document.getElementsByClassName('ant-picker-dropdown')[0])document.getElementsByClassName('ant-picker-dropdown')[0].style.visibility = 'collapse';
+		})
+	}
+}
+const getBloqueoFecha = (className)=>{
+	let inputDate = document?.getElementsByClassName(`${className}`)[0]?.querySelector('input')
+	return inputDate?.disabled
+}
+// BLOQUEO DE RADIO
+const setBloqueoRadio = (className,p_bloqueo)=>{
+	let inputBloqueo = document?.getElementsByClassName(`${className}`)[0]
+	if(inputBloqueo.querySelectorAll('input')){
+		for (let i = 0; i < inputBloqueo.querySelectorAll('input').length; i++) {
+			inputBloqueo.querySelectorAll('input')[i].disabled = p_bloqueo;
+		}
+	}
+}
+
+const format_N = (date_time) => {
+	let DateUtc = moment.utc(date_time);    
+	return DateUtc.format('DD/MM/YYYY');
 }
 
 var Guardar = 'f10';
@@ -247,6 +293,9 @@ const Main = {
 	, Tooltip
 	, Tabs
 	, TabPane
+	, DatePicker
+	,	ConfigProvider
+	, locale
 	//----------------   
 	, ProgressBarMain
 	, startLoadingProgressBar
@@ -272,6 +321,12 @@ const Main = {
 	, getCambiosPendiente
 	, limpiar_CambiosPendiente
 	, hotTableRequerido
+	, currency
+	, setBloqueoFecha
+	, getBloqueoFecha
+	, format_N
+	, openStart
+	, setBloqueoRadio
 }
 
 
