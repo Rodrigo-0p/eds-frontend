@@ -256,6 +256,9 @@ export const setFocusedRowIndex = (rowIndex = false,columnIndex = false, refData
   let valorRow  = g_getRowFocus(idComp);
   
   if(valorRow){
+    
+    if(Main._.isUndefined(valorRow[0])) return
+
     valorRow[0].rowIndex    = rowIndex    >= 0 && rowIndex    ? rowIndex    : valorRow[0].rowIndex    >= 0 ? valorRow[0].rowIndex    : 0;
     valorRow[0].columnIndex = columnIndex >= 0 && columnIndex ? columnIndex : valorRow[0].columnIndex >= 0 ? valorRow[0].columnIndex : 0;
   
@@ -632,8 +635,10 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
               if(setLastFocusNext && columnModal[maxFocus[0].hasta]?.length > 0){
                 let dataRow   = refData.current.__hotInstance.getSourceData()[rowIndex]
                 let rowCount  = refData?.current?.hotInstance?.getSourceData()?.length;
+                // let rowcolumn = refData.current.__hotInstance.propToCol(maxFocus[0].hasta)
                 rowCount      = (rowCount - 1) === -1 ? 0 : rowCount - 1
-                if(rowIndex === rowCount) setLastFocusNext(e,dataRow,rowCount,rowIndex);
+                // let nexColumn = refData.current.__hotInstance.getSelected()[0][1]
+                if(rowIndex === rowCount ) setLastFocusNext(e,dataRow,rowCount,rowIndex);
               }
             }
           }
@@ -854,10 +859,13 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
                   if(setUpdateValue_desp)setUpdateValue_desp(false,valorIndex,nameColumn)
                   if(setLastFocusNext && maxFocus && columnModal){
                     if(columnModal[maxFocus[0].hasta] || (maxFocus[0]?.hasta === nameColumn && columnModal.urlValidar[0][nameColumn]) ){
-                      let dataRow  = refData.current.__hotInstance.getSourceData()[row[0].rowIndex];
-                      let rowCount = refData?.current?.hotInstance?.getSourceData()?.length;
-                      rowCount     = (rowCount - 1) === -1 ? 0 : rowCount - 1
-                      if(row[0].rowIndex === rowCount) setLastFocusNext(e,dataRow,rowCount,row[0].rowIndex);
+                      let dataRow     = refData.current.__hotInstance.getSourceData()[row[0].rowIndex];
+                      let rowCount    = refData?.current?.hotInstance?.getSourceData()?.length;
+                      let columnIndex = refData.current.__hotInstance.propToCol(maxFocus[0].hasta)                  
+                      let nexColumn   = valorIndex[1]
+                      // refData.current.__hotInstance.getSelected()[0][1]
+                      rowCount        = (rowCount - 1) === -1 ? 0 : rowCount - 1
+                      if(row[0].rowIndex === rowCount && columnIndex === nexColumn) setLastFocusNext(e,dataRow,rowCount,row[0].rowIndex);
                     }
                   }
                 }else{
@@ -1414,8 +1422,6 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
         let keyColumn = getkeysValue(columns)
         rowArray.push(keyColumn);
       }
-  
-      console.log(rowArray);
   
       if(!banArray)return false
       else return rowArray;

@@ -29,6 +29,7 @@ import {  activarSpinner
 import ProgressBar                   from "@ramonak/react-progress-bar";
 import { setBuscar,getViewBuscar	}  from './HeaderMenu/iconButtonBuscar';
 import Fieldset                      from './Fieldset/Fieldset';
+import dayjs 												 from 'dayjs';
 
 // Handsontable
 import HandsontableGrid,{	
@@ -327,6 +328,7 @@ const Main = {
 	, format_N
 	, openStart
 	, setBloqueoRadio
+	, dayjs
 }
 
 
