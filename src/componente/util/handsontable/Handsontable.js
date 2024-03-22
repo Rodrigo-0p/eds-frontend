@@ -256,6 +256,9 @@ export const setFocusedRowIndex = (rowIndex = false,columnIndex = false, refData
   let valorRow  = g_getRowFocus(idComp);
   
   if(valorRow){
+    
+    if(Main._.isUndefined(valorRow[0])) return
+
     valorRow[0].rowIndex    = rowIndex    >= 0 && rowIndex    ? rowIndex    : valorRow[0].rowIndex    >= 0 ? valorRow[0].rowIndex    : 0;
     valorRow[0].columnIndex = columnIndex >= 0 && columnIndex ? columnIndex : valorRow[0].columnIndex >= 0 ? valorRow[0].columnIndex : 0;
   
@@ -289,11 +292,11 @@ export const limpiar_CambiosPendiente = (idCom)=>{
 export var ArrayDependenciaGlobal = [];
 
 
-const HandsontableGrid = ({ refData                    , columns = []         , columnModal= false ,  idComp = '',FormName = '' , setfocusRowIndex = false,
+const HandsontableGrid = ({ refData                    , columns = []         , columnModal= false ,  idComp = ''  , FormName         = ''   ,  setfocusRowIndex = false,
                             height                     , columnNavigationEnter = [] , 
-                            setUpdateValue_ant = false , setUpdateValue_desp  , setLastFocusNext  = false, columBuscador = ''  ,buttomAccion = false,
-                            maxFocus                   , dataCabecera         , setClickCell       , multipleHeader, nextFocus = false , setUpdateEdit,
-                            colorButtom = false        , validaExterno = false, focusEditMode}) => {
+                            setUpdateValue_ant = false , setUpdateValue_desp  , setLastFocusNext  = false          , columBuscador    = ''   ,  buttomAccion     = false,
+                            maxFocus                   , dataCabecera         , setClickCell       , multipleHeader, nextFocus        = false,  setUpdateEdit,
+                            colorButtom = false        , validaExterno = false, focusEditMode      , executeCab    , validaAllExterno = false,  nextValidaInput  = false}) => {
 
   const refModal            = React.useRef({  modalColumn : []
                                             , data        : []                                            
@@ -304,7 +307,7 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
                                           })
   const previousEditRef = React.useRef(null);  
   const refModalData    = React.useRef()
-  const refKeyDown      = React.useRef({KeyDown:false})
+  const refKeyDown      = React.useRef({KeyDown:false,banEdit:true,inputChange:''})
 
   // USESTATE
   const [shows          , setShows           ] = React.useState(false);
@@ -410,7 +413,8 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
     }
     if(refKeyDown.current.KeyDown){
       refData.current.hotInstance.addHook("beforeKeyDown", KeyDown);
-      refKeyDown.current.KeyDown =  false
+      refKeyDown.current.KeyDown = false;
+      refKeyDown.current.banEdit = true;
     }
   };
   const validarDependencia = async (nameData)=>{
@@ -428,7 +432,14 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
         const items  = columnModal.config[nameData].depende_ex_cab[i];
         var dataName = items.id
         let indice   = getIndiceCabecera(idComp)
-        let infoData = dataCabecera !== undefined && dataCabecera.current.data !== undefined ? dataCabecera?.current.data[indice] : dataCabecera?.current.dataCab ? dataCabecera?.current.dataCab[indice] : []
+        let infoData = [{}]
+        if(executeCab){
+          infoData = dataCabecera();          
+        }else{
+          infoData = dataCabecera !== undefined && dataCabecera.current.data !== undefined ? dataCabecera?.current.data[indice] : dataCabecera?.current.dataCab ? dataCabecera?.current.dataCab[indice] : []
+        }
+        
+        
         if(infoData[dataName]?.length === 0){
           setTimeout(()=>{
             Main.message.info({
@@ -508,6 +519,11 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
   }
   const KeyDown = (e)=>{
     if(!refData) return
+    let editInput = document.getElementsByClassName('ht_clone_master') 
+    if(editInput.length){
+      let rowValue = g_getRowFocus(idComp)[0];
+      refKeyDown.current.inputChange = rowValue
+    } 
 
     if(e.keyCode === 118) e.preventDefault()
 
@@ -632,8 +648,10 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
               if(setLastFocusNext && columnModal[maxFocus[0].hasta]?.length > 0){
                 let dataRow   = refData.current.__hotInstance.getSourceData()[rowIndex]
                 let rowCount  = refData?.current?.hotInstance?.getSourceData()?.length;
+                // let rowcolumn = refData.current.__hotInstance.propToCol(maxFocus[0].hasta)
                 rowCount      = (rowCount - 1) === -1 ? 0 : rowCount - 1
-                if(rowIndex === rowCount) setLastFocusNext(e,dataRow,rowCount,rowIndex);
+                // let nexColumn = refData.current.__hotInstance.getSelected()[0][1]
+                if(rowIndex === rowCount ) setLastFocusNext(e,dataRow,rowCount,rowIndex);
               }
             }
           }
@@ -854,12 +872,23 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
                   if(setUpdateValue_desp)setUpdateValue_desp(false,valorIndex,nameColumn)
                   if(setLastFocusNext && maxFocus && columnModal){
                     if(columnModal[maxFocus[0].hasta] || (maxFocus[0]?.hasta === nameColumn && columnModal.urlValidar[0][nameColumn]) ){
-                      let dataRow  = refData.current.__hotInstance.getSourceData()[row[0].rowIndex];
-                      let rowCount = refData?.current?.hotInstance?.getSourceData()?.length;
-                      rowCount     = (rowCount - 1) === -1 ? 0 : rowCount - 1
-                      if(row[0].rowIndex === rowCount) setLastFocusNext(e,dataRow,rowCount,row[0].rowIndex);
+                      let dataRow     = refData.current.__hotInstance.getSourceData()[row[0].rowIndex];
+                      let rowCount    = refData?.current?.hotInstance?.getSourceData()?.length;
+                      let columnIndex = refData.current.__hotInstance.propToCol(maxFocus[0].hasta)                  
+                      let nexColumn   = valorIndex[1]
+                      // refData.current.__hotInstance.getSelected()[0][1]
+                      rowCount        = (rowCount - 1) === -1 ? 0 : rowCount - 1
+                      if(row[0].rowIndex === rowCount && columnIndex === nexColumn) setLastFocusNext(e,dataRow,rowCount,row[0].rowIndex);
                     }
                   }
+                  
+                  if(columns[columIndex].nextValida){
+                    if(nextValidaInput){
+                      refData.current.hotInstance.view.settings.data[valorIndex[0]].rowIndex = valorIndex[0];
+                      nextValidaInput(nameColumn,refData.current.hotInstance.view.settings.data[valorIndex[0]])
+                    }
+                  }
+
                 }else{
   
                   setFocusCloseModal({valor:'',rowIndex:row[0].rowIndex_ant,columnIndex:columIndex,valida:false},idComp)
@@ -951,16 +980,20 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
 
       let p_valor   = focusEditMode === false ? focusEditMode : focusEditMode === true ? focusEditMode : undefined
 
-      if(columns[row[0].columnIndex].validaExterno && (evet1.length > 0 || p_valor === false)){
+      if((columns[row[0].columnIndex].validaExterno || columns[row[0].columnIndex].validaAllExterno) && (evet1.length > 0 || p_valor === false)){
         e.preventDefault();
         e.stopImmediatePropagation();
         
         row[0][nameColum] = e.target.value.trim().length > 0 ? e.target.value : row[0][nameColum]
+        if(validaExterno)validaExterno(row[0],nameColum)
+        if(validaAllExterno && refKeyDown.current.banEdit){
+          validaAllExterno(row[0],nameColum,13);
+          refKeyDown.current.banEdit = false;
+        }; 
         setTimeout(()=>{
           refKeyDown.current.KeyDown = true;
           refData.current.hotInstance.removeHook('beforeKeyDown',KeyDown);          
         })
-        if(validaExterno)validaExterno(row[0],nameColum)
       }else if(columnModal.urlValidar){
         if(!columnModal.urlValidar[0][nameColum] || evet1.length === 0 || validate){
           refData.current.hotInstance.selectCell(rowIndex, currentColumn); // Cambiar la celda seleccionada
@@ -1089,39 +1122,6 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
       console.log(error);
     }
   }  
-  // const afterChange = (changes, source)=>{
-  //   if(changes){
-  //     if(source === 'edit'){
-  //       var columIndex = refData.current.hotInstance.propToCol(changes[0][1])
-
-  //       if(columns[columIndex].type === 'numeric' || columns[columIndex].type === 'checkbox' || columns[columIndex].type === 'date' || columns[columIndex].type === 'select'){
-  //         if(changes[0][2] !== changes[0][3]){
-  //           Main.modifico(FormName);
-  //           setCambiosPendiente(idComp,true)
-
-  //           if(columns[columIndex].type === 'date' || columns[columIndex].type === 'checkbox'){
-  //             let value = refData.current.__hotInstance.view.settings.data[changes[0][0]]
-              
-  //             if(value.insertDefault){
-  //               value.inserted      = true;
-  //               value.insertDefault = false;
-  //             }else if(value.inserted){
-  //               value.inserted      = true;
-  //               value.insertDefault = false;
-  //             }else if(!value.inserted || !value.insertDefault){
-  //               value.updated       = true;
-  //             }
-  //           }
-  //         }
-  //         if(columns[columIndex].type !== 'date' && columns[columIndex].type !== "select"){
-  //           setFocusedRowIndex(changes[0][0],false,refData,idComp);  
-  //         }else{
-  //           setFocusedRowIndex(changes[0].rowIndex,false,refData,idComp);
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
   const afterChange = (changes, source)=>{
     if(changes){
       if(source === 'edit'){
@@ -1131,10 +1131,13 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
 
         if(columns[columIndex].type === 'numeric' || columns[columIndex].type === 'checkbox' || columns[columIndex].type === 'date' || columns[columIndex].type === 'select'){
           if(changes[0][2] !== changes[0][3]){
-            Main.modifico(FormName)
+            Main.modifico(FormName)            
             setCambiosPendiente(idComp,true)
 
             if(columns[columIndex].type === 'date' || columns[columIndex].type === 'checkbox'){
+              columIndex = refKeyDown.current.inputChange.columnIndex >= 0 ? refKeyDown.current.inputChange.columnIndex : columIndex; 
+              if(validaAllExterno && columns[columIndex].validaAllExterno) refKeyDown.current.banEdit = true;
+            
               let value = refData.current.__hotInstance.view.settings.data[changes[0][0]]
               // changes[0][0]
               if(value.insertDefault){
@@ -1146,7 +1149,7 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
               }else if(!value.inserted || !value.insertDefault){
                 value.updated       = true;
               }
-            }
+            }            
           }
           if(columns[columIndex].type !== 'date' && columns[columIndex].type !== "select"){
             setFocusedRowIndex(changes[0][0],false,refData,idComp);  
@@ -1171,13 +1174,22 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
 
           }
         }
+
+        columIndex = refKeyDown.current.inputChange.columnIndex >= 0 ? refKeyDown.current.inputChange.columnIndex : columIndex; 
+        if(validaAllExterno && refKeyDown.current.banEdit && columns[columIndex].validaAllExterno){          
+          refKeyDown.current.banEdit = false
+          let valor  = refData.current.hotInstance.view.settings.data[changes[0][0]]
+          valor.rowIndex  = changes[0][0];
+          valor.rowColumn = columIndex;
+          validaAllExterno(valor,changes[0][1],-1);
+          setTimeout(()=>{
+            refKeyDown.current.KeyDown = true;
+            refData.current.hotInstance.removeHook('beforeKeyDown',KeyDown);
+          })
+        } 
       }
     }
   }
-  const isNumeric = (value) => {
-    const numericRegex = /^[0-9]+(\.[0-9]*)?$/;
-    return numericRegex.test(value);
-  };
   const isValidDate = (dateString)=> {
     let valor = {isDate:false,date:''}
 
@@ -1241,7 +1253,6 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
   
     return valor;
   }
-  
   const onBeforeChange = (changes,source) => {
     
     // Antes de que se realice un cambio, almacenamos el valor actual de la celda en previousValueRef.
@@ -1254,7 +1265,8 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
       // eslint-disable-next-line
       const [row, prop, oldVal, newVal] = changes[i];
       let columnIndex = refData.current.hotInstance.propToCol(prop)
-      if (columns[columnIndex].type === 'numeric' && !isNumeric(newVal)) {
+      // if (columns[columnIndex].type === 'numeric' && isNaN(Number(newVal)) && newVal !== "" ){
+      if( columns[columnIndex].type === 'numeric' && (isNaN(Number(newVal)) || (newVal < 0 && columns[columnIndex].isNegative === false)) && newVal !== ""){
         // Rechazar el cambio si el nuevo valor no es numérico
         if(newVal !== "") return false;
       }else if(columns[columnIndex].type === 'date'){
@@ -1271,36 +1283,6 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
       }
     }
   };
-  // const onBeforeChange = (changes,source) => {
-    
-  //   // Antes de que se realice un cambio, almacenamos el valor actual de la celda en previousValueRef.
-  //   if (changes && changes.length > 0) {
-  //     const [row, prop] = changes[0];
-  //     previousEditRef.current = { row, prop };
-  //   }
-
-  //   for (let i = 0; i < changes.length; i++) {
-  //     const [prop, newVal] = changes[i];
-  //     let columnIndex = refData.current.hotInstance.propToCol(prop)
-  //     if (columns[columnIndex]){
-  //       if (columns[columnIndex].type === 'numeric' && !isNumeric(newVal)) {
-  //         // Rechazar el cambio si el nuevo valor no es numérico
-  //         if(newVal !== "") return false;
-  //       }else if(columns[columnIndex].type === 'date'){
-  //         let valor = isValidDate(newVal)
-  //         if(valor.isDate){
-  //           changes[i][3] = valor.date;
-  //         }else{
-  //           return false
-  //         }        
-  //       }else if(columns[columnIndex].type === 'select'){
-  //         const item = columns[columnIndex].options.find(({ id }) => id === newVal);
-  //         if(!item) return false
-  //       }
-  //     }
-  //   }
-  // };
-
   const getHeaderAlignment = (col) => {
     switch (columns[col]?.className) {
       case "htLeft":
@@ -1382,7 +1364,6 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
     TH.style.textAlign = headerAlignment;   
     removeColumnMenuButton(col, TH)
   };
-
   const getkeysValue = (value)=>{
     var arrayValue = []
     if(value.length > 0){
@@ -1414,8 +1395,6 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
         let keyColumn = getkeysValue(columns)
         rowArray.push(keyColumn);
       }
-  
-      console.log(rowArray);
   
       if(!banArray)return false
       else return rowArray;

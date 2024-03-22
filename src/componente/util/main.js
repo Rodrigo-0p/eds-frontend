@@ -29,6 +29,7 @@ import {  activarSpinner
 import ProgressBar                   from "@ramonak/react-progress-bar";
 import { setBuscar,getViewBuscar	}  from './HeaderMenu/iconButtonBuscar';
 import Fieldset                      from './Fieldset/Fieldset';
+import dayjs 												 from 'dayjs';
 
 // Handsontable
 import HandsontableGrid,{	
@@ -196,6 +197,30 @@ const numerico = (valor, decimales = null)=>{
 		return valor; 
 	}	
 }
+const numerico_grilla = (valor, decimales = 0)=>{
+	// Verificar si el valor es una cadena y contiene puntos
+if (typeof valor === 'string') {
+		// Eliminar comas
+		valor = valor.replace(/,/g, '');
+		valor = valor.includes('.') ? (decimales === 0 || decimales === "0") ? parseFloat(valor) : parseFloat(valor).toFixed(decimales) : valor
+		// Convertir la cadena a un número
+		let numero = typeof valor === 'string' ? Number(valor.replace(/[^0-9,]/g, '')) : valor;
+	
+		if (!isNaN(numero)) {				
+				return numero;
+		} else {
+				return null;
+		}
+	} else {
+		let numero = (decimales === 0 || decimales === "0") ? parseFloat(valor) : parseFloat(valor).toFixed(decimales);
+		numero = typeof numero === 'string' ? Number(numero.replace(/[^0-9,]/g, '')) : numero;
+		if (!isNaN(numero)) {				
+				return numero;
+		} else {
+				return null;
+		}
+	}
+} 
 // BLOQUEO Y DESBLOQUEO DE FECHA
 const setBloqueoFecha = (className,valor)=>{
 	
@@ -211,13 +236,13 @@ const setBloqueoFecha = (className,valor)=>{
 		}
 	}
 }
-const openStart = (className)=>{
+const openStart = (className,indice = 0)=>{
 	let valor = getBloqueoFecha(className)
 	if(!valor){
-		if(document.getElementsByClassName('ant-picker-dropdown')[0])document.getElementsByClassName('ant-picker-dropdown')[0].style.visibility = 'visible';
+		if(document.getElementsByClassName('ant-picker-dropdown')[indice])document.getElementsByClassName('ant-picker-dropdown')[indice].style.visibility = 'visible';
 	}else{
 		setTimeout(()=>{
-			if(document.getElementsByClassName('ant-picker-dropdown')[0])document.getElementsByClassName('ant-picker-dropdown')[0].style.visibility = 'collapse';
+			if(document.getElementsByClassName('ant-picker-dropdown')[indice])document.getElementsByClassName('ant-picker-dropdown')[indice].style.visibility = 'collapse';
 		})
 	}
 }
@@ -234,10 +259,30 @@ const setBloqueoRadio = (className,p_bloqueo)=>{
 		}
 	}
 }
-
 const format_N = (date_time) => {
 	let DateUtc = moment.utc(date_time);    
 	return DateUtc.format('DD/MM/YYYY');
+}
+
+const getData = async (data, url) => {
+	try {
+		let params = await data;
+		return await Request(url, "POST", params).then(resp => { return resp.data.rows });
+	} catch (error) {
+		console.log(error);
+		return [];
+	}
+};
+
+const onKeyDownBloqueo = (e)=>{e.preventDefault()}
+
+const nvl = (value, defaultValue)=> {
+	return (value !== null && value !== undefined && value !== "") ? value : defaultValue;
+}
+
+const round = (number, decimals)=>{
+	let factor = Math.pow(10, decimals);
+	return Math.round(number * factor) / factor;
 }
 
 var Guardar = 'f10';
@@ -327,6 +372,12 @@ const Main = {
 	, format_N
 	, openStart
 	, setBloqueoRadio
+	, dayjs
+	, getData
+	, onKeyDownBloqueo
+	, numerico_grilla
+	, nvl
+	, round
 }
 
 

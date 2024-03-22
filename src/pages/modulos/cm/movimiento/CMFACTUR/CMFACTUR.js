@@ -115,7 +115,7 @@ const MainCM = memo(() => {
     valor.idCabecera      = idCabecera ? idCabecera : refCab.current.data[indexRow]?.ID;
     return valor;
   }
-  const getDetalle = async (idCabecera, data = false,indexRow = 0,f7 = false)=>{
+  const getDetalle = async (idCabecera, data = false,indexRow = 0,guardar = false)=>{
     let dataParams = data ? data : await getParamsDetalle(idCabecera,indexRow);
     var content = [];
     try {
@@ -130,7 +130,7 @@ const MainCM = memo(() => {
         ver_bloqueo();
         addClassAddGrid()
         setTimeout(()=>Main.setFocusedRowIndex(0,undefined,refGrid,idComp),10);
-        refGrid.current.hotInstance.selectCell(0,0);
+        if(guardar)refGrid.current.hotInstance.selectCell(0,0);
       },5);
     } catch (error) {
       console.error(error);
@@ -353,7 +353,7 @@ const MainCM = memo(() => {
               refCab.current.data        = infoCab.rowsAux
               refCab.current.dataCan     = JSON.parse(JSON.stringify(refCab.current.data));
 
-              loadForm(infoCab.rowsAux,banRef.current.indice);
+              loadForm(infoCab.rowsAux,banRef.current.indice,true);
               setTimeout(()=>document.getElementById('COD_SUCURSAL').focus())
             }else{
               Main.desactivarSpinner();
@@ -501,7 +501,7 @@ const MainCM = memo(() => {
     }
     setTimeout(()=>Main.desactivarSpinner())
   }
-  const loadForm = async (data = [] , indice = false)=>{
+  const loadForm = async (data = [] , indice = false,guardar = false)=>{
     let index  = await indice ? indice : banRef.current.indice;
     let value  = await data[index] === undefined ? data : data[index];
        
@@ -516,7 +516,7 @@ const MainCM = memo(() => {
     getDetalle(false, { COD_EMPRESA     : value.COD_EMPRESA
                       , NRO_COMPROBANTE : value.NRO_COMPROBANTE
                       , TIP_COMPROBANTE : value.TIP_COMPROBANTE
-                      , SER_COMPROBANTE : value.SER_COMPROBANTE},indice); 
+                      , SER_COMPROBANTE : value.SER_COMPROBANTE},indice,guardar); 
   } 
   const funcionBuscar = (e)=>{
     if(e){
