@@ -24,8 +24,7 @@ const url_buscar_ent_sal       = '/st/stentsal/buscar/'             ;
 const url_buscar_nro_Orden     = '/st/stentsal/buscar/orden/'       ; 
 // ABM
 const url_abm                  = '/st/stentsal'                     ;
-// REPORTE
-const url_reporte              = '/st/stentsal/reporte/rstentsal'   ;
+
 
 const main ={
   // BUSCADOR
@@ -53,8 +52,6 @@ const main ={
   , url_list_detalle  
   // ABM
   , url_abm
-  // REPORTE
-  , url_reporte
 }
 
 export default main;

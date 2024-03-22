@@ -38,7 +38,7 @@ const VTVENDE = memo(({FormName,refs,idComp,setLastFocusNext}) => {
       columns={columns}
       FormName={FormName}
       idComp={idComp}// id del componente
-      height={540}
+      height={550}
       columnNavigationEnter={columnNavigationEnter}
       colorButtom={false}
       setLastFocusNext={setLastFocusNext}

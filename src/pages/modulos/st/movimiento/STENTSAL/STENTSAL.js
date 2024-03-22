@@ -1,6 +1,5 @@
 import React, { memo } from 'react';
 import Main            from '../../../../../componente/util/main';
-import Reporte         from './reporte';
 import STENTSAL
      ,{columns}        from './view';
 import mainUrl         from './url/mainUrl';
@@ -93,7 +92,7 @@ const MainST = memo(() => {
     let date                = Main.moment().format('DD/MM/YYYY').toString()
     valor.FEC_ENT_SAL       = dayjs(date, 'DD/MM/YYYY');
     valor.FEC_ALTA				  = Main.moment().format('DD/MM/YYYY HH:mm:ss');
-    if(!f7_delete) form.setFieldsValue(valor);
+    if(!f7_delete) form.setFieldsValue({...valor,MANEJA_COSTO : valor.MANEJA_COSTO === 'S' ? true : false});    
     else Main.desactivarSpinner();
     valor.FEC_ENT_SAL       = Main.moment(valor.FEC_ENT_SAL).format('DD/MM/YYYY');
     refCab.current.data     = [valor]
@@ -127,27 +126,26 @@ const MainST = memo(() => {
     var content = [];
     try {
       var info = await Main.Request(mainUrl.url_list_detalle,'POST',dataParams);
-      if(info?.data?.rows?.length === 0 || info?.data?.rows === undefined){
-        let valor = await getParamsDetalle(idCabecera,indexRow)
-        content   = [valor]
-        setTimeout(()=>{
-          habilitar_columna(0)  
-        },200)  
-      }else{
-        content = info.data.rows;
-      } 
-      refCab.current.dataCanDet = JSON.parse(JSON.stringify(content));
-      refData.current?.hotInstance.loadData(content)
-      Main.setFocusedRowIndex(0,undefined,refData,idComp);
-      ver_bloqueo(f7)
-      setTimeout(()=>{
-        setClickCell();
-      },10)
     } catch (error) {
       console.log(error)
       Main.desactivarSpinner()
     }
-     
+    if(info?.data?.rows?.length === 0 || info?.data?.rows === undefined){
+      let valor = await getParamsDetalle(idCabecera,indexRow)
+      content   = [valor]
+      // setTimeout(()=>{
+        // habilitar_columna(0)  
+      // },100)      
+    }else{
+      content = info.data.rows;
+    }    
+    refCab.current.dataCanDet = JSON.parse(JSON.stringify(content));
+    refData.current?.hotInstance.loadData(content)
+    Main.setFocusedRowIndex(0,undefined,refData,idComp);
+    ver_bloqueo(f7)
+    setTimeout(()=>{
+      setClickCell();
+    },10)
   }
   // -----------------------------------------------------------------------
   const guardar = async ()=>{
@@ -279,7 +277,7 @@ const MainST = memo(() => {
           refCab.current.delete         = []
 
           let keyPamas = await getParmas(true)
-          keyPamas.NRO_ENT_SAL = infoCab.rowsAux[0].NRO_ENT_SAL
+          keyPamas.COD_PERSONA = infoCab.rowsAux[0].COD_PERSONA
           setTimeout(()=>{
             getDataCab(true,keyPamas)
           },4)
@@ -291,7 +289,7 @@ const MainST = memo(() => {
       
     } catch (error) {
       Main.desactivarSpinner();
-      console.log('Error en la funcion de Guardar stentsal',error)
+      console.log('Error en la funcion de Guardar vtclient',error)
     }
     }else{
       Main.message.info({
@@ -586,40 +584,34 @@ const MainST = memo(() => {
     params.INDICE = 0;
     params.LIMITE = data_len;
     Main.activarSpinner()    
-    try {
-      Main.Request(mainUrl.url_list_cab, "POST", params).then((resp) => {
-        let response = resp?.data?.rows;
-        if (response?.length > 0) {
-          
-          // LIMPIAR EL DELETE
-          refCab.current.delete         = []
-          refCab.current.deleteDet      = []
-  
-          if(response.length === 1) document.getElementById("total_registro").textContent = "1";
-          else document.getElementById("total_registro").textContent = response.length
-          refCab.current.data    = response;
-          refCab.current.dataCan = JSON.parse(JSON.stringify(response));
-          setIndice(0);
-          setTimeout(()=>{
-            postQueryCab(response[0],buttonF8,getIndice())                    
-          })
-        }else{
-          Main.desactivarSpinner();
-          Main.message.info({
-            content  : `No se han encontrado registros`,
-            className: 'custom-class',
-            duration : `${2}`,
-            style    : {
-              marginTop: '2vh',
-            },
-          });
-        }
-      });
-    } catch (error) {
-      Main.desactivarSpinner();
-      console.error(error);
-    }
+    Main.Request(mainUrl.url_list_cab, "POST", params).then((resp) => {
+      let response = resp?.data?.rows;
+      if (response.length > 0) {
+        
+        // LIMPIAR EL DELETE
+        refCab.current.delete         = []
+        refCab.current.deleteDet      = []
 
+        if(response.length === 1) document.getElementById("total_registro").textContent = "1";
+        else document.getElementById("total_registro").textContent = response.length
+        refCab.current.data    = response;
+        refCab.current.dataCan = JSON.parse(JSON.stringify(response));
+        setIndice(0);
+        setTimeout(()=>{
+          postQueryCab(response[0],buttonF8,getIndice())                    
+        })
+      }else{
+        Main.desactivarSpinner();
+        Main.message.info({
+          content  : `No se han encontrado registros`,
+          className: 'custom-class',
+          duration : `${2}`,
+          style    : {
+            marginTop: '2vh',
+          },
+        });
+      }
+    });
   }
   const postQueryCab = async(info,buttonF8 = false,indice) => {
     if(info){      
@@ -636,7 +628,7 @@ const MainST = memo(() => {
       try {
         await Main.Request(mainUrl.url_postQueryCab, "POST", data).then(async(resp) => {
           if(resp.data){
-            ver_bloqueo()
+            // ver_bloqueo()
             refCab.current.data[indice] = {...refCab.current.data[indice], ...resp.data}
             refCab.current.dataCan[indice] = JSON.parse(JSON.stringify(refCab.current.data[indice]));
             loadForm(refCab.current.data,indice);            
@@ -690,6 +682,7 @@ const MainST = memo(() => {
         case "OBSERVACION":
           setTimeout(()=>{
             refData.current?.hotInstance?.selectCell(0,0);
+            // refData.current?.hotInstance?.getActiveEditor().beginEditing();
           })
         break;
         default:
@@ -776,7 +769,7 @@ const MainST = memo(() => {
     })    
   }
   const ver_bloqueo= async() =>{
-    let p_boqueo = form.getFieldValue('NRO_ENT_SAL') === '' || form.getFieldValue('NRO_ENT_SAL') === undefined ? false : true;
+    let p_boqueo = form.getFieldValue('NRO_ENT_SAL') === '' ? false : true;
     let input = document.getElementsByClassName(`${FormName}_BLOQUEO`)
 
     for (let i = 0; i < input.length; i++) {
@@ -790,26 +783,24 @@ const MainST = memo(() => {
     },1);
   }
   const habilitar_columna = (p_boqueo)=>{
-    p_boqueo = form.getFieldValue('NRO_ENT_SAL') === '' || form.getFieldValue('NRO_ENT_SAL') === undefined ? false : true;
+    p_boqueo = form.getFieldValue('NRO_ENT_SAL') === '' ? false : true;
     
-    let row = refData?.current ? refData?.current?.hotInstance?.getSourceData() : []; 
-    if(row.length > 0){
-      for (let i = 0; i < row.length; i++) {
-        const meta = refData?.current?.hotInstance?.getCellMetaAtRow(i);
-        meta[0].readOnly = p_boqueo;
-        meta[1].readOnly = true
-        meta[2].readOnly = p_boqueo;
-        meta[3].readOnly = true;
-        meta[4].readOnly = form.getFieldValue('ESTADO') === 'P' ? false : true;
-        meta[5].readOnly = form.getFieldValue('ESTADO') === 'P' ? false : true;
-        meta[6].readOnly = true  
-        refData.current.hotInstance.setCellMetaObject(i, meta);
-      }
-      refData?.current?.hotInstance?.updateSettings({});
-      let p_bloqueo = form.getFieldValue('ESTADO') === 'P' ? false : true
-      Main.setBloqueoRadio(`${FormName}_ESTADO`,p_bloqueo);   
-      document.getElementsByClassName(`${FormName}_OBSERVACION`)[0].readOnly = p_bloqueo;
+    let row = refData.current.hotInstance.getSourceData();
+    for (let i = 0; i < row.length; i++) {
+      const meta = refData.current.hotInstance.getCellMetaAtRow(i);
+      meta[0].readOnly = p_boqueo;
+      meta[1].readOnly = true
+      meta[2].readOnly = p_boqueo;
+      meta[3].readOnly = true;
+      meta[4].readOnly = form.getFieldValue('ESTADO') === 'P' ? false : true;
+      meta[5].readOnly = form.getFieldValue('ESTADO') === 'P' ? false : true;
+      meta[6].readOnly = true  
+      refData.current.hotInstance.setCellMetaObject(i, meta);
     }
+    refData.current.hotInstance.updateSettings({});
+    let p_bloqueo = form.getFieldValue('ESTADO') === 'P' ? false : true
+    Main.setBloqueoRadio(`${FormName}_ESTADO`,p_bloqueo);   
+    document.getElementsByClassName(`${FormName}_OBSERVACION`)[0].readOnly = p_bloqueo;
   }
   const onChangeModal = async (e) => {
     let valor = e.target.value;
@@ -929,7 +920,6 @@ const MainST = memo(() => {
       refCab.current.data[getIndice()].COD_USUARIO_MODI	  = sessionStorage.cod_usuario;
       refCab.current.data[getIndice()].FEC_MODI           = Main.moment().format('DD/MM/YYYY');
       refCab.current.activateCambio = true;            
-      if(form.getFieldValue('ESTADO') === 'C') refCab.current.data[getIndice()].FEC_ESTADO = Main.moment().format('DD/MM/YYYY HH:mm:ss');
     }
     Main.modifico(FormName);
   }
@@ -956,12 +946,10 @@ const MainST = memo(() => {
   const setfocusRowIndex = React.useCallback((valor,row,col)=>{
     refAdd.current.bandNew = true;
     let resul       = refData.current.hotInstance.getSourceData()
-    if(!Main._.isNull(valor)){
-      form.setFieldsValue({
-        ...form.getFieldsValue(),
-        COSTO_ULTIMO    : valor.COSTO_ULTIMO,      
-      });
-    }
+    form.setFieldsValue({
+      ...form.getFieldsValue(),
+      COSTO_ULTIMO    : valor.COSTO_ULTIMO,      
+    });              
     document.getElementById("total_registro").textContent = resul.length;
     setTimeout(()=>{
       setClickCell();
@@ -1007,106 +995,18 @@ const MainST = memo(() => {
       refAdd.current.bandNew = true;
     }
 
-    if(refData.current){
-      let resul       = refData.current.hotInstance.getSourceData()
-      const columnSum = resul.reduce((acc, row) => acc + parseFloat(row.MONTO_TOTAL || 0), 0);
-      let p_decimales = refCab.current.data[getIndice()].DECIMALES ? refCab.current.data[getIndice()].DECIMALES : 0
-      form.setFieldsValue({
-        ...form.getFieldsValue(),    
-        TOT_COMPROBANTE : Main.currency(columnSum, { separator:'.',decimal:',',precision:p_decimales,symbol:''}).format(),
-        COSTO_ULTIMO    : new Intl.NumberFormat("de-DE").format(resul[rowIndex]?.COSTO_ULTIMO ? resul[rowIndex]?.COSTO_ULTIMO : 0),
-        COSTO_UB        : new Intl.NumberFormat("de-DE").format(resul[rowIndex]?.COSTO_UB     ? resul[rowIndex]?.COSTO_UB     : 0),
-      });    
-      refCab.current.data[getIndice()].TOT_COMPROBANTE = columnSum;
-    }
+    let resul       = refData.current.hotInstance.getSourceData()
+    const columnSum = resul.reduce((acc, row) => acc + parseFloat(row.MONTO_TOTAL || 0), 0);
+    let p_decimales = refCab.current.data[getIndice()].DECIMALES ? refCab.current.data[getIndice()].DECIMALES : 0
+    form.setFieldsValue({
+      ...form.getFieldsValue(),    
+      TOT_COMPROBANTE : Main.currency(columnSum, { separator:'.',decimal:',',precision:p_decimales,symbol:''}).format(),
+      COSTO_ULTIMO    : new Intl.NumberFormat("de-DE").format(resul[rowIndex]?.COSTO_ULTIMO ? resul[rowIndex]?.COSTO_ULTIMO : 0),
+      COSTO_UB        : new Intl.NumberFormat("de-DE").format(resul[rowIndex]?.COSTO_UB     ? resul[rowIndex]?.COSTO_UB     : 0),
+    });    
+    refCab.current.data[getIndice()].TOT_COMPROBANTE = columnSum;
     // eslint-disable-next-line
   },[])
-  // ************ REPORTE ****************************/
-  const rstensal = async() => {
-    let data = { P_COD_EMPRESA  : sessionStorage.getItem('cod_empresa'),
-                 P_COD_SUCURSAL : form.getFieldValue('COD_SUCURSAL')   ,
-                 P_NRO_ENT_SAL  : form.getFieldValue('NRO_ENT_SAL')    ,
-                }
-   try {
-    await Main.Request(mainUrl.url_reporte, 'POST', data)
-      .then( response => {        
-        if( response.data.rows.length > 0 ){          
-          Main.activarSpinner();
-          buildReport(response.data.rows)          
-        }else{
-          Main.message.info({
-            content  : `No se encontraron registros`,
-            className: 'custom-class',
-            duration : `${2}`,
-            style    : {marginTop: '2vh'},
-          });        
-        }
-      })
-   } catch (error) {
-    Main.desactivarSpinner()
-    console.log(error);
-   }    
-  }
-  const buildReport = async(data) => {
-    var rows = [];
-    let comprobantes = Main._.uniq( data, (item)=>{ return item.NRO_ENT_SAL; });
-     // eslint-disable-next-line 
-    comprobantes.sort( function(a,b){
-      if ( parseInt(a.NRO_ENT_SAL) > parseInt(b.NRO_ENT_SAL) ) { return  1;}
-      if ( parseInt(a.NRO_ENT_SAL) < parseInt(b.NRO_ENT_SAL) ) { return -1;}
-    });
-     // eslint-disable-next-line 
-    comprobantes.map( comprobante => {
-      rows = [ ...rows, 
-        { 
-          COD_ARTICULO: `Nro Ajuste: ${comprobante.NRO_ENT_SAL}`, 
-          TIPO_AJUSTE: `Tipo Ajuste: ${comprobante.TIPO_AJUSTE}`,
-          ESTADO: `Estado: ${comprobante.ESTADO}`, 
-          FEC_COMPROBANTE: `Fecha: ${Main.moment(comprobante.FEC_ENT_SAL).format('DD/MM/YYYY')}`, 
-        },
-        { 
-          COD_ARTICULO: `Depósito: ${comprobante.COD_DEPOSITO} - ${comprobante.DESC_DEPOSITO}`,
-          COD_PROVEEDOR: `Proveedor: ${ comprobante.COD_PROVEEDOR != null ? comprobante.COD_PROVEEDOR : ''}`,
-          USUARIO: `Usuario: ${comprobante.COD_USUARIO}`,
-        },
-        {
-          COD_ARTICULO: `Motivo: ${comprobante.COD_MOTIVO} - ${comprobante.DESC_MOTIVO}`,
-          OBSERVACION: `Observacion: ${comprobante.OBSERVACION}`,
-        },
-        { COD_ARTICULO: 'Artículo (Cód. Descripción)', 
-          DESC_UNIDAD: 'U.M',
-          NRO_LOTE:'Nro. Lote', 
-          FEC_VENCIMIENTO: 'Fec. Venc.', 
-          CANTIDAD: 'Cantidad', 
-          COSTO_UNITARIO:'Costo', 
-          MONTO_TOTAL: 'Total' 
-        }
-      ];
-      let articulos = data.filter( item => item.NRO_ENT_SAL === comprobante.NRO_ENT_SAL );
-       // eslint-disable-next-line 
-      articulos.map( item => {
-        rows = [ ...rows, {
-          COD_ARTICULO     : `${item.COD_ARTICULO} ${item.DESC_ARTICULO}`,
-          DESC_UNIDAD      : item.DESC_UNIDAD,
-          NRO_LOTE         : item.NRO_LOTE,
-          FEC_VENCIMIENTO  : item.FEC_VENCIMIENTO != null ? Main.moment(item.FEC_VENCIMIENTO).format('DD/MM/YYYY') : ' ',
-          CANTIDAD         : item.CANTIDAD,
-          COSTO_UNITARIO   : Main.currency(item.COSTO_UNITARIO, { separator:'.',decimal:',',precision:0,symbol:'' } ).format(),
-          MONTO_TOTAL      : Main.currency(item.MONTO_TOTAL,    { separator:'.',decimal:',',precision:0,symbol:'' } ).format(),
-          MONTO_TOTAL_no_format: item.MONTO_TOTAL
-        }]
-      });
-      let total = Main._.reduce(Main._.map( articulos ,function(map) {
-        return parseFloat(map.MONTO_TOTAL);
-      }),function(memo, num) {
-          return memo + num;
-      },0);
-      rows = [...rows, {COSTO_UNITARIO: 'TOTAL: ', MONTO_TOTAL: Main.currency(total, { separator:'.',decimal:',',precision:0,symbol:'' } ).format() }];
-    });
-    // Report(rows,form);
-    Reporte.rstensal(rows,form);
-  }
-  
 
   return (
     <>
@@ -1146,8 +1046,7 @@ const MainST = memo(() => {
             vprinf={false}
             refs={{ref:buttonSaveRef}}
             funcionBuscar={funcionBuscar}
-            NavigateArrow={NavigateArrow}     
-            reporte={rstensal}       
+            NavigateArrow={NavigateArrow}            
           />
 
           <STENTSAL

@@ -77,7 +77,7 @@ export const columns = [
 const columnNavigationEnter = [0,2,4,5];
 
 const STENSAL = memo(({refGrid         ,form    ,FormName,  idComp, handleKeyDown, handleInputChange,      handleKeyUp ,
-                       setfocusRowIndex,dataRef ,validaExterno    , setClickCell , activateButtonCancelar}) => {
+                       setfocusRowIndex,dataRef ,validaExterno    , setClickCell , activateButtonCancelar, refBloqueo}) => {
 
   const maxFocus = [{
     id       : idComp         ,
@@ -93,27 +93,27 @@ const STENSAL = memo(({refGrid         ,form    ,FormName,  idComp, handleKeyDow
         <Main.Col span={12} onClick={()=>setClickCell('CAB')}>
           <Main.Row id={`form-cab-${FormName}`} gutter={[2,2]}>
 
-            <Main.Col span={24}>
-              <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Sucursal</label>}>
-                <Main.Form.Item name="COD_SUCURSAL" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
-                    <Main.Input className={`${FormName}_BLOQUEO requerido`} onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp}/>
-                </Main.Form.Item>
-                <Main.Form.Item name="DESC_SUCURSAL" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
-                    <Main.Input disabled/>
-                </Main.Form.Item>
+          <Main.Col span={24}>
+            <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Sucursal</label>}>
+              <Main.Form.Item name="COD_SUCURSAL" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
+                  <Main.Input className={`${FormName}_BLOQUEO`} onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp}/>
               </Main.Form.Item>
-            </Main.Col>
+              <Main.Form.Item name="DESC_SUCURSAL" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
+                  <Main.Input disabled/>
+              </Main.Form.Item>
+            </Main.Form.Item>
+          </Main.Col>
 
-            <Main.Col span={12}>            
-                <Main.Form.Item className='form-items' name="NRO_ENT_SAL" type="text" label={<label style={{ marginLeft: '43px' }}>Número</label>} >
-                  <Main.Input 
-                    onKeyUp={handleKeyUp} 
-                    onKeyDown={handleKeyDown}
-                    className={`search_input ${FormName}_BLOQUEO`}
-                    name="NRO_ENT_SAL" 
-                />
-                </Main.Form.Item>            
-            </Main.Col>
+          <Main.Col span={12}>            
+              <Main.Form.Item className='form-items' name="NRO_ENT_SAL" type="text" label={<label style={{ marginLeft: '43px' }}>Número</label>} >
+                <Main.Input 
+                  onKeyUp={handleKeyUp} 
+                  onKeyDown={handleKeyDown}
+                  className={`search_input ${FormName}_BLOQUEO`}
+                  name="NRO_ENT_SAL" 
+               />
+              </Main.Form.Item>            
+          </Main.Col>
 
             <Main.Col span={12}>
 
@@ -126,6 +126,7 @@ const STENSAL = memo(({refGrid         ,form    ,FormName,  idComp, handleKeyDow
                   format={['DD/MM/YYYY']}
                   key="FEC_ENT_SAL"
                   placeholder=""
+                  // disabled={true} 
                   className={`${FormName}_FEC_ENT_SAL`}
                   onClick={(()=>Main.openStart(`${FormName}_FEC_ENT_SAL`))}
                 />
@@ -137,7 +138,7 @@ const STENSAL = memo(({refGrid         ,form    ,FormName,  idComp, handleKeyDow
             <Main.Col span={24}>
               <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Motivo</label>}>
                 <Main.Form.Item name="COD_MOTIVO" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
-                    <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className={`${FormName}_BLOQUEO requerido`}
+                    <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className={`${FormName}_BLOQUEO`}
                     />
                 </Main.Form.Item>
                 <Main.Form.Item name="DESC_MOTIVO" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
@@ -149,7 +150,7 @@ const STENSAL = memo(({refGrid         ,form    ,FormName,  idComp, handleKeyDow
             <Main.Col span={24}>
               <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Deposito</label>}>
                 <Main.Form.Item name="COD_DEPOSITO" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
-                    <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className={`${FormName}_BLOQUEO requerido`} />
+                    <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className={`${FormName}_BLOQUEO`} />
                 </Main.Form.Item>
                 <Main.Form.Item name="DESC_DEPOSITO" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
                     <Main.Input disabled/>
@@ -167,7 +168,7 @@ const STENSAL = memo(({refGrid         ,form    ,FormName,  idComp, handleKeyDow
             <Main.Col span={24}>
                 <Main.Form.Item label={<label style={{ width: '55px' }}><span style={{ color: 'red' }}>*</span>Proveedor</label>}>
                   <Main.Form.Item name="COD_PROVEEDOR" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
-                      <Main.Input  onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className={`${FormName}_BLOQUEO requerido`}/>
+                      <Main.Input  onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className={`${FormName}_BLOQUEO`}/>
                   </Main.Form.Item>
                   <Main.Form.Item name="DESC_PROVEEDOR" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
                       <Main.Input disabled/>
@@ -178,7 +179,7 @@ const STENSAL = memo(({refGrid         ,form    ,FormName,  idComp, handleKeyDow
             <Main.Col span={18}>
                 <Main.Form.Item label={<label style={{ width: '55px' }}><span style={{ color: 'red' }}>*</span>Moneda</label>}>
                   <Main.Form.Item name="COD_MONEDA" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
-                      <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className={`${FormName}_BLOQUEO requerido`} />
+                      <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className={`${FormName}_BLOQUEO`} />
                   </Main.Form.Item>
                   <Main.Form.Item name="DESC_MONEDA" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
                       <Main.Input disabled/>
@@ -189,7 +190,7 @@ const STENSAL = memo(({refGrid         ,form    ,FormName,  idComp, handleKeyDow
             <Main.Col span={6}>
               <Main.Form.Item label={<label style={{width:'45px'}}>Cambio</label>} name="TIP_CAMBIO">
                 <Main.NumberFormat 
-                  className="type-numeri"
+                  className="type-numeri requerido"
                   thousandSeparator="."
                   decimalScale={3}
                   decimalSeparator=","
@@ -203,7 +204,7 @@ const STENSAL = memo(({refGrid         ,form    ,FormName,  idComp, handleKeyDow
             <Main.Col span={10}>
               <Main.Form.Item label={<label style={{width:'55px'}}>Cambio U$</label>} name="TIP_CAMBIO_US">
                 <Main.NumberFormat 
-                  className="type-numeri"
+                  className="type-numeri requerido"
                   thousandSeparator="."
                   decimalScale={3}
                   decimalSeparator=","
@@ -276,21 +277,21 @@ const STENSAL = memo(({refGrid         ,form    ,FormName,  idComp, handleKeyDow
         
         <Main.Col id={`form-det-${FormName}`} style={{marginTop:'12px'}} span={24}>
           <Main.HandsontableGrid
-            refData={refGrid}
-            columns={columns}
-            FormName={FormName}
-            idComp={idComp}// id del componente
-            height={210}
-            maxFocus={maxFocus}
-            setfocusRowIndex={setfocusRowIndex}
-            columnNavigationEnter={columnNavigationEnter}
-            colorButtom={false}
-            dataCabecera={dataRef}
-            columnModal={columnModal}
-            validaExterno={validaExterno}
-            setClickCell={setClickCell}
-            focusEditMode={false} // boolean. true/ el valda externo se ejecuta solo cuando se edita el campo
-          />          
+              refData={refGrid}
+              columns={columns}
+              FormName={FormName}
+              idComp={idComp}// id del componente
+              height={210}
+              maxFocus={maxFocus}
+              setfocusRowIndex={setfocusRowIndex}
+              columnNavigationEnter={columnNavigationEnter}
+              colorButtom={false}
+              dataCabecera={dataRef}
+              columnModal={columnModal}
+              validaExterno={validaExterno}
+              setClickCell={setClickCell}
+              focusEditMode={false} // boolean. true/ el valda externo se ejecuta solo cuando se edita el campo
+            />          
         </Main.Col>
         <Main.Col span={14}/>
         
@@ -310,7 +311,7 @@ const STENSAL = memo(({refGrid         ,form    ,FormName,  idComp, handleKeyDow
         <Main.Col span={5} onClick={()=>setClickCell('CAB')}>
           <Main.Form.Item label={<label style={{width:'60px'}}>Total</label>} name="TOT_COMPROBANTE">
             <Main.NumberFormat 
-              className="type-numeri"
+              className="type-numeri requerido"
               thousandSeparator="."
               decimalScale={3}
               decimalSeparator=","
