@@ -446,34 +446,38 @@ const MainST = memo(({history, location, match}) => {
     params.INDICE = 0;
     params.LIMITE = data_len;
     Main.activarSpinner()    
-    Main.Request(mainUrl.url_list_cab, "POST", params).then((resp) => {
-      let response = resp?.data?.rows;
-      if (response.length > 0) {
-        
-        // LIMPIAR EL DELETE
-        refCab.current.delete         = []
-        refCab.current.deleteDet      = []
-
-        if(response.length === 1) document.getElementById("total_registro").textContent = "1";
-        else document.getElementById("total_registro").textContent = response.length
-        refCab.current.data    = response;
-        refCab.current.dataCan = JSON.parse(JSON.stringify(response));
-        setIndice(0);
-        setTimeout(()=>{
-          postQueryCab(response[0],buttonF8,getIndice())                    
-        })
-      }else{
-        Main.desactivarSpinner();
-        Main.message.info({
-          content  : `No se han encontrado registros`,
-          className: 'custom-class',
-          duration : `${2}`,
-          style    : {
-            marginTop: '2vh',
-          },
-        });
-      }
-    });
+    try {
+      Main.Request(mainUrl.url_list_cab, "POST", params).then((resp) => {
+        let response = resp?.data?.rows;
+        if (response.length > 0) {
+          
+          // LIMPIAR EL DELETE
+          refCab.current.delete         = []
+          refCab.current.deleteDet      = []
+  
+          if(response.length === 1) document.getElementById("total_registro").textContent = "1";
+          else document.getElementById("total_registro").textContent = response.length
+          refCab.current.data    = response;
+          refCab.current.dataCan = JSON.parse(JSON.stringify(response));
+          setIndice(0);
+          setTimeout(()=>{
+            postQueryCab(response[0],buttonF8,getIndice())                    
+          })
+        }else{
+          Main.desactivarSpinner();
+          Main.message.info({
+            content  : `No se han encontrado registros`,
+            className: 'custom-class',
+            duration : `${2}`,
+            style    : {
+              marginTop: '2vh',
+            },
+          });
+        }
+      });
+    } catch (error) {
+      console.error(error)
+    }
   }
   const postQueryCab = async(info,buttonF8 = false,indice) => {
     if(info){      

@@ -1,0 +1,11 @@
+.CMFACTUR_card_body>.ant-card-body {
+  padding: 7px !important;
+}
+
+.handsontable .lightblue-bg-verd {
+  background-color: #c7d8c370;
+}
+
+.handsontable .lightblue-bg-amar {
+  background-color: #ffde762e;
+}
