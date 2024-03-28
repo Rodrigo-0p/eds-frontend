@@ -208,8 +208,14 @@ const CMFACTUR = memo(({ refGrid         , form          , FormName, idComp,  da
 
                   <Main.Col span={24}>
                     <Main.Form.Item label={<label style={{width:'78px'}}>Tip Factura</label>}>
-                      <Main.Form.Item name="IND_TIPO_FACTURA">
-                        <Main.Radio.Group disabled>
+                      <Main.Form.Item name="IND_TIPO_FACTURA" 
+                      onChange={(e)=>{
+                        let valor = {target:{}}
+                        valor.target.id    = "IND_TIPO_FACTURA"
+                        valor.target.value = e.target.value                       
+                        handleInputChange(valor);
+                      }}>
+                        <Main.Radio.Group className={`${FormName}_IND_TIPO_FACTURA`} >
                           <Main.Radio style={{paddingRight:'12px'}} value="N" >Normal</Main.Radio>
                           <Main.Radio style={{paddingRight:'26px'}} value="V" >Virtual</Main.Radio>
                           <Main.Radio value="E" >Electronica</Main.Radio>

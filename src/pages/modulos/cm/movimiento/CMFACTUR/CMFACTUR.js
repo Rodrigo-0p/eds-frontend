@@ -15,7 +15,8 @@ const idComp     = `GRID_${FormName}`;
 
 let data_len   = 100
 var mitad_data = data_len / 2;
-const MainCM = memo(() => {
+
+const MainCM = memo(({history, location}) => {
 
   const [form]              = Main.Form.useForm()  
   const cod_empresa         = sessionStorage.cod_empresa;
@@ -23,7 +24,8 @@ const MainCM = memo(() => {
   const defaultOpenKeys     = Main.DireccionMenu(FormName);
   const defaultSelectedKeys = Main.Menu(FormName);
   // USESTATE
-  const [shows, setShows]   = React.useState(false);
+  const [ shows        , setShows         ] = React.useState(false);
+  const [ activateAtras, setActivateAtras ] = React.useState(false);
   // USE REF
   const banRef              = React.useRef({indice:0,bandNew:false, id_cabecera:'', bandPost_Cab_Det : false, banCambioPrecio:true,
                                             b_bloqueo:false,b_bloqueo_aux:false,
@@ -42,7 +44,21 @@ const MainCM = memo(() => {
                                             , url_buscador: ''
                                             });
   React.useEffect(()=>{
-    inicialForm();    
+    setTimeout(async()=>{
+      if(location.state !== undefined){
+        setActivateAtras(true)
+        let rowData = getParmas(true);
+        rowData.NRO_COMPROBANTE   = location.state.NRO_COMPROBANTE;
+        rowData.IND_COMPRA_LOCAL  = 'S';
+        rowData.SER_COMPROBANTE   = 'A';
+        rowData.TIP_COMPROBANTE   = 'FAC';
+        setTimeout(()=>{
+          getDataCab(rowData);
+        })
+      }else{
+        inicialForm();
+      }
+    },45);
     // eslint-disable-next-line
   },[])
 
@@ -333,7 +349,7 @@ const MainCM = memo(() => {
               Main.setModifico(FormName)
               
               Main.message.success({
-                content  : `Procesado correctamente!!`,
+                content  : resp.data.p_mensaje !== '' && resp.data.p_mensaje !== 'OK'? resp.data.p_mensaje : 'Procesado correctamente!!',
                 className: 'custom-class',
                 duration : 2,
                 style    : {
@@ -353,7 +369,7 @@ const MainCM = memo(() => {
               refCab.current.data        = infoCab.rowsAux
               refCab.current.dataCan     = JSON.parse(JSON.stringify(refCab.current.data));
 
-              loadForm(infoCab.rowsAux,banRef.current.indice,true);
+              loadForm(infoCab.rowsAux,banRef.current.indice,refCab.current.delete.length === 0 ? false : true );
               setTimeout(()=>document.getElementById('COD_SUCURSAL').focus())
             }else{
               Main.desactivarSpinner();
@@ -584,7 +600,7 @@ const MainCM = memo(() => {
         if( banRef.current.id_cabecera !== refCab.current.data[index]?.ID && !Main._.isUndefined(refCab.current.data[index]?.ID)){
           banRef.current.id_cabecera = refCab.current.data[index].ID;
           banRef.current.indice = index;
-          loadForm(refCab.current.data[index],false,index)
+          loadForm(refCab.current.data[index],index)
           document.getElementById("total_registro").textContent = refCab.current.data.length
           document.getElementById("mensaje").textContent = "";
           document.getElementById("indice").textContent  = index + 1;
@@ -1134,6 +1150,9 @@ const MainCM = memo(() => {
     Main.setBloqueoFecha(`${FormName}_FEC_EMBARQUE`   ,p_bloqueo_aux);
     Main.setBloqueoFecha(`${FormName}_FEC_RECEPCION`  ,p_bloqueo_aux);
 
+    Main.setBloqueoRadio(`${FormName}_IND_TIPO_FACTURA`,p_bloqueo);   
+
+
     setTimeout(()=>{
       habilitar_columna()
     },1);
@@ -1434,6 +1453,23 @@ const MainCM = memo(() => {
     refCab.current.data[banRef.current.indice][nameInput] = await e !== null ? Main.format_N(e.$d) : Main.moment(new Date(),'DD MM YYYY');    
 		typeEvent();  
   }
+  const funcionAtras = async()=>{
+    if(!refCab.current.activateCambio){
+      setActivateAtras(false)
+      setTimeout(()=>{
+        history.push({ 
+          pathname     :`${location.rutaAtras}`,
+          rowData      : location.rowData,
+          rowIndex     : location.rowIndex    ? location.rowIndex    : 0,
+          tabkey       : location.tabkey      ? location.tabkey      : 0,
+          columnIndex  : location.columnIndex ? location.columnIndex : 0,
+        })
+      })      
+    }else{
+      Main.alert('Hay cambios pendientes. ¿Desea guardar los cambios?','Atencion!','confirm','Guardar','Cancelar',guardar,funcionCancelar)
+    }
+  }
+
   return (
     <>
       <Main.FormModalSearch
@@ -1471,7 +1507,9 @@ const MainCM = memo(() => {
             vprinf={false}
             refs={{ref:buttonSaveRef}}
             funcionBuscar={funcionBuscar}
-            NavigateArrow={navigateArrow}             
+            NavigateArrow={navigateArrow}
+            activateAtras={activateAtras}
+            funcionAtras={funcionAtras}
           />
 
           

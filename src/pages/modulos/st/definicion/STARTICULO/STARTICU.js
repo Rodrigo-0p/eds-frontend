@@ -197,7 +197,7 @@ const MainST = memo(({history, location, match}) => {
 
     var data = {
       updateInserData      ,
-      aux_updateInserData : refCab.current.dataCan[getIndice()],
+      aux_updateInserData  : refCab.current.dataCan[getIndice()],
       delete_cab	         , 
 
       updateInserDataDet   ,
@@ -236,7 +236,7 @@ const MainST = memo(({history, location, match}) => {
             refCab.current.deleteDet = []
 
             let keyPamas = await getParmas(true)
-            keyPamas.COD_ARTICULO = infoCab.rowsAux[0].COD_ARTICULO
+            keyPamas.COD_ARTICULO = infoCab.rowsAux[getIndice()].COD_ARTICULO
             setTimeout(()=>{
               getDataCab(true,keyPamas)
             },4)
@@ -365,7 +365,7 @@ const MainST = memo(({history, location, match}) => {
     valor.ID	               = newKey;
     valor.COD_EMPRESA	       = refCab.current.data[indexRow === false ? 0 : indexRow].COD_EMPRESA
     valor.COD_ARTICULO       = refCab.current.data[indexRow === false ? 0 : indexRow].COD_ARTICULO    
-    valor.idCabecera         = idCabecera ? idCabecera : refCab.current.data[indexRow]?.ID;
+    valor.idCabecera         = form.getFieldsValue('ID');
     return valor;
   }
   const getDetalle = async (idCabecera, data = false,indexRow = 0,f7 = false)=>{
@@ -615,7 +615,7 @@ const MainST = memo(({history, location, match}) => {
           if(getIndice() > mitad_data && bandPost_Cab_Det){
             bandPost_Cab_Det = false;
             let params = { INDICE  : refCab.current.data.length, 
-                          LIMITE  : data_len
+                           LIMITE  : data_len
                         };  
             try {
               await Main.Request(mainUrl.url_list_cab,'POST',params)
