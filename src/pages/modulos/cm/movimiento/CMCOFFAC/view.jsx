@@ -3,7 +3,7 @@ import Main            from '../../../../../componente/util/main';
 import mainColumn      from '../CMCOFFAC/columnModal/mainColumn';
 
 
-const CMCOFFAC = memo(({refData, FormName, idComp, buttomAccion,validaRow}) => {
+const CMCOFFAC = memo(({refData, FormName, idComp, buttomAccion,validaRow,handleonkeydown}) => {
 
   return (
     <Main.HandsontableGrid
@@ -14,6 +14,8 @@ const CMCOFFAC = memo(({refData, FormName, idComp, buttomAccion,validaRow}) => {
       height={540}
       buttomAccion={buttomAccion}
       validaAllExterno={validaRow}
+      f7_and_F8={handleonkeydown}
+      
     />
   );
 });

@@ -296,7 +296,8 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
                             height                     , columnNavigationEnter = [] , 
                             setUpdateValue_ant = false , setUpdateValue_desp  , setLastFocusNext  = false          , columBuscador    = ''   ,  buttomAccion     = false,
                             maxFocus                   , dataCabecera         , setClickCell       , multipleHeader, nextFocus        = false,  setUpdateEdit,
-                            colorButtom = false        , validaExterno = false, focusEditMode      , executeCab    , validaAllExterno = false,  nextValidaInput  = false}) => {
+                            colorButtom = false        , validaExterno = false, focusEditMode      , executeCab    , validaAllExterno = false,  nextValidaInput  = false,
+                            f7_and_F8}) => {
 
   const refModal            = React.useRef({  modalColumn : []
                                             , data        : []                                            
@@ -523,12 +524,11 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
     if(editInput.length){
       let rowValue = g_getRowFocus(idComp)[0];
       refKeyDown.current.inputChange = rowValue
-    } 
-
-    if(e.keyCode === 118) e.preventDefault()
-
-    setEventGlobal(e?.keyCode,idComp)
+    }
     
+    if(f7_and_F8 && [118,119].includes(e.keyCode))f7_and_F8(e);
+    else if(e.keyCode === 118) e.preventDefault();
+
     if([38,40].includes(e?.keyCode) && e.repeat){
       if( e.keyCode === 40){
         let rowCount     = refData?.current?.hotInstance?.getSourceData()?.length;

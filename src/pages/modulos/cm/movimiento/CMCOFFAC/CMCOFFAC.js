@@ -1,10 +1,11 @@
-import React, { memo } from 'react';
-import CMCOFFAC        from './view';
-import Main            from '../../../../../componente/util/main';
+import React, { memo }    from 'react';
+import CMCOFFAC           from './view';
+import Main               from '../../../../../componente/util/main';
 import './styles/CMCOFFAC.css';
-import mainUrl         from './url/mainUrl';
-import {Report}        from './reporte';
-
+import mainUrl            from './url/mainUrl';
+import {Report}           from './reporte';
+import mainColumn         from './columnModal/mainColumn';
+import {objetoInicialCab} from './ObjetoInicial/mainInicial'
 
 const FormName   = "CMCOFFAC";
 const TituloList = "Confirmar Compras"
@@ -18,7 +19,7 @@ const MainCM = memo(({history, location}) => {
   const defaultOpenKeys     = Main.DireccionMenu(FormName);
   const defaultSelectedKeys = Main.Menu(FormName);
   // REF
-  const banRef              = React.useRef({valida:false,rowCan:[]});
+  const banRef              = React.useRef({valida:false,rowCan:[],objetoF7:{}});
   const buttonSaveRef       = React.useRef();
   const refData             = React.useRef();
   
@@ -44,9 +45,16 @@ const MainCM = memo(({history, location}) => {
     try {
       let info = await Main.Request(mainUrl.url_listar_cab,'POST',dataParams);
 
-      if(info?.data?.rows?.length === 0 || info?.data?.rows === undefined) content = [];
-      else content = info.data.rows;
-      
+      if(info?.data?.rows?.length === 0 || info?.data?.rows === undefined){
+        content.push(JSON.parse(JSON.stringify(objetoInicialCab)));
+        Main.message.info({
+          content  : `No se encontro datos!!`,
+          className: 'custom-class',
+          duration : `${2}`,
+          style    : {marginTop: '2vh'},
+        });
+      } else content = info.data.rows;        
+            
       refData.current.hotInstance.loadData(content);
       banRef.current.rowCan = JSON.parse(JSON.stringify(content));
       setTimeout(()=>{
@@ -234,6 +242,38 @@ const MainCM = memo(({history, location}) => {
       Main.desactivarSpinner()
       console.log(error)
     }
+    // eslint-disable-next-line 
+  },[])
+  const handleonkeydown = React.useCallback((e)=>{
+    const hotInstance = refData.current.hotInstance;
+    e.preventDefault();
+    if(hotInstance){
+      hotInstance.getSelected()
+      const selected = hotInstance?.getSelected() ? hotInstance?.getSelected()[0] : [0,0,0,0];
+      if(e.keyCode === 118 && [0,1,4,5,6].includes(selected[1])){
+        Main.activarSpinner()
+        hotInstance.loadData([]);
+        let valor  = JSON.parse(JSON.stringify(objetoInicialCab));
+        banRef.current.objetoF7 = valor
+        hotInstance.loadData([valor]);
+        setTimeout(()=>{
+          const meta = hotInstance.getCellMetaAtRow(0);
+          meta[selected[1]].readOnly = false;
+          hotInstance.selectCell(0, selected[1]);
+          Main.desactivarSpinner()  
+        },5)
+      }else if([0,1,4,5,6].includes(selected[1])){
+        let data = banRef.current.objetoF7;        
+        data[mainColumn.columns[selected[1]].data] = e.target.value.trim().length > 0 ? e.target.value : data[mainColumn.columns[selected[1]].data]
+        data.updated = false
+        inicialForm(data,0,selected[1]);        
+        hotInstance.deselectCell();
+        let activeEditor = hotInstance?.getActiveEditor();
+        if (activeEditor) activeEditor.finishEditing();
+        Main.desactivarSpinner()
+      }
+    }
+    // eslint-disable-next-line 
   },[])
 
   return (
@@ -258,6 +298,7 @@ const MainCM = memo(({history, location}) => {
           refData={refData}
           buttomAccion={iconAccion}
           validaRow={validaRow}
+          handleonkeydown={handleonkeydown}
         />
       </Main.Paper>
       </Main.AntLayout>
