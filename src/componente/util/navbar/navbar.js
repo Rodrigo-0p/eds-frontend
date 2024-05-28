@@ -67,7 +67,7 @@ const Navbar = memo(() => {
       <Main.Row>
         <Main.Col span={10}/>
         <Main.Col span={2}>
-          <Main.Tooltip placement="bottom" title={`Sucursales - ${sessionStorage.desc_sucursal}`}>
+          <Main.Tooltip color='gold' placement="bottom" title={`Sucursales - ${sessionStorage.desc_sucursal}`}>
             <Main.Button
                 type="text"
                 icon={<img alt='' src={sucursalIcono} width="30" />}

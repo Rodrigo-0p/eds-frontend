@@ -166,8 +166,6 @@ const SiderBartLef = memo(({ defaultSelectedKeys, defaultOpenKeys, CloseSession,
                         }
                     ]}
                 />
-
-               
             </Main.Modal>
         
             <Layout.Sider id="sidebarLeft" width="250">

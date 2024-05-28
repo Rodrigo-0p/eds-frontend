@@ -194,7 +194,6 @@ const GeneraUpdateInsertDet = async (rows, keyNotNull, rowCabecera, updateDepend
         }
       }
     } else {
-      // if(!item.insertDefault){
       rowsAux.push(_.omit(item, 'updated', 'inserted'));
       for (let i = 0; i < updateDependencia.length; i++) {
         let ObjectKey = updateDependencia[i][Object.keys(updateDependencia[i])[0]];
@@ -205,7 +204,6 @@ const GeneraUpdateInsertDet = async (rows, keyNotNull, rowCabecera, updateDepend
           }
         }
       }
-      // }
     }
   }
   return {

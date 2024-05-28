@@ -9,6 +9,7 @@ import doble_next_left   from '../../../assets/icons/doubleLeft.png';
 import doble_next_right  from '../../../assets/icons/doubleRight.png';
 import next_right        from '../../../assets/icons/nextRight.png';
 import printer           from '../../../assets/icons/printer.png';
+import printerPdf        from '../../../assets/icons/pdf.png';
 import excel             from '../../../assets/icons/excel.svg';
 import expotTxt          from '../../../assets/icons/txt.svg';
 import iconBuscar        from '../../../assets/icons/iconsDetective.png';
@@ -27,7 +28,7 @@ const HeaderMenu = memo(({AddForm, SaveForm , deleteRows    , cancelar     ,
                           reporte           , funcionBuscar , 
                           buttonBuscar      , activateAtras , funcionAtras ,
                           excelfuncion      , addButton     , textfuncion  , 
-                          search            , searchChange
+                          search            , searchChange  , pdfreporte
                          }) => {
     
 
@@ -40,44 +41,51 @@ const HeaderMenu = memo(({AddForm, SaveForm , deleteRows    , cancelar     ,
         <div className="paper-header-menu">
              {  AddForm
                  ?
-                 <Button
-                    icon={<img alt="add" src={nuevo} width="20"/>}         
-                    className="paper-header-menu-button"
-                    disabled={Permiso.insert === 'S' ? false : true}
-                    onClick={AddForm}
-                />
+                 <Main.Tooltip color={"#429846"} title="Nuevo" >
+                    <Button
+                        icon={<img alt="add" src={nuevo} width="20"/>}         
+                        className="paper-header-menu-button"
+                        disabled={Permiso.insert === 'S' ? false : true}
+                        onClick={AddForm}
+                    />
+                 </Main.Tooltip>
+                 
                 : null
             }
             {
                 SaveForm ?
-                    <Button
-                        icon={<img alt="save" src={guardarIcon} width="20" />}
-                        className="paper-header-menu-button"
-                        ref={refs.ref}
-                        onClick={SaveForm}
-                    />
+                    <Main.Tooltip color={"#fcb12b"} title="Guardar" >
+                        <Button
+                            icon={<img alt="save" src={guardarIcon} width="20" />}
+                            className="paper-header-menu-button"
+                            ref={refs.ref}
+                            onClick={SaveForm}
+                        />
+                    </Main.Tooltip>                    
                 : null
             }
-            {
+            {                    
                 deleteRows ?
-                <Button 
-                    style={{marginRight:'3px'}}
-                    icon={<img alt='delete' src={deleteIcon} width="20"/>}
-                    className="paper-header-menu-button" 
-                    disabled={Permiso.delete === 'S' ? false : true}
-                    onClick={deleteRows}
-                />
+                    <Main.Tooltip color={"#db2426"} title="Eliminar" >
+                        <Button 
+                            style={{marginRight:'3px'}}
+                            icon={<img alt='delete' src={deleteIcon} width="20"/>}
+                            className="paper-header-menu-button" 
+                            disabled={Permiso.delete === 'S' ? false : true}
+                            onClick={deleteRows}
+                        />
+                    </Main.Tooltip>
                 : null 
             }
             {
                 NavigateArrow ?
                 <>
                     <Button
-                    id="left-arrow"
-                        icon={<img alt='left' src={doble_next_left} width="20"  id="left-arrow"/>}
-                        className="paper-header-menu-button"
-                        onClick={()=>NavigateArrow('next-left')}
-                    />
+                        id="left-arrow"
+                            icon={<img alt='left' src={doble_next_left} width="20"  id="left-arrow"/>}
+                            className="paper-header-menu-button"
+                            onClick={()=>NavigateArrow('next-left')}
+                        />
                     <Button
                         id="left-arrow"
                         icon={<img alt='left-row' src={next_left} width="20"  id="left-arrow"/>}
@@ -102,10 +110,10 @@ const HeaderMenu = memo(({AddForm, SaveForm , deleteRows    , cancelar     ,
             }
             {
                 funcionBuscar ?
-                <>
+                <>                    
                     <Button 
                         id="buscador-f7"
-                         // eslint-disable-next-line
+                        // eslint-disable-next-line
                         icon={<img src={iconBinacular} width="20" id="right-arrow"/>}
                         className={`paper-header-menu-button ${formName}_prepare_search`} 
                         onClick={()=>funcionBuscar(false)}
@@ -116,19 +124,33 @@ const HeaderMenu = memo(({AddForm, SaveForm , deleteRows    , cancelar     ,
                         icon={<img src={iconBuscar} width="20" id="right-arrow"/>}
                         className={`button-buscar-ocultar-visible paper-header-menu-button ${formName}_search`}                                     
                         onClick={()=>funcionBuscar(true)}
-                    />                    
+                    />  
                 </>
                 : null
             }
                             
             {
                 reporte ? 
-                    <Button 
-                        style={{marginLeft:'10px'}}
-                        icon={<img alt='' src={printer} width="20" id="right-arrow"/>}
-                        className="paper-header-menu-button" 
-                        onClick={reporte}
-                    />
+                    <Main.Tooltip color={"cyan"} title="Reporte" >
+                        <Button 
+                            style={{marginLeft:'10px'}}
+                            icon={<img alt='' src={printer} width="20" id="right-arrow"/>}
+                            className="paper-header-menu-button" 
+                            onClick={reporte}
+                        />
+                    </Main.Tooltip>
+                : null
+            }
+            {
+                pdfreporte ?
+                    <Main.Tooltip color={"cyan"} title="PDF" >
+                        <Button 
+                            style={{marginLeft:'10px'}}
+                            icon={<img alt='' src={printerPdf} width="20" id="right-arrow"/>}
+                            className="paper-header-menu-button" 
+                            onClick={pdfreporte}
+                        />
+                    </Main.Tooltip>
                 : null
             }
             {
@@ -160,12 +182,12 @@ const HeaderMenu = memo(({AddForm, SaveForm , deleteRows    , cancelar     ,
                     onClick={()=>funcionAtras(buttonBuscar)}
                 />
             }
-            <Button 
-                style={{marginLeft:'10px'}}
-                icon={<img alt='' src={cancelarEdit} width="19"/>}
-                className={`${formName}-cancelar button-cancelar-ocultar-visible-grid paper-header-menu-button stylesCancelar`}
-                onClick={funcion_cancelar}
-            />
+                <Button 
+                    style={{marginLeft:'10px'}}
+                    icon={<img alt='' src={cancelarEdit} width="19"/>}
+                    className={`${formName}-cancelar button-cancelar-ocultar-visible-grid paper-header-menu-button stylesCancelar`}
+                    onClick={funcion_cancelar}
+                />
             {
                 addButton ? addButton : null
             }

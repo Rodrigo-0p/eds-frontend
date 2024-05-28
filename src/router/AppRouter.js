@@ -1,21 +1,20 @@
-import React                  from 'react';
+import React               from 'react';
 import { BrowserRouter
-        , Switch, Route }     from 'react-router-dom';
-import _                      from "underscore";
+        , Switch, Route }  from 'react-router-dom';
+import _                   from "underscore";
 // Componete
-import NotFound               from './Router_404';
-import Lgn                    from './lg/rLogin';
-import Home                   from '../pages/Home';
+import NotFound            from './Router_404';
+import Lgn                 from './lg/rLogin';
+import Home                from '../pages/Home';
 
-import bs                     from '../router/modulosRouter/bs';
-import cm                     from '../router/modulosRouter/cm';
-import vt                     from '../router/modulosRouter/vt';
-import st                     from '../router/modulosRouter/st';
-
-// import TEST                   from '../pages/modulos/test/prueba'
+import bs                  from '../router/modulosRouter/bs';
+import cm                  from '../router/modulosRouter/cm';
+import vt                  from '../router/modulosRouter/vt';
+import st                  from '../router/modulosRouter/st';
+import cc                  from '../router/modulosRouter/cc';
 
 const Router = () => {
-    const route = _.union(Lgn,bs,cm,vt,st);
+    const route = _.union(Lgn,bs,cm,vt,st,cc);
     return (
         <BrowserRouter>       
             <Switch>
@@ -25,7 +24,6 @@ const Router = () => {
                         path={item.path} 
                         component={item.component}/>
                 ))}                        
-                {/* <Route exact path={"/test"}  component={TEST} /> */}
                 <Route exact path={"/home"}  component={Home} />
                 <Route component={NotFound}/>
             </Switch>

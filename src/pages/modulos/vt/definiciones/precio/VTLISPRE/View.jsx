@@ -31,14 +31,14 @@ const columnModal = {
 };
 
 export const columns = [
-  { data: 'COD_ARTICULO'      , title: 'Articulo'     , width : 35  , className: 'htLeft'   , requerido:true   , filter:true   }, 
+  { data: 'COD_ARTICULO'      , title: 'Articulo'     , width : 20  , className: 'htLeft'   , requerido:true   , filter:true   }, 
   { data: 'DESC_ARTICULO'     , title: 'Descripcion'  , width : 100 , readOnly:true         , requerido:false  , filter:true    , textWrap:true}, 
   { data: 'COD_UNIDAD_MEDIDA' , title: 'Unidad Medida', width : 35  , className: 'htLeft'   , requerido:true   , readOnly:false}, 
   { data: 'DESC_UNIDAD_MEDIDA', title: 'Descripcion'  , width : 100 , readOnly:true         , requerido:false  , filter:false  }, 
-  { data: 'FEC_VIGENCIA'      , title: 'Fecha'        , width : 40  , className: 'htLeft '  , readOnly:false   , type:'date'    , hora:true},
-  { data: 'PRECIO_FIJO'       , title: 'Precio Venta' , width : 40  , className: 'htRight'  , requerido:true   , type:'numeric' , format:{pattern: '0,0.00'}}, 
+  { data: 'FEC_VIGENCIA'      , title: 'Fecha'        , width : 30  , className: 'htLeft '  , readOnly:false   , type:'date'    , hora:true},
+  { data: 'PRECIO_FIJO'       , title: 'Precio Venta' , width : 20  , className: 'htRight'  , requerido:true   , type:'numeric' , format:{pattern: '0,0.00'}}, 
 ]
-const columnNavigationEnter = [0,2,4,5,6];
+const columnNavigationEnter = [0,2,3,4,5];
 
 const STLISPRE = memo(({ form            , refGrid        , FormName   , idComp          , handleKeyDown   , handleKeyUp      , 
                         handleInputChange, handleCheckbox , dataRef    , setfocusRowIndex, setLastFocusNext, bloqueoListPrecio,

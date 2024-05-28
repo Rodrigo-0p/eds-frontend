@@ -15,7 +15,6 @@ const CMCOFFAC = memo(({refData, FormName, idComp, buttomAccion,validaRow,handle
       buttomAccion={buttomAccion}
       validaAllExterno={validaRow}
       f7_and_F8={handleonkeydown}
-      
     />
   );
 });

@@ -131,7 +131,6 @@ const STARTICU = memo(({form     , refGrid  , FormName     , idComp     , dataRe
               <Main.Input 
               onKeyUp={handleKeyUp} 
               onKeyDown={handleKeyDown} 
-              // ref={stateRef.bloqueoCliente} 
               className='search_input'  />
             </Main.Form.Item>
           </Main.Col>

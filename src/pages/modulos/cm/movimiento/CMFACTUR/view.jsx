@@ -83,10 +83,10 @@ export const columns = [
   { data: 'COD_PROVEEDOR_REC'    , title: 'Recup.'       , width : 25  , className: 'htLeft'   , requerido:false     , readOnly:false }, 
   { data: 'COD_UNIDAD_MEDIDA'    , title: 'U.M'          , width : 25  , className: 'htLeft'   , requerido:true      , readOnly:false  , editFocus:true , nextValida:true }, 
   { data: 'DESC_UNIDAD_MEDIDA'   , title: 'Descripcion'  , width : 120 , readOnly:true         , filter:false   }    , 
-  { data: 'COD_IVA'              , title: 'IVA'          , width : 25  , type:'numeric'        , className: 'htRight', readOnly:true   , format:{pattern: '0,0'}},
+  { data: 'COD_IVA'              , title: 'IVA'          , width : 25  , type:'numeric'        , className: 'htRight', readOnly:true        , format:{pattern: '0,0'}},
   { data: 'CANTIDAD'             , title: 'Cantidad'     , width : 55  , type:'numeric'        , requerido:true      , className: 'htRight' , readOnly:false  , format:{pattern: '0,0'}, validaAllExterno:true , isNegative:false, editFocus:true },   
   { data: 'PRECIO_UNITARIO_C_IVA', title: 'Precio Compra', width : 55  , type:'numeric'        , requerido:true      , className: 'htRight' , readOnly:false  , format:{pattern: '0,0'}, validaAllExterno:true}, 
-  { data: 'PRECIO_ULTIMO_COSTO'  , title: 'Últ. Costo'   , width : 55  , type:'numeric'        , className: 'htRight', readOnly:true   , format:{pattern: '0,0'}},   
+  { data: 'PRECIO_ULTIMO_COSTO'  , title: 'Últ. Costo'   , width : 55  , type:'numeric'        , className: 'htRight', readOnly:true        , format:{pattern: '0,0'}},   
   { data: 'DESCUENTO'            , title: 'Descuento'    , width : 55  , type:'numeric'        , requerido:false     , className: 'htRight' , readOnly:false  , format:{pattern: '0,0'}, validaAllExterno:true , isNegative:false},   
   { data: 'MONTO_TOTAL_C_IVA'    , title: 'Total'        , width : 60  , type:'numeric'        , className:'htRight' , readOnly:true        , format:{pattern: '0,0'}},     
   { data: 'IND_BLOQ'             , title: 'BI'           , width : 15  , className: 'htCenter' , type:'checkbox'     , checkbox:['S','N']   , readOnly:true  }, 
@@ -398,7 +398,7 @@ const CMFACTUR = memo(({ refGrid         , form          , FormName, idComp,  da
             columns={columns}
             FormName={FormName}
             idComp={idComp}// id del componente
-            height={263}
+            height={265}
             maxFocus={maxFocus}
             setLastFocusNext={setLastFocusNext}
             setfocusRowIndex={setfocusRowIndex}

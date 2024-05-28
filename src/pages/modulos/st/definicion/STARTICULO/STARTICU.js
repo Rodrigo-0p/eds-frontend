@@ -921,6 +921,7 @@ const MainST = memo(({history, location, match}) => {
           let resulMul = await (row[index].MULT * row[0].KG_PESO_NETO).toFixed(3)
           let resul    = await parseFloat(resulMul)
           refData.current.hotInstance.view.settings.data[index].KG_PESO_NETO = resul;
+          typeEventDet(index)
           refData.current.__hotInstance.updateSettings({      
             cellRow:index,
           },);

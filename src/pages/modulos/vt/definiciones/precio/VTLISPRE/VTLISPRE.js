@@ -308,6 +308,9 @@ const MainVt = memo(({history, location, match}) => {
       let rowIndex    = index.index ? index.index + 1 : rowValue[0].rowIndex === 0 ? rowValue[0].rowIndex + 1  : rowValue[0].rowIndex === -1 ? 0 : rowValue[0].rowIndex;
       let newRow      = await getParamsDetalle(false,getIndice());
 
+      console.log(rowIndex);
+
+
       refData.current.hotInstance.alter('insert_row', rowIndex);
       refData.current.hotInstance.view.settings.data[rowIndex] = newRow;
 
@@ -435,7 +438,7 @@ const MainVt = memo(({history, location, match}) => {
   }
   const getParamsDetalle = async (idCabecera = false, indexRow = 0)=>{
     var newKey              = Main.uuidID();
-    var valor               = await {...objetoInicialDet};
+    var valor               = await JSON.parse(JSON.stringify({...objetoInicialDet}));
     valor.ID	              = newKey;
     valor.COD_EMPRESA	      = refCab.current.data[indexRow === false ? 0 : indexRow].COD_EMPRESA
     valor.COD_SUCURSAL	    = refCab.current.data[indexRow === false ? 0 : indexRow].COD_SUCURSAL
@@ -464,7 +467,9 @@ const MainVt = memo(({history, location, match}) => {
     }
     refCab.current.dataCanDet = JSON.parse(JSON.stringify(content));
     refData.current?.hotInstance.loadData(content)
-    Main.setFocusedRowIndex(0,undefined,refData,idComp);
+    setTimeout(()=>{
+      Main.setFocusedRowIndex(0,undefined,refData,idComp);
+    },10);    
     ver_bloqueo(f7)
   }
   const manejaF7 = (idFocus)=>{
@@ -708,7 +713,7 @@ const MainVt = memo(({history, location, match}) => {
         Main.alert('Hay cambios pendientes. ¿Desea guardar los cambios?','Atencion!','confirm','Guardar','Cancelar',guardar,funcionCancelar)
       }
     }else{
-      manejaF7('DESCRIPCION')
+      manejaF7('COD_LISTA_PRECIO')
     };
     Main.setBuscar(FormName,!e)
   }
@@ -837,7 +842,7 @@ const MainVt = memo(({history, location, match}) => {
     if(e.keyCode === 13){
       setTimeout(()=>{
         addRow({index:rowindex})
-      },2)
+      },3)      
     }
     // eslint-disable-next-line
   },[]);

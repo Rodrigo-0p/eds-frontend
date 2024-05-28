@@ -50,6 +50,8 @@ import {
 	Checkbox	, List 		  , Tooltip	, Tabs 	 , 
 	Typography, DatePicker,	ConfigProvider} from 'antd';
 import locale	 		  			  			       	from 'antd/lib/locale/es_ES';
+import {NumerosALetras} 		from './numerosALetras';
+
 const { TabPane } = Tabs;
 const { Title } = Typography;
 
@@ -58,7 +60,7 @@ const mayuscula = (e) => {
 	e.target.value = ("" + e.target.value).toUpperCase();
 };
 
-const alert = (content = '',titulo = '',  type = 'info', desc_ok = 'Aceptar', desc_cancel = 'Cancelat', funcionAceptar = false , funcionCancelar= false) => {
+const alert = (content = '',titulo = '',  type = 'info', desc_ok = 'Aceptar', desc_cancel = 'Cancelat', funcionAceptar = false , funcionCancelar= false,FormName = '') => {
 	setTimeout(()=>{
 		Modal[type === 'alert' ? 'info' : type]({
 			title:<div className='titleModal'>{titulo}</div>,
@@ -71,7 +73,7 @@ const alert = (content = '',titulo = '',  type = 'info', desc_ok = 'Aceptar', de
 				if(funcionAceptar) funcionAceptar()
 				else Modal.destroyAll() 
 			},
-			
+			okButtonProps:{className:`${FormName}_alert`},
 			cancelText:desc_cancel,
 			onCancel() {
 				if(funcionCancelar) funcionCancelar()
@@ -285,6 +287,17 @@ const round = (number, decimals)=>{
 	return Math.round(number * factor) / factor;
 }
 
+const ajustarTexto = (rectWidth, fontSize, texto) => {
+  const charWidth = 0.6 * fontSize; // Este valor es aproximado y puede variar según la fuente
+  // Calcula el número máximo de caracteres que caben en el ancho del rectángulo
+  const maxChars = Math.floor(rectWidth / charWidth);
+  if (texto.length > maxChars) {
+    texto = texto.substring(0, maxChars - 3) + "...";
+  }
+  return texto;
+}
+
+
 var Guardar = 'f10';
 
 const Main = {
@@ -378,6 +391,8 @@ const Main = {
 	, numerico_grilla
 	, nvl
 	, round
+	, ajustarTexto
+	, NumerosALetras
 }
 
 

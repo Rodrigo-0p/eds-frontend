@@ -263,14 +263,19 @@ const MainCM = memo(({history, location}) => {
           Main.desactivarSpinner()  
         },5)
       }else if([0,1,4,5,6].includes(selected[1])){
-        let data = banRef.current.objetoF7;        
-        data[mainColumn.columns[selected[1]].data] = e.target.value.trim().length > 0 ? e.target.value : data[mainColumn.columns[selected[1]].data]
-        data.updated = false
-        inicialForm(data,0,selected[1]);        
-        hotInstance.deselectCell();
-        let activeEditor = hotInstance?.getActiveEditor();
-        if (activeEditor) activeEditor.finishEditing();
-        Main.desactivarSpinner()
+        try {
+          let data = banRef.current.objetoF7;        
+          data[mainColumn.columns[selected[1]].data] = e.target.value.length > 0 ? e.target.value.trim() : data[mainColumn.columns[selected[1]].data]
+          data.updated = false
+          inicialForm(data,0,selected[1]);        
+          hotInstance.deselectCell();
+          let activeEditor = hotInstance?.getActiveEditor();
+          if (activeEditor) activeEditor.finishEditing();
+          Main.desactivarSpinner() 
+        } catch (error) {
+          console.log(error)
+          Main.desactivarSpinner()
+        }        
       }
     }
     // eslint-disable-next-line 

@@ -92,10 +92,10 @@ const VTCLIENT = ({ form     , refGrid  , FormName         , idComp             
           <Main.Col span={10}>
             <Main.Form.Item className='form-items' name="COD_CLIENTE" type="text" label={<label style={{ marginLeft: '50px' }}>Cliente</label>} >
               <Main.Input 
-              onKeyUp={handleKeyUp} 
-              onKeyDown={handleKeyDown} 
-              ref={stateRef.bloqueoCliente} 
-              className='search_input' name="COD_CLIENTE" />
+                onKeyUp={handleKeyUp} 
+                onKeyDown={handleKeyDown} 
+                ref={stateRef.bloqueoCliente} 
+                className='search_input' name="COD_CLIENTE" />
             </Main.Form.Item>
           </Main.Col>
 

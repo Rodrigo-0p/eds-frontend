@@ -297,7 +297,7 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
                             setUpdateValue_ant = false , setUpdateValue_desp  , setLastFocusNext  = false          , columBuscador    = ''   ,  buttomAccion     = false,
                             maxFocus                   , dataCabecera         , setClickCell       , multipleHeader, nextFocus        = false,  setUpdateEdit,
                             colorButtom = false        , validaExterno = false, focusEditMode      , executeCab    , validaAllExterno = false,  nextValidaInput  = false,
-                            f7_and_F8}) => {
+                            f7_and_F8 , modalClick = false}) => {
 
   const refModal            = React.useRef({  modalColumn : []
                                             , data        : []                                            
@@ -423,7 +423,16 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
     if(!columnModal) return
 
     if((Object.keys(columnModal.config).length === 0) || !columnModal.config[nameData]){
-      return [];
+      if(columnModal.config.not_in){
+        let key = Object.keys(columnModal.config.not_in);
+        if(key.includes(nameData)){
+          let nro_ref = refData.current.hotInstance.getDataAtCol(columnModal.config.not_in[nameData])
+          let resul   = Main._.compact( nro_ref) // filtra valores false,'',null
+          ArrayDataDependencia.push({[nameData]:`${resul}`})
+          ArrayDependenciaGlobal = ArrayDataDependencia;
+        }
+      }
+      return ArrayDataDependencia;
     }
     let valor = g_getRowFocus(idComp);
     var info  = refData.current.__hotInstance.getSourceData()[valor[0].rowIndex]
@@ -496,6 +505,102 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
     }
     return ArrayDataDependencia
   }
+  // const validarDependencia = async (nameData)=>{
+  //   var ArrayDataDependencia = [];
+  //   if(!columnModal) return
+
+  //   if((Object.keys(columnModal.config).length == 0) || !columnModal.config[nameData]){
+  //     if(columnModal.config.not_in){
+  //       let key = Object.keys(columnModal.config.not_in);
+  //       if(key.includes(nameData)){
+  //         let nro_ref = refData.current.hotInstance.getDataAtCol(columnModal.config.not_in[nameData])
+  //         let resul   = Main._.compact( nro_ref) // filtra valores false,'',null
+  //         ArrayDataDependencia.push({[nameData]:`${resul}`})
+  //         ArrayDependenciaGlobal = ArrayDataDependencia;
+  //       }
+  //     }
+  //     return ArrayDataDependencia;
+  //   }
+
+  //   let valor = g_getRowFocus(idComp);
+  //   var info  = refData.current.__hotInstance.getSourceData()[valor[0].rowIndex]
+
+  //   if(columnModal.config[nameData]?.depende_ex_cab !== undefined){
+  //     for (let i = 0; i < columnModal.config[nameData].depende_ex_cab.length; i++){
+  //       const items  = columnModal.config[nameData].depende_ex_cab[i];
+  //       var dataName = items.id
+  //       let indice   = getIndiceCabecera(idComp)
+  //       let infoData = dataCabecera !== undefined && dataCabecera.current.data !== undefined ? dataCabecera?.current.data[indice] : dataCabecera?.current.dataCab ? dataCabecera?.current.dataCab[indice] : []
+  //       if(infoData[dataName]?.length == 0){
+  //         setTimeout(()=>{
+  //           Main.message.info({
+  //             content  : `Favor complete el campo ${items.label} antes de continuar!! (valor externo)`,
+  //             className: 'custom-class',
+  //             duration : `${2}`,
+  //             style    : {
+  //               marginTop: '2vh',
+  //             },
+  //           });
+  //         },10)       
+  //         return {valor:true,externo:true,nameColumn:dataName}
+  //       }else{
+  //         ArrayDataDependencia = [...ArrayDataDependencia,{
+  //           [dataName]:infoData[dataName]
+  //         }]
+  //         ArrayDependenciaGlobal = ArrayDataDependencia;
+  //       }
+  //     }
+  //   }
+    
+  //   if(columnModal.config[nameData].depende_de.length > 0){
+
+  //     for (let i = 0; i < columnModal.config[nameData].depende_de.length; i++){
+  //       const items  = columnModal.config[nameData].depende_de[i];
+  //       var dataName = items.id
+  //         if(info[dataName] === "" || Main._.isUndefined(info[dataName]) || Main._.isNull(info[dataName])){
+  //           if(items.depende_value || items.isNull){
+  //             if(items.depende_value?.value?.includes(info[items.depende_value.id]) || (items?.isNull !== undefined && items?.isNull !== true) ){
+  //               setTimeout(()=>{
+  //                 Main.message.info({
+  //                   content  : `Favor complete el campo ${items.label} antes de continuar!!`,
+  //                   className: 'custom-class',
+  //                   duration : `${2}`,
+  //                   style    : {
+  //                     marginTop: '2vh',
+  //                   },
+  //                 });                  
+  //               },10)
+  //               return {valor:true,externo:false,nameColumn:dataName}
+  //             }else{
+  //               ArrayDataDependencia = [...ArrayDataDependencia,{
+  //                 [dataName]:info[dataName]
+  //               }]
+  //               ArrayDependenciaGlobal = ArrayDataDependencia;
+  //             }
+
+  //           }else{
+  //             setTimeout(()=>{
+  //               Main.message.info({
+  //                 content  : `Favor complete el campo ${items.label} antes de continuar!!`,
+  //                 className: 'custom-class',
+  //                 duration : `${2}`,
+  //                 style    : {
+  //                   marginTop: '2vh',
+  //                 },
+  //               });
+  //             },10)            
+  //             return {valor:true,externo:false,nameColumn:dataName} 
+  //           }            
+  //         }else{
+  //           ArrayDataDependencia = [...ArrayDataDependencia,{
+  //             [dataName]:info[dataName]
+  //           }]
+  //           ArrayDependenciaGlobal = ArrayDataDependencia;
+  //         }
+  //     }
+  //   }
+  //   return ArrayDataDependencia
+  // }
 
   const getRowDataModal = async (url, tipo, data,dependencia)=>{
     let dataRows = []
@@ -524,6 +629,14 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
     if(editInput.length){
       let rowValue = g_getRowFocus(idComp)[0];
       refKeyDown.current.inputChange = rowValue
+    }
+
+    if(FormName && modalClick){
+      const buttonElement = document.getElementsByClassName(FormName+'_alert')[0];
+      if (buttonElement && [13,9].includes(e.keyCode)) {
+        buttonElement.click(); // Enfocar el botón del modal
+        return
+      }
     }
     
     if(f7_and_F8 && [118,119].includes(e.keyCode))f7_and_F8(e);
@@ -663,7 +776,7 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
         }
           
         
-        if(columns[rowColumn].type !== 'date'){
+        if(columns[rowColumn] && columns[rowColumn].type !== 'date'){
             if(evet1.length > 0){
               let value = refData.current.__hotInstance.view.settings.data[valorIndex[0] !== -1 ? valorIndex[0] : 0]
               if(value.insertDefault){
@@ -854,8 +967,11 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
                        }else{
                         refData.current.__hotInstance.view.settings.data[valorIndex[0]][i] = resp.data.outBinds[i];
                        }
-                      }        
+                      }                              
                     }
+                    refData.current.__hotInstance.updateSettings({      
+                      cellRow:row[0].rowIndex,
+                    });
                   }else{
                     var nombreColumn = columnModal[nameColumn] ? columnModal[nameColumn][1].data : Object.keys(resp.data.outBinds)[0];
                     let columnIndex  = refData.current.hotInstance.propToCol(nombreColumn)
@@ -894,17 +1010,30 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
                   setFocusCloseModal({valor:'',rowIndex:row[0].rowIndex_ant,columnIndex:columIndex,valida:false},idComp)
                   let event = await eventGlobal[idComp]
                   
-                  if(event !== -13){                    
+                  if(event !== -13){                   
                     refData?.current?.hotInstance.deselectCell()
                     setEventGlobal(-120,idComp);
                     if(columnModal[nameColumn]){
-                      for (let i = 0; i < columnModal[nameColumn].length; i++) {
-                        const element = columnModal[nameColumn][i];
-                        let IndexColumn  = refData.current.hotInstance.propToCol(element.ID) 
-                        if(!Main._.isNull(refData.current.__hotInstance.toVisualColumn(IndexColumn))){
-                          refData.current.hotInstance.setDataAtCell(row[0].rowIndex_ant,IndexColumn,'')
-                        }else{
-                          refData.current.hotInstance.view.settings.data[row[0].rowIndex_ant][element.ID] = '';
+                      if((Object.keys(resp.data.outBinds).length - 1 ) > 2){
+                        for(var a in resp.data.outBinds){
+                          if(a !== 'ret' && a !== 'p_mensaje'){
+                          let columnIndex  = refData.current.hotInstance.propToCol(a)                  
+                          if(!Main._.isNull(refData.current.__hotInstance.toVisualColumn(columnIndex))){
+                            refData.current.__hotInstance.setDataAtCell(valorIndex[0],columnIndex,resp.data.outBinds[a])
+                           }else{
+                            refData.current.__hotInstance.view.settings.data[valorIndex[0]][a] = resp.data.outBinds[a];
+                           }
+                          }        
+                        }
+                      }else{
+                        for (let i = 0; i < columnModal[nameColumn].length; i++) {
+                          const element = columnModal[nameColumn][i];
+                          let IndexColumn  = refData.current.hotInstance.propToCol(element.data) 
+                          if(!Main._.isNull(refData.current.__hotInstance.toVisualColumn(IndexColumn))){
+                            refData.current.hotInstance.setDataAtCell(row[0].rowIndex_ant,IndexColumn,'')
+                          }else{
+                            refData.current.hotInstance.view.settings.data[row[0].rowIndex_ant][element.data] = '';
+                          }
                         }
                       }
                     }
@@ -997,7 +1126,8 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
       }else if(columnModal.urlValidar){
         if(!columnModal.urlValidar[0][nameColum] || evet1.length === 0 || validate){
           refData.current.hotInstance.selectCell(rowIndex, currentColumn); // Cambiar la celda seleccionada
-          if(columns[currentColumn]?.editFocus){
+          if(columns[currentColumn]?.editFocus){            
+            // hotInstance.setCellMeta(0, 0, 'readOnly', false);
             let activeEditor = refData.current?.hotInstance?.getActiveEditor();
             if(activeEditor){
               activeEditor.enableFullEditMode();
@@ -1091,6 +1221,19 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
       }
 
       refData?.current?.hotInstance?.selectCell(row[0].rowIndex,row[0].columnIndex);
+      if(columns[row[0].columnIndex] && columns[row[0].columnIndex].editModalFocus){
+        setTimeout(()=>{
+          const activeEditor = refData?.current?.hotInstance?.getActiveEditor();
+          if (activeEditor) {
+              const currentValue = data[columns[row[0].columnIndex].data];
+              activeEditor.beginEditing(); // Activa el modo de edición
+              // Restaura el valor después de que el modo de edición esté activo
+              setTimeout(() => {
+                activeEditor.setValue(currentValue);
+              },);
+          }
+        },10)
+      }
     })    
   }
   const cerrarModal = async (e)=>{

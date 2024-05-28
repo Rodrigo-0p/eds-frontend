@@ -58,7 +58,7 @@ const MainCM = memo(({history, location}) => {
       }else{
         inicialForm();
       }
-    },45);
+    },65);
     // eslint-disable-next-line
   },[])
 
@@ -147,29 +147,33 @@ const MainCM = memo(({history, location}) => {
         addClassAddGrid()
         setTimeout(()=>Main.setFocusedRowIndex(0,undefined,refGrid,idComp),10);
         if(guardar)refGrid.current.hotInstance.selectCell(0,0);
-      },5);
+      },15);
     } catch (error) {
       console.error(error);
     }
   }
-  const addClassAddGrid = ()=>{  
-    let row = refGrid.current.hotInstance.getSourceData();
-    for (let a = 0; a < row.length; a++) {
-      const items = row[a];
-      if(items.IND_NUEVO === 'S'){
-        for (let b = 0; b < 2; b++) {
-          refGrid.current.hotInstance.setCellMeta(a, b, 'className', 'lightblue-bg-verd');         
+  const addClassAddGrid = async ()=>{  
+    try {
+      let row = await refGrid.current.hotInstance.getSourceData();
+      for (let a = 0; a < row.length; a++) {
+        const items = row[a];
+        if(items.IND_NUEVO === 'S'){
+          for (let b = 0; b < 2; b++) {
+            refGrid.current.hotInstance.setCellMeta(a, b, 'className', 'lightblue-bg-verd');         
+          }
         }
-      }
-      if(items.IND_BLOQ === 'S'){
-        for (let c = 3; c < columns.length; c++) {
-          refGrid.current.hotInstance.setCellMeta(a, c, 'className', 'lightblue-bg-amar');          
+        if(items.IND_BLOQ === 'S'){
+          for (let c = 3; c < columns.length; c++) {
+            refGrid.current.hotInstance.setCellMeta(a, c, 'className', 'lightblue-bg-amar');          
+          }
         }
-      }
-      refGrid.current.__hotInstance.updateSettings({      
-        cellRow:a
-      },);
-    }    
+        refGrid.current.__hotInstance.updateSettings({      
+          cellRow:a
+        },);
+      }      
+    } catch (error) {
+      console.log(error)
+    }
   }
   const quitarClassAddGrid = (rowIndex)=>{
     for (let i = 3; i < columns.length; i++) {
@@ -858,8 +862,7 @@ const MainCM = memo(({history, location}) => {
       Main.desactivarSpinner()
       setTimeout(() => {
         setShows(true)  
-      }, 5);
-      
+      }, 5);      
     }
   }
   const procesa_desc_rec = async (row)=>{
@@ -1472,7 +1475,7 @@ const MainCM = memo(({history, location}) => {
 
   return (
     <>
-      <Main.FormModalSearch
+    <Main.FormModalSearch
       setShowsModal={setShows}
       open={shows}
       title={shows ? refModal.current.ModalTitle : refModal.current.ModalTitle}

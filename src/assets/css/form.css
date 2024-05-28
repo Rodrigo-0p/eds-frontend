@@ -57,3 +57,32 @@ input:disabled {
 :where(.css-dev-only-do-not-override-nnuwmp).ant-radio-wrapper-disabled {
 	color: rgb(0 0 0);
 }
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-picker-dropdown .ant-picker-date-panel .ant-picker-body {
+	padding: 0px 9px;
+}
+:where(.css-dev-only-do-not-override-nnuwmp).ant-picker-dropdown .ant-picker-footer {
+	width: min-content;
+	min-width: 100%;
+	line-height: 26px;
+	text-align: center;
+	font-size: 13px;
+}
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-picker-dropdown .ant-picker-header {
+	height: 30px;
+}
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-picker-dropdown .ant-picker-header button {
+	line-height: 28px;
+}
+
+:where(.css-dev-only-do-not-override-nnuwmp).ant-picker-dropdown .ant-picker-header >button {
+	margin: 0px 1px 6px 0px;
+}
+
+.ant-select-disabled:where(.css-dev-only-do-not-override-nnuwmp).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+	color: rgb(135 137 141);
+	background: rgb(255 255 255 / 4%);
+	cursor: not-allowed;
+}

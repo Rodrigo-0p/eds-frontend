@@ -1,5 +1,9 @@
 // DEFINICION
-import vtvende  from "../../pages/modulos/vt/definiciones/VTVENDE/VTVENDE";
+import vtvende   from "../../pages/modulos/vt/definiciones/VTVENDE/VTVENDE";
+// MOVIMIENTO
+import vtpresar  from "../../pages/modulos/vt/movimiento/VTPRESAR/VTPRESAR";
+import vtpedido  from "../../pages/modulos/vt/movimiento/VTPEDIDO/VTPEDIDO";
+import vtfactur  from "../../pages/modulos/vt/movimiento/VTFACTUR/VTFACTUR";
 // CATASTRO
 import vtclient from "../../pages/modulos/vt/definiciones/catastro/VTCLIENT/VTCLIENT";
 // LIST PRECIO
@@ -15,6 +19,15 @@ const Route = [
   },{
     path:'/vt/vtlispre',
     component:vtlispre
+  },{
+    path:'/vt/vtpresar',
+    component:vtpresar
+  },{
+    path:'/vt/vtpedido',
+    component:vtpedido
+  },{
+    path:'/vt/vtfactur', 
+    component:vtfactur
   }
 ];
 export default Route;

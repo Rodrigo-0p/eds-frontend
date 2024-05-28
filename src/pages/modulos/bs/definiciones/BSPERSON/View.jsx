@@ -178,6 +178,19 @@ const BSPERSON = memo(({handleKeyDow  , handleKeyUp , handleInputChange,  form, 
               </Main.Form.Item>
             </Main.Col>
 
+            <Main.Col span={24}>
+              <Main.Form.Item name="SEXO" label={<label style={{ width: '90px' }}>Sexo</label>}>
+                <Main.Select 
+                  onChange={(e)=>{
+                    let value = {target : {id:'SEXO',value:e}}
+                    handleInputChange(value)                        
+                  }} >
+                  <Main.Select.Option value="M">Masculino  </Main.Select.Option>
+                  <Main.Select.Option value="F">Femenino   </Main.Select.Option>                        
+                </Main.Select>
+                </Main.Form.Item>                
+            </Main.Col>
+
 
           </Main.Col>
 

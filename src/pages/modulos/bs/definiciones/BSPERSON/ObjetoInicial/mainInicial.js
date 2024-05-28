@@ -5,7 +5,7 @@ export const objetoinicial = {
   ES_FISICA	            : 'S',
   NOMBRE	              : '',
   NOMB_FANTASIA	        : '',
-  SEXO	                : '',
+  SEXO	                : 'M',
   FEC_NACIMIENTO	      : '',			
   NIVEL_ESTUDIOS	      : '',
   PROFESION	            : '',
