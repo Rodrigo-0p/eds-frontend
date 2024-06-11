@@ -13,36 +13,36 @@
 	height: 32px;
 }
 
-:where(.css-dev-only-do-not-override-nnuwmp).ant-input-sm {
+.ant-input-sm {
 	padding: 0px 7px 3px;
 	border-radius: 4px;
 	height: 20px;
 	font-size: 11px;
 }
 
-:where(.css-dev-only-do-not-override-nnuwmp).ant-card-small >.ant-card-body{
+.ant-card-small >.ant-card-body{
 	padding: 13px;
 }
 
-:where(.css-dev-only-do-not-override-nnuwmp).ant-input-disabled, :where(.css-dev-only-do-not-override-nnuwmp).ant-input[disabled]{
+.ant-input-disabled, .ant-input[disabled]{
 	background-color: white;
 }
 
-:where(.css-dev-only-do-not-override-nnuwmp).ant-divider-horizontal.ant-divider-with-text{
+.ant-divider-horizontal.ant-divider-with-text{
 	color: rgb(78 82 93);
 }
 
-:where(.css-dev-only-do-not-override-nnuwmp).ant-divider{
+.ant-divider{
 	border-block-start: 2px solid #515568bc;
 }
-:where(.css-dev-only-do-not-override-nnuwmp).ant-divider-horizontal.ant-divider-with-text::before, :where(.css-dev-only-do-not-override-nnuwmp).ant-divider-horizontal.ant-divider-with-text::after{
+.ant-divider-horizontal.ant-divider-with-text::before, .ant-divider-horizontal.ant-divider-with-text::after{
 	border-block-start: 2px solid #515568bc;
 }
-:where(.css-dev-only-do-not-override-nnuwmp).ant-form-item{
+.ant-form-item{
 	margin-bottom: 0px;
 }
 
-:where(.css-dev-only-do-not-override-nnuwmp).ant-input-disabled, :where(.css-dev-only-do-not-override-nnuwmp).ant-input[disabled]{
+.ant-input-disabled, .ant-input[disabled]{
 	color: rgba(0, 0, 0, 0.605);
 }
 
@@ -50,18 +50,18 @@ input:disabled {
 	background: white !important;
 }
 
-:where(.css-dev-only-do-not-override-nnuwmp).ant-picker .ant-picker-input >input-disabled, :where(.css-dev-only-do-not-override-nnuwmp).ant-picker .ant-picker-input >input[disabled] {
+.ant-picker .ant-picker-input >input-disabled, .ant-picker .ant-picker-input >input[disabled] {
 	color: rgb(0 0 0 / 54%);
 }
 
-:where(.css-dev-only-do-not-override-nnuwmp).ant-radio-wrapper-disabled {
+.ant-radio-wrapper-disabled {
 	color: rgb(0 0 0);
 }
 
-:where(.css-dev-only-do-not-override-nnuwmp).ant-picker-dropdown .ant-picker-date-panel .ant-picker-body {
+.ant-picker-dropdown .ant-picker-date-panel .ant-picker-body {
 	padding: 0px 9px;
 }
-:where(.css-dev-only-do-not-override-nnuwmp).ant-picker-dropdown .ant-picker-footer {
+.ant-picker-dropdown .ant-picker-footer {
 	width: min-content;
 	min-width: 100%;
 	line-height: 26px;
@@ -69,20 +69,24 @@ input:disabled {
 	font-size: 13px;
 }
 
-:where(.css-dev-only-do-not-override-nnuwmp).ant-picker-dropdown .ant-picker-header {
+.ant-picker-dropdown .ant-picker-header {
 	height: 30px;
 }
 
-:where(.css-dev-only-do-not-override-nnuwmp).ant-picker-dropdown .ant-picker-header button {
+.ant-picker-dropdown .ant-picker-header button {
 	line-height: 28px;
 }
 
-:where(.css-dev-only-do-not-override-nnuwmp).ant-picker-dropdown .ant-picker-header >button {
+.ant-picker-dropdown .ant-picker-header >button {
 	margin: 0px 1px 6px 0px;
 }
 
-.ant-select-disabled:where(.css-dev-only-do-not-override-nnuwmp).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+.ant-select-disabled.ant-select:not(.ant-select-customize-input) .ant-select-selector {
 	color: rgb(135 137 141);
 	background: rgb(255 255 255 / 4%);
 	cursor: not-allowed;
+}
+
+.ant-menu-light:not(.ant-menu-horizontal) .ant-menu-submenu-title:active, .ant-menu-light>.ant-menu:not(.ant-menu-horizontal) .ant-menu-submenu-title:active{
+	background: transparent;
 }

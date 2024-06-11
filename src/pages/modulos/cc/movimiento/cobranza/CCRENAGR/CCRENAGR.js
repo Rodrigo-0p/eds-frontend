@@ -69,6 +69,7 @@ const MainCc = memo(() => {
     let valor  = JSON.parse(JSON.stringify({...mainObjetInicial.objetoInicialCab}));
     let newKey = Main.uuidID()
     valor.ID	 = newKey;
+    valor.COD_SUCURSAL = cod_sucursal;
     let result_preForm = await get_PreFrom();
     if(Object.keys(result_preForm).length > 0) valor   = {...valor, ...result_preForm}
     form.resetFields();

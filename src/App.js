@@ -1,9 +1,12 @@
 import React        from "react";
 import AppRouter    from "./router/AppRouter";
+import { ConfigProvider } from 'antd';
 
 function App() {
   return (    
-    <AppRouter/>  
+  <ConfigProvider theme={{ hashed: false }}>
+    <AppRouter />
+  </ConfigProvider>
   );
 }
 

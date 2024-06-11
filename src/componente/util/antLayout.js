@@ -9,6 +9,7 @@ import Navbar       from './navbar/navbar';
 // CSS GENERICO
 import '../../assets/css/styles.css';
 import '../../assets/css/form.css';
+import '../../assets/css/layout.css';
 
 const { Content } = Layout;
 
@@ -39,17 +40,17 @@ const AntLayout = (props) => {
 
           <Content
             id="site-content"
-            // className="site-layout-background"
-            style={{
-              padding: 10,
-              height: 'calc(100vh - 70px)',
-              margin: 5,
-              marginBottom:'0px',
-              overflow:'auto',
-              scrollbarWidth: 'none',              
-            }}
+            className="ant-layout-content"
+            // style={{
+            //   padding: 10,
+            //   height: 'calc(100vh - 70px)',
+            //   margin: 5,
+            //   marginBottom:'0px',
+            //   overflow:'auto',
+            //   scrollbarWidth: 'none',              
+            // }}
           > 
-          {props.children}          
+            {props.children}                   
         </Content>
 
       </Layout>

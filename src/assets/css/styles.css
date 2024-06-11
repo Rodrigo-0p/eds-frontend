@@ -8,7 +8,7 @@ body{
   margin: 0px;
 }
 
-:where(.css-dev-only-do-not-override-byeoj0).ant-menu-light, :where(.css-dev-only-do-not-override-byeoj0).ant-menu-light>.ant-menu {
+.ant-menu-light, .ant-menu-light>.ant-menu {
   color: rgb(255 255 255);
   background: rgba(0, 0, 0, 0);
 }
@@ -21,7 +21,7 @@ body{
   transition: all 0.2s ease;  
 }
 
-:where(.css-dev-only-do-not-override-nnuwmp).ant-layout{
+.ant-layout{
   background: linear-gradient(0deg,#eff3ffe0 0%,#bfc1cc 100%);
 }
 
@@ -40,10 +40,10 @@ body{
   border-radius: 5px 5px 0px 0px !important;
 }
 
-h4:where(.css-dev-only-do-not-override-nnuwmp).ant-typography, 
-div:where(.css-dev-only-do-not-override-nnuwmp).ant-typography-h4, 
-div:where(.css-dev-only-do-not-override-nnuwmp).ant-typography-h4>textarea, 
-:where(.css-dev-only-do-not-override-nnuwmp).ant-typography h4 {
+h4.ant-typography, 
+div.ant-typography-h4, 
+div.ant-typography-h4>textarea, 
+.ant-typography h4 {
   margin-bottom: 0.5em;
   color: rgb(254 254 254);
   font-weight: 600;
@@ -59,23 +59,23 @@ div:where(.css-dev-only-do-not-override-nnuwmp).ant-typography-h4>textarea,
   height: calc(100vh - 165px);
 }
 
-:where(.css-dev-only-do-not-override-nnuwmp).ant-form label {
+.ant-form label {
   font-size: 11px;
 }
 
 /* MODAL CONFIRMAR ANT */
-:where(.css-dev-only-do-not-override-nnuwmp).ant-modal-confirm .ant-modal-confirm-body .ant-modal-confirm-title{
+.ant-modal-confirm .ant-modal-confirm-body .ant-modal-confirm-title{
   display: contents;
 }
 
-:where(.css-dev-only-do-not-override-nnuwmp).ant-modal-confirm .ant-modal-confirm-body .ant-modal-confirm-title +.ant-modal-confirm-content {
+.ant-modal-confirm .ant-modal-confirm-body .ant-modal-confirm-title +.ant-modal-confirm-content {
   border-top: 1px solid #0a4b5526;
   border-bottom: 1px solid #0a4b5533;
   margin: 6px;
   padding: 10px;
 }
 
-:where(.css-dev-only-do-not-override-nnuwmp).ant-modal-confirm .ant-modal-confirm-btns{
+.ant-modal-confirm .ant-modal-confirm-btns{
   margin-top:1px;
 }
 
@@ -124,16 +124,16 @@ div:where(.css-dev-only-do-not-override-nnuwmp).ant-typography-h4>textarea,
   /* Otros estilos que desees aplicar cuando el input está enfocado y visible */
 }
 
-:where(.css-dev-only-do-not-override-nnuwmp).ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
   color: #70778f; 
 }
-:where(.css-dev-only-do-not-override-nnuwmp).ant-tabs-card.ant-tabs-small >.ant-tabs-nav .ant-tabs-tab {
+.ant-tabs-card.ant-tabs-small >.ant-tabs-nav .ant-tabs-tab {
   padding: 2px 9px;
 }
-:where(.css-dev-only-do-not-override-nnuwmp).ant-tabs >.ant-tabs-nav, :where(.css-dev-only-do-not-override-nnuwmp).ant-tabs >div>.ant-tabs-nav{
+.ant-tabs >.ant-tabs-nav, .ant-tabs >div>.ant-tabs-nav{
   margin-bottom: 4px;
 }
 
-:where(.css-dev-only-do-not-override-nnuwmp).ant-tabs-small >.ant-tabs-nav .ant-tabs-tab {
+.ant-tabs-small >.ant-tabs-nav .ant-tabs-tab {
   font-size: 12px;
 }
