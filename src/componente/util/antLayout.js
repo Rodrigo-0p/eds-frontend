@@ -36,7 +36,7 @@ const AntLayout = (props) => {
 
       <Layout className="site-layout" id="system-layout">
 
-        <Navbar />
+        <Navbar  CloseSession={CloseSession} />
 
           <Content
             id="site-content"

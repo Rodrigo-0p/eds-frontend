@@ -48,7 +48,8 @@ import {
 	Form			, Card	    , Input   , Button ,
 	Modal			, Divider   , Radio   , Select ,
 	Checkbox	, List 		  , Tooltip	, Tabs 	 , 
-	Typography, DatePicker,	ConfigProvider} from 'antd';
+	Typography, DatePicker,	ConfigProvider	 ,
+	Dropdown	, Space			, Avatar} from 'antd';
 import locale	 		  			  			       	from 'antd/lib/locale/es_ES';
 import {NumerosALetras} 		from './numerosALetras';
 
@@ -354,6 +355,9 @@ const Main = {
 	, DatePicker
 	,	ConfigProvider
 	, locale
+	, Dropdown
+	, Space
+	, Avatar
 	//----------------   
 	, ProgressBarMain
 	, startLoadingProgressBar

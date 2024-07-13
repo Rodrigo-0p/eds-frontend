@@ -18,7 +18,7 @@ const view = memo(({form, refGrid, FormName, idComp, handleKeyDown , dataRef ,re
   
   const maxFocus = [{
     id:idComp         ,
-    hasta:"CANTIDAD" ,
+    hasta:"DESCUENTO" ,
     newAddRow:true    ,
     nextId:''
   }];
@@ -155,17 +155,32 @@ const view = memo(({form, refGrid, FormName, idComp, handleKeyDown , dataRef ,re
             
             <Main.Col span={24}>
               <Main.Form.Item label={<label style={{ width: '52px' }}><span style={{ color: 'red' }}>*</span>Cliente</label>}>
-              <Main.Form.Item name="COD_CLIENTE" style={{ width: '52px', display: 'inline-block', marginRight: '4px' }}>
-                  <Main.Input className={`${FormName}_BLOQUEO requerido`} 
-                      onKeyDown={handleKeyDown} 
-                      onChange={handleInputChange} 
-                      onKeyUp={handleKeyUp}
-                    />
+                <Main.Form.Item name="COD_CLIENTE" style={{ width: '52px', display: 'inline-block', marginRight: '4px' }}>
+                    <Main.Input className={`${FormName}_BLOQUEO requerido`} 
+                        onKeyDown={handleKeyDown} 
+                        onChange={handleInputChange} 
+                        onKeyUp={handleKeyUp}
+                      />
+                </Main.Form.Item>
+                <Main.Form.Item name="DESC_CLIENTE" style={{ width: 'calc(100% - 56px)', display: 'inline-block' }}>
+                    <Main.Input disabled/>
+                </Main.Form.Item>
               </Main.Form.Item>
-              <Main.Form.Item name="DESC_CLIENTE" style={{ width: 'calc(100% - 56px)', display: 'inline-block' }}>
-                  <Main.Input disabled/>
+            </Main.Col>
+            <Main.Col span={24}>
+              <Main.Form.Item label={<label style={{ width: '52px' }}>Sub Client.</label>}>
+                <Main.Form.Item name="COD_SUBCLIENTE" style={{ width: '52px', display: 'inline-block', marginRight: '4px' }}>
+                    <Main.Input className={`${FormName}_BLOQUEO`} 
+                        onKeyDown={handleKeyDown} 
+                        onChange={handleInputChange} 
+                        onKeyUp={handleKeyUp}
+                      />
+                </Main.Form.Item>
+                <Main.Form.Item name="DESC_SUBCLIENTE" style={{ width: 'calc(100% - 56px)', display: 'inline-block' }}>
+                    <Main.Input disabled/>
+                </Main.Form.Item>
               </Main.Form.Item>
-              </Main.Form.Item>
+
             </Main.Col>
 
             <Main.Col span={24}>

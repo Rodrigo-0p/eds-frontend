@@ -3,9 +3,9 @@ import Main            from '../../../../../componente/util/main';
 import mainUrl         from './url/mainUrl';
 import dayjs           from "dayjs";
 import updateLocale    from "dayjs/plugin/updateLocale";
-import locale          from "antd/es/locale/es_ES";
+// import locale          from "antd/es/locale/es_ES";
 import "dayjs/locale/es";
-import {ConfigProvider,DatePicker} from 'antd'
+import {DatePicker} from 'antd'
 dayjs.extend(updateLocale);
 dayjs.updateLocale("es", {
   weekStart: 0
@@ -86,7 +86,7 @@ export const columns = [
   { data: 'DESC_UNIDAD_MEDIDA'    , title: 'Descripción'     , width : 120 , readOnly:true        , filter:false      , textWrap:true  }, 
   { data: 'CANTIDAD'              , title: 'Cantidad'        , width : 50  , className: 'htRight' , requerido:true    , readOnly:false  , type:'numeric', format:{pattern: '0,0.000',culture: 'de-DE'}},
   { data: 'PRECIO_UNITARIO_C_IVA' , title: 'Precio Unitario' , width : 50  , className: 'htRight' , requerido:true    , readOnly:false  , type:'numeric', format:{pattern: '0,0',culture: 'de-DE'}},
-  { data: 'MONTO_TOTAL_CONIVA'    , title: 'Monto Total'     , width : 50  , className: 'htRight' , requerido:true    , readOnly:true   , type:'numeric', format:{pattern: '0,0',culture: 'de-DE'}},      
+  { data: 'MONTO_TOTAL_CONIVA'    , title: 'MontoS Total'     , width : 50  , className: 'htRight' , requerido:true    , readOnly:true   , type:'numeric', format:{pattern: '0,0',culture: 'de-DE'}},      
 ]
 
 const columnNavigationEnter = [0,2,4,5];

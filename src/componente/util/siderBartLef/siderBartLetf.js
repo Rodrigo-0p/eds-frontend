@@ -1,9 +1,6 @@
 import React, { memo }   from 'react';
 import { Layout, Menu }  from 'antd';
 import { Link }          from 'react-router-dom';
-import { Avatar, Space } from 'antd';
-import imgAvatar         from '../../../assets/avatar.jpg'
-import { Dropdown }      from 'antd';
 import Main              from '../main';
 import { ShopOutlined
      , HomeOutlined  }   from '@ant-design/icons';
@@ -39,14 +36,14 @@ const SiderBartLef = memo(({ defaultSelectedKeys, defaultOpenKeys, CloseSession,
     },[])
 
 
-    const items = [
-        {
-            key: '2',            
-            label: (
-                <button className='buttonDropdown' onClick={CloseSession} > Cerrar Sesion </button>
-            ),
-        },
-    ];
+    // const items = [
+    //     {
+    //         key: '2',            
+    //         label: (
+    //             <button className='buttonDropdown' onClick={CloseSession} > Cerrar Sesion </button>
+    //         ),
+    //     },
+    // ];
 
     const getInfo = async (cod_empresa = null,cod_usuario = null, url) =>{
         try {
@@ -188,7 +185,7 @@ const SiderBartLef = memo(({ defaultSelectedKeys, defaultOpenKeys, CloseSession,
                          </Main.Tooltip> 
                     </Menu.Item>                   
                     
-                    <Dropdown menu={{ items }} placement="bottomLeft" trigger={['click']} arrow>
+                    {/* <Dropdown menu={{ items }} placement="bottomLeft" trigger={['click']} arrow>
                         <div>
                             <Space className='spaceAvatar' wrap size={16} >
                             
@@ -204,7 +201,7 @@ const SiderBartLef = memo(({ defaultSelectedKeys, defaultOpenKeys, CloseSession,
                                                         
                             </Space>
                         </div>
-                    </Dropdown>
+                    </Dropdown> */}
                     <Menu.Item key="home" icon={<DashboardOutlined />}>
                         <Link to="/home">Home</Link>
                     </Menu.Item>

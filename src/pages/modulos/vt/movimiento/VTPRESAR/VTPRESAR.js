@@ -137,7 +137,7 @@ const MainVT = memo(() => {
       let rowValue    = Main.g_getRowFocus(idComp);
       let rowIndex    = index !== false ? index.index + 1 : rowValue[0].rowIndex === 0 ? rowValue[0].rowIndex + 1  : rowValue[0].rowIndex === -1 ? 0 : rowValue[0].rowIndex;
       let newRow      = await getParamsDetalle(false,banRef.current.indice);
-
+      newRow.insertDefault  = true
       refGrid.current.hotInstance.alter('insert_row', rowIndex);
       refGrid.current.hotInstance.view.settings.data[rowIndex] =  JSON.parse(JSON.stringify({...newRow}));
 
@@ -207,10 +207,11 @@ const MainVT = memo(() => {
       }
     }
 
+
     // FILTER CAB
     var dependencia_cab     = [];
     var rowCab              = refCab.current.data[banRef.current.indice];
-    let url_get_cab_cod     = `${mainUrl.url_buscar_nro_compr}${cod_empresa}/${rowCab.SER_COMPROBANTE}/${rowCab.TIP_COMPROBANTE}`
+    let url_get_cab_cod     = refCab.current.delete?.length > 0 ? null : `${mainUrl.url_buscar_nro_compr}${cod_empresa}/${rowCab.SER_COMPROBANTE}/${rowCab.TIP_COMPROBANTE}`
     let infoCab      	      = await Main.GeneraUpdateInsertCab(refCab.current.data,'NRO_COMPROBANTE',url_get_cab_cod,dependencia_cab,true,false,true);
     var aux_cab	            = infoCab.rowsAux;
     var updateInserData     = infoCab.updateInsert;
@@ -540,7 +541,7 @@ const MainVT = memo(() => {
       FEC_COMPROBANTE       : retornaNull ? '' : banRef.current.refFec_comp                     !== ''        ? banRef.current.refFec_comp                      : '',
       COD_CONDICION_VENTA   : retornaNull ? '' : form.getFieldValue('COD_CONDICION_VENTA')      !== undefined ? form.getFieldValue('COD_CONDICION_VENTA')       : '',
       COD_VENDEDOR          : retornaNull ? '' : form.getFieldValue('COD_VENDEDOR')             !== undefined ? form.getFieldValue('COD_VENDEDOR')              : '',
-      COD_CLIENTE           : retornaNull ? '' : form.getFieldValue('COD_CLIENTE')              !== undefined ? form.getFieldValue('COD_CLIENTE')               : '',
+      COD_CLIENTE           : retornaNull ? '' : form.getFieldValue('COD_CLIENTE')              !== undefined ? form.getFieldValue('COD_CLIENT1E')               : '',
       COD_MONEDA            : retornaNull ? '' : form.getFieldValue('COD_MONEDA')               !== undefined ? form.getFieldValue('COD_MONEDA')                : '',
     }
     return data
@@ -619,7 +620,7 @@ const MainVT = memo(() => {
         default:
           break;
       }
-      if (['COD_VENDEDOR','COD_CONDICION_VENTA','COD_CLIENTE','COD_MONEDA','COD_LISTA_PRECIO'].includes(e.target.id) && !banRef.current.b_bloqueo) {
+      if (['COD_VENDEDOR','COD_CONDICION_VENTA','COD_CLIENTE','COD_SUBCLIENTE','COD_MONEDA','COD_LISTA_PRECIO'].includes(e.target.id) && !banRef.current.b_bloqueo) {
        ValidarUnico(e.target.id, e.target.value);
       }
     }else if (['F7', 'F8'].includes(e.key)) {
@@ -635,45 +636,26 @@ const MainVT = memo(() => {
       }else{
         Main.alert('Hay cambios pendientes. ¿Desea guardar los cambios?','Atencion!','confirm','Guardar','Cancelar',guardar,funcionCancelar)
       }
-    }else if (e.key === 'F9' && ['COD_VENDEDOR','COD_CONDICION_VENTA','COD_CLIENTE','COD_MONEDA','COD_LISTA_PRECIO'].includes(e.target.id) && !banRef.current.b_bloqueo) {
+    }else if (e.key === 'F9' && ['COD_VENDEDOR','COD_CONDICION_VENTA','COD_CLIENTE','COD_SUBCLIENTE','COD_MONEDA','COD_LISTA_PRECIO'].includes(e.target.id) && !banRef.current.b_bloqueo) {
       e.preventDefault()
       let aux = [];
       refModal.current.idInput = e.target.id
       let items = mainInput.ModalF9[e.target.id]
-
+      refModal.current.dataParams   = { cod_empresa, valor: 'null' }
       refModal.current.ModalTitle   = items.title;
       refModal.current.modalColumn  = items.column;
       refModal.current.url_buscador = items.url;
+
+      let data_int = mainInput.validaInput.filter((resul)=> resul.input === e.target.id)
+      data_int && data_int[0]?.data.map((keyName)=>{
+        if(keyName){
+          refModal.current.dataParams[keyName.toLocaleLowerCase()] = form.getFieldValue(keyName)
+        }
+      })
+
       Main.activarSpinner()
-      switch (e.target.id) {
-        case "COD_VENDEDOR":
-          aux = await Main.getData({ valor: 'null',cod_empresa },refModal.current.url_buscador);
-          refModal.current.data = aux ? aux : []
-          refModal.current.dataParams = { cod_empresa }
-        break;
-        case "COD_CONDICION_VENTA":
-          aux = await Main.getData({valor:'null',cod_empresa },  refModal.current.url_buscador);
-          refModal.current.data = aux ? aux : []
-          refModal.current.dataParams = { cod_empresa }
-        break;    
-        case "COD_CLIENTE":
-          aux = await Main.getData({valor:'null',cod_empresa },  refModal.current.url_buscador);
-          refModal.current.data = aux ? aux : []
-          refModal.current.dataParams = { cod_empresa }
-        break;        
-        case "COD_MONEDA":
-          aux = await Main.getData({valor:'null',cod_empresa },  refModal.current.url_buscador);
-          refModal.current.data = aux ? aux : []
-          refModal.current.dataParams = { cod_empresa }
-        break;
-        case "COD_LISTA_PRECIO":
-          aux = await Main.getData({valor:'null',cod_empresa },  refModal.current.url_buscador);
-          refModal.current.data = aux ? aux : []
-          refModal.current.dataParams = { cod_empresa }
-        break;
-        default:
-        break;
-      }    
+      aux = await Main.getData(refModal.current.dataParams,refModal.current.url_buscador);      
+      refModal.current.data = aux ? aux : []
       Main.desactivarSpinner()
       setTimeout(() => {
         setShows(true)  
@@ -939,8 +921,7 @@ const MainVT = memo(() => {
         refGrid.current.hotInstance.view.settings.data[row.rowIndex].PRECIO_UNITARIO_C_IVA = row.PRECIO_UNITARIO_C_IVA !== "0" && row.PRECIO_UNITARIO_C_IVA ? Main.numerico_grilla(row.PRECIO_UNITARIO_C_IVA) : 0;
       }
     }
-    
-
+        
     let p_precio_unitario_c_iva   = refGrid.current.hotInstance.view.settings.data[row.rowIndex].PRECIO_UNITARIO_C_IVA; 
     row.PRECIO_UNITARIO_C_IVA = p_precio_unitario_c_iva;
     refGrid.current.hotInstance.view.settings.data[row.rowIndex].PRECIO_UNITARIO_C_IVA = p_precio_unitario_c_iva;
@@ -951,17 +932,41 @@ const MainVT = memo(() => {
                                     Main.nvl( p_precio_unitario_c_iva,0 )) , p_decimales  )
     let porcentaje = (p_valorDescuento / total) * 100 ;
     refGrid.current.hotInstance.view.settings.data[row.rowIndex].PORC_DESC  = porcentaje;
-    total          = (total - p_valorDescuento)
+    total          = (total - p_valorDescuento)     
+    refGrid.current.hotInstance.view.settings.data[row.rowIndex].MONTO_TOTAL_CONIVA = total;
 
     refGrid.current.hotInstance.setDataAtCell(row.rowIndex, 7, total);
     if(enter === 13 ){
       let rowColumn = name === 'DESCUENTO' ? 6 : name === 'PRECIO_UNITARIO_C_IVA' ? 5 : 4
       setTimeout(()=>{    
-        refGrid.current.hotInstance.selectCell(row.rowIndex,rowColumn);
+        refGrid.current.hotInstance.selectCell(row.rowIndex, name === 'CANTIDAD' ? 6 : rowColumn);
       },10)  
       refGrid.current.hotInstance.setDataAtCell(row.rowIndex,rowColumn,row[name]);
     }
     typeEventDet(row.rowIndex)
+    if(['CANTIDAD','DESCUENTO'].includes(name)){
+      try {
+        let data = { 
+                     PRECIO_UNITARIO_C_IVA  : p_precio_unitario_c_iva,
+                     DECIMALES              : Main.nvl(form.getFieldValue('DECIMALES'),0),
+                     MULT                   : row.MULT,
+                     DIV                    : row.DIV,
+                     PORC_IVA               : row.PORC_IVA,
+                     PORC_GRAVADA           : row.PORC_GRAVADA,
+                     CANTIDAD               : p_cantidad,
+                     DESCUENTO              : p_valorDescuento
+                    }
+        Main.Request(mainUrl.url_valida_calculoAct,'POST',data).then((resp)=>{
+          for(var index in resp.data.outBinds) {
+            if(!['p_mensaje','ret'].includes(index)){
+              refGrid.current.hotInstance.view.settings.data[row.rowIndex][index] = resp.data.outBinds[index]
+            }            
+          }
+        })
+      } catch (error) {
+        console.log(error);
+      }
+    }
     setTimeout(()=>calculaTotal(refGrid.current.hotInstance.view.settings.data),10)
     // eslint-disable-next-line
   },[])
@@ -975,14 +980,26 @@ const MainVT = memo(() => {
   const calculaTotal = (data = false,activateCancelar = true)=>{
     if(refGrid.current){
       let resul        = data === false ? refGrid.current.hotInstance.getSourceData() : data;
-      const columnSum  = resul.reduce((acc, row) => acc + parseFloat(row.MONTO_TOTAL || 0), 0);
+      const columnSum  = resul.reduce((acc, row) => acc + parseFloat(row.MONTO_TOTAL_CONIVA || 0), 0);
       let p_decimales  = refCab.current.data[banRef.current.indice].DECIMALES ? refCab.current.data[banRef.current.indice].DECIMALES : 0;
-
+      let tot_iva = resul.reduce((acc, item) => {
+        // Calculamos el monto del IVA para la fila actual
+        let ivaAmount = 0
+        if( item.PORC_IVA === 5 ){
+          ivaAmount = Math.round( item.MONTO_TOTAL_CONIVA  / ( 1 + ( item.PORC_IVA / 100 ) ) * ( item.PORC_IVA / 100 ), 0 );
+        }else if( item.PORC_IVA === 10 ){
+          ivaAmount = Math.round( item.MONTO_TOTAL_CONIVA  / ( 1 + ( item.PORC_IVA / 100 ) ) * ( item.PORC_IVA / 100 ), 0);
+        }      
+        // Redondeamos el monto del IVA y lo sumamos al acumulador
+        return acc + Math.round(ivaAmount);
+    }, 0);
+  
       form.setFieldsValue({
         ...form.getFieldsValue(), 
         TOT_COMPROBANTE : p_decimales === 0 || p_decimales === "0" ? columnSum : Main.currency(columnSum, { separator:'.',decimal:',',precision:p_decimales,symbol:''}).format(),
       });    
       refCab.current.data[banRef.current.indice].TOT_COMPROBANTE = columnSum;
+      refCab.current.data[banRef.current.indice].TOT_IVA         = tot_iva;
       typeEvent(activateCancelar)
     }
   }
@@ -1010,7 +1027,7 @@ const MainVT = memo(() => {
     if(e.keyCode === 13){
       setTimeout(()=>{
         addRow({index:rowindex})
-      },2)
+      },50)
     }
     // eslint-disable-next-line
   },[]);

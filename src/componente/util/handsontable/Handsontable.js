@@ -749,7 +749,7 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
           if(e.target.classList.value.includes('handsontable-upper')) e.target.classList.remove('handsontable-upper');
         }
         if(columnModal){
-          if([37,39,13,40,9].includes(e?.keyCode) && evet1.length > 0 && columnModal?.urlValidar[0][columns[rowColumn]?.data]){
+          if([37,39,13,40,9].includes(e?.keyCode) && evet1.length > 0 && (columnModal?.urlValidar && columnModal?.urlValidar[0][columns[rowColumn]?.data])){
             validaInput(e.target.value,valorIndex,e)
           }else if(evet1.length > 0 && [40,38].includes(e.keyCode)){
             setTimeout(async()=>{
@@ -1123,7 +1123,7 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
           refKeyDown.current.KeyDown = true;
           refData.current.hotInstance.removeHook('beforeKeyDown',KeyDown);          
         })
-      }else if(columnModal.urlValidar){
+      }else if(columnModal.urlValidar && columnModal.urlValidar.length > 0){
         if(!columnModal.urlValidar[0][nameColum] || evet1.length === 0 || validate){
           refData.current.hotInstance.selectCell(rowIndex, currentColumn); // Cambiar la celda seleccionada
           if(columns[currentColumn]?.editFocus){            
@@ -1636,6 +1636,10 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
                   months:mes,
                   weekdays:semana,
                   weekdaysShort:diasSemanaCorto
+                },
+                onOpen:()=>{
+                  const datePicker = document.querySelector('.htDatepickerHolder');
+                  if (datePicker) datePicker.classList.add(`${idComp}_htDatepickerHolder`);
                 }
               }}
             />        

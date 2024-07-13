@@ -18,3 +18,45 @@
   margin-top: 8px;
   padding: 4px;
 }
+
+
+.spaceAvatar{
+  color: aliceblue;
+  height: 50px;
+}
+.contentUserName{
+  font-size: 10px;
+  margin-left: -5px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 12px;
+}
+.avatar_img{
+  margin-top: -10px;
+  width: 40px !important;
+  height: 40px !important;
+}
+.avatar_img > img{
+  width: 39px;
+  height: 38px;
+}
+
+.nombreDeusuario{
+  max-width: 185px;
+  padding: 0px 8px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.user{
+  font-weight: 700;
+}
+
+.buttonDropdown{
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  height:100%;
+}
+

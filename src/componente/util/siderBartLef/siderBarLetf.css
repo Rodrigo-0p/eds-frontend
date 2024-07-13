@@ -1,4 +1,4 @@
-.spaceAvatar{
+/* .spaceAvatar{
   margin: 0px 0px 0px 14px;
 }
 .contentUserName{
@@ -27,7 +27,7 @@
   width: 100%;
   text-align: left;
   height:100%;
-}
+} */
 
 .ant-menu-light:not(.ant-menu-horizontal) .ant-menu-submenu-title:hover, .ant-menu-light>.ant-menu:not(.ant-menu-horizontal) .ant-menu-submenu-title:hover {
   background-color: rgb(62 72 109 / 31%);

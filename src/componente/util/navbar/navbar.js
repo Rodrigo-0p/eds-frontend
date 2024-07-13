@@ -2,9 +2,10 @@ import React, { memo } from 'react';
 import { Layout }      from 'antd';
 import Main            from '../main';
 import sucursalIcono   from "../../../assets/icons/shop.png";
+import imgAvatar       from '../../../assets/avatar.jpg'
 import './styles.css';
 
-const Navbar = memo(() => {
+const Navbar = memo(({CloseSession}) => {
 
   const [ isModalVisible , setModalVisible ] = React.useState(false)
   const [ sucursal       , setSucursal     ] = React.useState([])
@@ -36,6 +37,16 @@ const Navbar = memo(() => {
     setModalVisible(false);
   }
 
+  
+  const items = [
+      {
+          key: '2',            
+          label: (
+              <button className='buttonDropdown' onClick={CloseSession} > Cerrar Sesion </button>
+          ),
+      },
+  ];
+
   return (
     <>
      <Main.Modal
@@ -45,22 +56,22 @@ const Navbar = memo(() => {
         onCancel={()=>setModalVisible(false)}
         footer={false}
     >
-        <Main.List
-            itemLayout="horizontal"                
-            dataSource={sucursal}
-            renderItem={(item) => (
-                <Main.List.Item>
-                    <Main.List.Item.Meta
-                        title={
-                            // eslint-disable-next-line 
-                            <a className='a-empresa' onClick={()=>selectSucursal(item.CODIGO)} href='#' id={item.CODIGO}>
-                                {item.CODIGO + " - " + item.DESCRIPCION}
-                            </a>
-                        }
-                    />
-                </Main.List.Item>
-            )}
-        />
+      <Main.List
+          itemLayout="horizontal"                
+          dataSource={sucursal}
+          renderItem={(item) => (
+              <Main.List.Item>
+                  <Main.List.Item.Meta
+                      title={
+                          // eslint-disable-next-line 
+                          <a className='a-empresa' onClick={()=>selectSucursal(item.CODIGO)} href='#' id={item.CODIGO}>
+                              {item.CODIGO + " - " + item.DESCRIPCION}
+                          </a>
+                      }
+                  />
+              </Main.List.Item>
+          )}
+      />
     </Main.Modal>
     
     <Layout.Header className='layout-header'>
@@ -77,7 +88,21 @@ const Navbar = memo(() => {
             />
           </Main.Tooltip>
         </Main.Col>
-        <Main.Col span={13}/>
+        <Main.Col span={6} />          
+        <Main.Col span={6} >
+          <Main.Dropdown menu={{ items }} placement="bottomLeft" trigger={['click']} arrow>        
+            <Main.Space className='spaceAvatar' wrap size={16} >
+              <Main.Avatar className='avatar_img' size={50} icon={<img alt='avatar' src={imgAvatar} />} />
+              <div className='contentUserName' >
+                <div className='user'>
+                    {sessionStorage.getItem('cod_usuario')}
+                </div>
+                <div className='nombreDeusuario'> - {sessionStorage.getItem('nombre_usuario')}
+                </div>
+              </div>
+            </Main.Space>            
+        </Main.Dropdown>          
+        </Main.Col>
       </Main.Row>
     </Layout.Header>
   </>    

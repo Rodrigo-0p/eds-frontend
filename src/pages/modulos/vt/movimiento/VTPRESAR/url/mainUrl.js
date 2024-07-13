@@ -3,16 +3,21 @@
 const url_valida_vendedor = '/vt/vtpresar/valida/vendedor'  ;
 const url_valida_codVenta = '/vt/vtpresar/valida/cod_vent'  ;
 const url_valida_cliente  = '/vt/vtpresar/valida/cod_clien' ;
+const url_valida_subClien = '/vt/vtpresar/valida/cod_subclien' ;
+
 const url_valida_moneda   = '/vt/vtpresar/valida/moneda'    ;
 const url_valida_listPrec = '/vt/vtpresar/valida/listPrecio';
 const url_valida_articulo = '/vt/vtpresar/valida/articulo'  ;
 const url_valida_um       = '/vt/vtpresar/valida/unidadm'   ;
 const url_valida_estado   = '/vt/vtpresar/valida/estado'    ;
 const url_valida_estCorr  = '/vt/vtpresar/valida/estadoCorreo';
+const url_valida_calculoAct = '/vt/vtpresar/valida/calculoAct';
+
 // BUSCADOR
 const url_buscar_vendedor = '/vt/vtpresar/buscar/vendedor'  ;
 const url_buscar_codVenta = '/vt/vtpresar/buscar/cod_vent'  ;
 const url_buscar_cliente  = '/vt/vtpresar/buscar/cod_clien' ;
+const url_buscar_subclien = '/vt/vtpresar/buscar/cod_subclien';
 const url_buscar_moneda   = '/vt/vtpresar/buscar/moneda'    ;
 const url_buscar_listPrec = '/vt/vtpresar/buscar/listPrecio';
 const url_buscar_articulo = '/vt/vtpresar/buscar/articulo'  ;
@@ -33,16 +38,19 @@ const main = {
   url_valida_vendedor ,
   url_valida_codVenta ,
   url_valida_cliente  ,
+  url_valida_subClien ,
   url_valida_moneda   ,
   url_valida_listPrec ,
   url_valida_articulo ,
   url_valida_um       ,
   url_valida_estado   ,
   url_valida_estCorr  ,
+  url_valida_calculoAct,
   // BUSCAR
   url_buscar_vendedor ,
   url_buscar_codVenta ,
   url_buscar_cliente  ,
+  url_buscar_subclien ,
   url_buscar_moneda   ,
   url_buscar_listPrec ,
   url_buscar_articulo ,

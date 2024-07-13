@@ -14,8 +14,6 @@ const columnModal = {
   COD_ARTICULO: [
     { data: 'COD_ARTICULO'         , title: 'Código'      ,width : 35  , className:'htLeft'  },
     { data: 'DESC_ARTICULO'        , title: 'Descripción' ,width : 100 , className:'htLeft'  },
-    // { data: 'COD_UNIDAD_MEDIDA'    , title: 'UM'          ,width : 35  , className:'htLeft'  },
-    // { data: 'PRECIO_UNITARIO_C_IVA', title: 'Precio'      ,width : 35  , className:'htRight' }
   ],
   COD_UNIDAD_MEDIDA: [
     { data: 'COD_UNIDAD_MEDIDA'   , title: 'Código'      ,className:'htLeft'  },
@@ -35,6 +33,8 @@ const columnModal = {
       depende_de:[{id:'COD_ARTICULO'         , label:'Cod Articulo'}
                  ,{id:'CANTIDAD'             , label:'Cantidad'   , isNull:true}
                  ,{id:'DESCUENTO'            , label:'Descuento'  , isNull:true}
+                 ,{id:'PORC_IVA'             , label:'Iva'        , isNull:true}
+                 ,{id:'PORC_GRAVADA'         , label:'Gravada'    , isNull:true}
                  ,{id:'PRECIO_UNITARIO_C_IVA', label:'Precio'     , isNull:true}
                 ],
       dependencia_de:[],
@@ -55,9 +55,9 @@ const columnDet = [
   { data: 'CANTIDAD'             , title: 'Cantidad'     , width : 55  , type:'numeric'     , className:'htRight' , requerido:true       , filter:false   , readOnly:false  , format:{pattern: '0,0'}, validaAllExterno:true},
   { data: 'PRECIO_UNITARIO_C_IVA', title: 'Precio Venta' , width : 55  , type:'numeric'     , requerido:true      , className: 'htRight' , filter:false   , readOnly:false  , format:{pattern: '0,0'}, validaAllExterno:true}, 
   { data: 'DESCUENTO'            , title: 'Descuento'    , width : 55  , type:'numeric'     , requerido:false     , className: 'htRight' , readOnly:false , format:{pattern: '0,0'}, validaAllExterno:true},   
-  { data: 'MONTO_TOTAL'          , title: 'Total'        , width : 60  , type:'numeric'     , className:'htRight' , readOnly:true        , filter:false   , format:{pattern: '0,0'}},
+  { data: 'MONTO_TOTAL_CONIVA'   , title: 'Total'        , width : 60  , type:'numeric'     , className:'htRight' , readOnly:true        , filter:false   , format:{pattern: '0,0'}},
 ]
-const columnNavigationEnter = [0,2,4]
+const columnNavigationEnter = [0,2,4,6]
 // F9
 const column_vendor = [
   { data: 'COD_VENDEDOR'        , title: 'Código'      , className:'htreft' },
@@ -70,6 +70,10 @@ const column_codVenta = [
 const column_cliente = [
   { data: 'COD_CLIENTE'         , title: 'Código'      , className:'htreft' },
   { data: 'DESC_CLIENTE'        , title: 'Descrición'  , className:'htreft' },
+]
+const column_Subcliente = [
+  { data: 'COD_SUBCLIENTE'      , title: 'Código'      , className:'htreft' },
+  { data: 'DESC_SUBCLIENTE'     , title: 'Descrición'  , className:'htreft' },
 ]
 const column_moneda = [
   { data: 'COD_MONEDA'          , title: 'Código'      , className:'htreft' },
@@ -89,6 +93,7 @@ export default {
   column_vendor,
   column_codVenta,
   column_cliente,
+  column_Subcliente,
   column_moneda,
   column_listaPrecio
 }
