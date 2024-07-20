@@ -1,6 +1,6 @@
 
 const mainInicialCab = { 
-  COD_EMPRESA	          : sessionStorage.cod_empresa,
+  COD_EMPRESA	          : sessionStorage.getItem('cod_empresa'),
   TIP_COMPROBANTE	      : 'FCO',
   SER_COMPROBANTE	      : 'A',
   NRO_COMPROBANTE	      : '',
@@ -25,7 +25,7 @@ const mainInicialCab = {
   IVA5                  : 0,
   IVA10                 : 0,
   NRO_MOV_CAJ	          : '',
-  ESTADO	              : '',
+  ESTADO	              : 'P',
   FEC_ESTADO	          : '',
   COD_USUARIO	          : '',
   FEC_ALTA	            : '',
@@ -101,6 +101,9 @@ const mainInicialCab = {
   IND_PROC_SIFEN	      : '',
   NRO_CDC	              : '',
   // --
+  MONTO_ANT_GRAV        : '',
+  MONTO_ANT_EXEN        : '',
+  IVA_ANT               : '',
   CARGA_DETALLE         : 'N',
   DESC_MOTIVO_NRC       : '',
   insertDefault         : true,
@@ -171,7 +174,8 @@ const mainInicialDet = {
   COSTO_DIRECTO	            : '',
   COMENTARIO	              : '',
   // --
-  insertDefault         : true,
+  IVA_ANT                   : '',
+  insertDefault             : true,
 }
 const main = {mainInicialCab,mainInicialDet}
 

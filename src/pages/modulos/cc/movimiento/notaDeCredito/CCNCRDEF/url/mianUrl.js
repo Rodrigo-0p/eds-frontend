@@ -2,6 +2,11 @@
 const url_listar_cab        = '/cc/ccncrdef/list/cabecera'    ;
 const url_listar_det        = '/cc/ccncrdef/list/detalle'     ;
 const url_listar_pq         = '/cc/ccncrdef/list/postquery'   ;
+
+const url_listar_prov       = '/cc/ccncrdef/list/prov'        ;
+const url_listar_def        = '/cc/ccncrdef/list/def'         ;
+const url_listar_apv        = '/cc/ccncrdef/list/apv'         ;
+
 const url_preForm           = '/cc/ccncrdef/buscar/preform'   ;
 const url_post_query        = '/cc/ccncrdef/buscar/postquery' ;
 //Buscar
@@ -31,9 +36,17 @@ const url_valida_moneda     = '/cc/ccncrdef/valida/moneda'    ;
 const url_valida_articulo   = '/cc/ccncrdef/valida/articulo'  ;
 const url_valida_um         = '/cc/ccncrdef/valida/um'        ;
 const url_valida_calcCant   = '/cc/ccncrdef/valida/cantidad'  ;
+const url_valida_calculoAct = '/cc/ccncrdef/valida/calculoAct';
+const url_valida_estado     = '/cc/ccncrdef/valida/estado'    ;
+const url_buscar_nro_compr  = '/cc/ccncrdef/cab/';
+const url_buscar_nro_orden  = '/cc/ccncrdef/det/';
+const url_abm               = '/cc/ccncrdef'
 
 const main ={ url_listar_cab
             , url_listar_det
+            , url_listar_prov
+            , url_listar_def 
+            , url_listar_apv 
             , url_preForm
             , url_post_query
             , url_listar_pq
@@ -64,6 +77,11 @@ const main ={ url_listar_cab
             , url_valida_articulo
             , url_valida_um
             , url_valida_calcCant
+            , url_valida_calculoAct
+            , url_valida_estado
+            , url_buscar_nro_compr
+            , url_buscar_nro_orden
+            , url_abm
             }
 
 export default main;

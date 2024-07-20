@@ -297,7 +297,7 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
                             setUpdateValue_ant = false , setUpdateValue_desp  , setLastFocusNext  = false          , columBuscador    = ''   ,  buttomAccion     = false,
                             maxFocus                   , dataCabecera         , setClickCell       , multipleHeader, nextFocus        = false,  setUpdateEdit,
                             colorButtom = false        , validaExterno = false, focusEditMode      , executeCab    , validaAllExterno = false,  nextValidaInput  = false,
-                            f7_and_F8 , modalClick = false}) => {
+                            f7_and_F8 , modalClick = false, afterChangeBoolean = true}) => {
 
   const refModal            = React.useRef({  modalColumn : []
                                             , data        : []                                            
@@ -361,7 +361,8 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
         TD.appendChild(buttonIcon)
       }
     }
-  };  
+  }; 
+  var lastClickTime = 0; 
   const handleCellClick = (event, coords, td)=>{
     let focusValida = focusCloseModal[idComp]    
     let evento      = eventGlobal[idComp]
@@ -391,7 +392,14 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
     setTimeout(()=>{
       if(setClickCell)setClickCell(idComp,coords);
     },1)
-    
+    var now = new Date().getTime();
+    var isDoubleClick = (lastClickTime && (now - lastClickTime < 200));
+    if (isDoubleClick) {
+      setTimeout(()=>{
+        if(setClickCell)setClickCell(idComp,coords,true);
+      },1)
+    }
+    lastClickTime = now; // Actualiza el tiempo del último clic
   }
   const onAfterSelectionEnd = (event, coords) => {
     if (previousEditRef.current !== null) {
@@ -450,7 +458,7 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
         }
         
         
-        if(infoData[dataName]?.length === 0){
+        if(infoData[dataName]?.length === 0 && items.isNull !== true){
           setTimeout(()=>{
             Main.message.info({
               content  : `Favor complete el campo ${items.label} antes de continuar!! (valor externo)`,
@@ -1326,9 +1334,11 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
           valor.rowColumn = columIndex;
           validaAllExterno(valor,changes[0][1],-1);
           setTimeout(()=>{
-            refKeyDown.current.KeyDown = true;
-            refData.current.hotInstance.removeHook('beforeKeyDown',KeyDown);
-          })
+            if(afterChangeBoolean){             
+              refKeyDown.current.KeyDown = true;
+              refData.current.hotInstance.removeHook('beforeKeyDown',KeyDown);            
+            }
+          });
         } 
       }
     }
@@ -1599,6 +1609,7 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
         afterSelection={handleAfterSelection}
         beforeKeyDown={KeyDown}
         afterOnCellMouseDown={handleCellClick} 
+        afterOnCellCornerDblClick={(e)=> console.log('=>',e)}
         afterChange={afterChange}
         afterSelectionEnd={onAfterSelectionEnd}
         beforeChange={onBeforeChange}

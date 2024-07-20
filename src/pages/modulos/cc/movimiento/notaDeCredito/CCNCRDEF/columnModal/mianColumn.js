@@ -3,6 +3,7 @@ import mainUrl  from '../url/mianUrl'
 const columnModalDet = {
   urlValidar : [{ COD_ARTICULO      : mainUrl.url_valida_articulo,
                   COD_UNIDAD_MEDIDA : mainUrl.url_valida_um,
+                  CANTIDAD          : mainUrl.url_valida_calcCant,
                 }],
   urlBuscador: [{ COD_ARTICULO      : mainUrl.url_buscar_articulo,
                   COD_UNIDAD_MEDIDA : mainUrl.url_buscar_um
@@ -26,17 +27,23 @@ const columnModalDet = {
       depende_ex_cab:[
         {id:'COD_SUCURSAL'        , label :'Sucursal'        },
         {id:'CARGA_DETALLE'       , label :'Carga Detalle'   },
-        {id:'COD_LISTA_PRECIO'    , label :'Lista de Precio' },
-        {id:'COD_MONEDA'          , label :'Moneda'          },    
+        {id:'PRECIO_VENTA'        , label :'Precio Venta'    },
+        {id:'COD_MONEDA'          , label :'Moneda'          },
+        {id:'IND_VENTA'           , label :'IND_VENTA'        , isNull:true },
         {id:'COD_CONDICION_VENTA' , label :'Condicion venta' },
-        {id:'IND_VENTA'           , label :'IND_VENTA'        , isNull:true },        
+        {id:'COD_LISTA_PRECIO'    , label :'Lista de Precio' },     
         {id:'IND_REG_TURISMO'     , label :'IND_REG_TURISMO'  , isNull:true },
       ],
     },
     COD_UNIDAD_MEDIDA:{
-      depende_de:[{id:'COD_ARTICULO'     ,label: 'Articulo'   }],
-      dependencia_de:[{id:"CANTIDAD"     ,label: 'Cantidad'   , isNull:true },
-                      {id:"PRECIO_UB"    ,label: 'Precio ub'  }],
+      depende_de:[{id:'COD_ARTICULO'  , label: 'Articulo'   }],
+      dependencia_de:[{id:"PRECIO_UB" , label: 'Precio ub'  }],
+      depende_ex_cab:[{id:'DECIMALES' , label :'Decimales'  }],
+    },
+    CANTIADAD:{
+      depende_de:[{id:'MULT' , label: 'MULT'},
+                  {id:'DIV'  , label: 'DIV' }],
+      dependencia_de:[],
       depende_ex_cab:[],
     }
   }
@@ -47,13 +54,13 @@ const columnDet = [
   { data: 'DESC_ARTICULO'        , title: 'Descripcion'     , width : 130 , readOnly:true      , filter:false        , textWrap:true       }, 
   { data: 'NRO_LOTE'             , title: 'Nro. Lote'       , width : 26  , className: 'htLeft', readOnly:false      , filter:false        }, 
   { data: 'FEC_VENCIMIENTO'      , title: 'Fec. Venc'       , width : 46  , className: 'htLeft', readOnly:false      , type:'date'          , hora:false}, 
-  { data: 'COD_UNIDAD_MEDIDA'    , title: 'U.M'             , width : 25  , className: 'htLeft', requerido:true      , readOnly:false       , filter:false   , editFocus:true  }, 
-  { data: 'CANTIDAD'             , title: 'Cantidad'        , width : 55  , type:'numeric'     , className:'htRight' , requerido:true       , filter:false   , readOnly:false  , format:{pattern: '0,0'}, validaAllExterno:true},
-  { data: 'PRECIO_UNITARIO_C_IVA', title: 'Precio Unitario' , width : 55  , type:'numeric'     , requerido:true      , className: 'htRight' , filter:false   , readOnly:false  , format:{pattern: '0,0'}, validaAllExterno:true}, 
+  { data: 'COD_UNIDAD_MEDIDA'    , title: 'U.M'             , width : 25  , className: 'htLeft', requerido:true      , readOnly:false       , filter:false   , nextValida:true }, 
+  { data: 'CANTIDAD'             , title: 'Cantidad'        , width : 55  , type:'numeric'     , className:'htRight' , requerido:true       , format:{pattern: '0,0'}, nextValida:true },
+  { data: 'PRECIO_UNITARIO_C_IVA', title: 'Precio Unitario' , width : 55  , type:'numeric'     , className: 'htRight', requerido:true       , format:{pattern: '0,0'}, validaAllExterno:true}, 
   { data: 'TOTAL_IVA'            , title: 'Total I.V.A'     , width : 60  , type:'numeric'     , className:'htRight' , readOnly:true        , filter:false   , format:{pattern: '0,0'}},
   { data: 'MONTO_TOTAL_C_IVA'    , title: 'Monto Total'     , width : 60  , type:'numeric'     , className:'htRight' , readOnly:true        , filter:false   , format:{pattern: '0,0'}},
 ]
-const nextEnter = [0,2,3,4,5];
+const nextEnter = [0,2,3,4,5,6];
       
 // F9
 const column_sucursal = [
@@ -68,6 +75,10 @@ const column_NroCompRef = [
   { data: 'TIP_COMPROBANTE_REF'  , title: 'Tipo'        , className:'htreft' },
   { data: 'SER_COMPROBANTE_REF'  , title: 'Ser'         , className:'htreft' },
   { data: 'NRO_COMPROBANTE_REF'  , title: 'Comprobante' , className:'htreft' },
+]
+const column_zona = [
+  { data: 'COD_ZONA'             , title: 'Código'      , className:'htreft' },
+  { data: 'DESC_ZONA'            , title: 'Descrición'  , className:'htreft' },
 ]
 const column_CondVenta = [
   { data: 'COD_CONDICION_VENTA'  , title: 'Código'      , className:'htreft' },
@@ -98,6 +109,7 @@ const main = {
   // F9
  , column_sucursal
  , column_cliente
+ , column_zona
  , column_NroCompRef
  , column_CondVenta
  , column_Motivoncr

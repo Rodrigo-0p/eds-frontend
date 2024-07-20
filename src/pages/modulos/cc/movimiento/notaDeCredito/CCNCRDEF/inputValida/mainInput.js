@@ -38,7 +38,7 @@ const validaInput = [
     out:[ 'CON_NCE'            , 'COD_ZONA'        , 'COD_VENDEDOR'      , 'VENDEDOR_PERSONA'   ,
           'COD_CONDICION_VENTA', 'COD_LISTA_PRECIO', 'COD_MONEDA'        , 'COD_DEPOSITO'       ,
           'NOM_CLIENTE'        , 'DIR_CLIENTE'     , 'RUC'               , 'CI'                 ,
-          'SER_REFERENCIA'     , 'TIP_REFERENCIA'  , 'NRO_COMPROBANTE'   , 'COD_MOTIVO_NCR'     ,
+          'SER_REFERENCIA'     , 'TIP_REFERENCIA'  , 'NRO_REFERENCIA'    , 'COD_MOTIVO_NCR'     ,
           'IND_TELEV'          , 'COD_SUPERVISOR'  , 'SUPERVISOR_PERSONA', 'TEL_CLIENTE'        ,
           'NOM_CLIENTE'        , 'ESTADO'          , 'OBSERVACION'       ,  'NRO_NCR_CLIENTE'   ,
           'IND_VENTA'          , 'COD_MONEDA_REF'  , 'TIP_CAMBIO_REF'    , 'TOT_COMPROBANTE_REF' ],
@@ -133,8 +133,8 @@ const validaInput = [
   },{
     input: 'COD_MONEDA',
     url: mainUrl.url_valida_moneda,
-    out:['DESC_MONEDA'],
-    data:['DESCIMALES','TIP_CAMBIO'],
+    out:['DESC_MONEDA','DECIMALES','TIP_CAMBIO'],
+    data:[],
     rel:[],
     next: 'NRO_NCR_CLIENTE', 
     // ---
@@ -154,6 +154,7 @@ const restablecerValida = ()=>{
 const ModalF9 = {
   "COD_SUCURSAL"         : {title: 'Sucursal'    , column: mainColumn.column_sucursal    , url: mainUrl.url_buscar_sucursal   },  
   "COD_CLIENTE"          : {title: 'Cliente'     , column: mainColumn.column_cliente     , url: mainUrl.url_buscar_cliente    },
+  "COD_ZONA"             : {title: 'Zona'        , column: mainColumn.column_zona        , url: mainUrl.url_buscar_zona       },
   "NRO_COMPROBANTE_REF"  : {title: 'Referencia'  , column: mainColumn.column_NroCompRef  , url: mainUrl.url_buscar_nroCompr   },  
   "COD_CONDICION_VENTA"  : {title: 'Cond Venta'  , column: mainColumn.column_CondVenta   , url: mainUrl.url_buscar_condventa  },  
   "COD_MOTIVO_NCR"       : {title: 'Motivo'      , column: mainColumn.column_Motivoncr   , url: mainUrl.url_buscar_motivoncr  },  
