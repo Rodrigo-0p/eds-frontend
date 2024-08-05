@@ -15,6 +15,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.8.6",
+    "antd-img-crop": "^4.21.0",
     "axios": "^1.4.0",
     "currency.js": "^2.0.4",
     "handsontable": "^9.0.1",

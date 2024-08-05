@@ -297,6 +297,7 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
                             setUpdateValue_ant = false , setUpdateValue_desp  , setLastFocusNext  = false          , columBuscador    = ''   ,  buttomAccion     = false,
                             maxFocus                   , dataCabecera         , setClickCell       , multipleHeader, nextFocus        = false,  setUpdateEdit,
                             colorButtom = false        , validaExterno = false, focusEditMode      , executeCab    , validaAllExterno = false,  nextValidaInput  = false,
+                            nextValida  = false        ,
                             f7_and_F8 , modalClick = false, afterChangeBoolean = true}) => {
 
   const refModal            = React.useRef({  modalColumn : []
@@ -727,6 +728,8 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
 
     // ADD MAYUSCULA // VALIDA TIPO NUMERICO
     if (e.target.nodeName === 'TEXTAREA') {
+      
+      
 
       let rowindex      = g_getRowFocus(idComp)[0]?.rowIndex
       let rowColumn     = g_getRowFocus(idComp)[0]?.columnIndex
@@ -739,12 +742,12 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
       let columnIndex = valorIndex && valorIndex !== -1 ? valorIndex[1] : 0
       rowIndex = rowIndex === -1 ? 0 : rowIndex;
 
-      if(refData?.current?.hotInstance?.getCellMeta(rowIndex,columnIndex)?.readOnly) return
-
+      if(!nextValida && refData?.current?.hotInstance?.getCellMeta(rowIndex,columnIndex)?.readOnly) return
 
       let element     = refData?.current?.hotInstance?.getCellMeta(rowIndex,columnIndex);
       let evet1       = document.getElementsByClassName('ht_clone_master')
       
+
       if(evet1 && !element.readOnly){
         if(evet1.length > 0 && columns[columnIndex]?.upper){
           if(!e.target.classList.value.includes('handsontable-upper')){
@@ -757,6 +760,8 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
           if(e.target.classList.value.includes('handsontable-upper')) e.target.classList.remove('handsontable-upper');
         }
         if(columnModal){
+          
+
           if([37,39,13,40,9].includes(e?.keyCode) && evet1.length > 0 && (columnModal?.urlValidar && columnModal?.urlValidar[0][columns[rowColumn]?.data])){
             validaInput(e.target.value,valorIndex,e)
           }else if(evet1.length > 0 && [40,38].includes(e.keyCode)){
@@ -766,6 +771,7 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
             },1)
           }else if([13,9].includes(e?.keyCode)){
             if(columnModal && maxFocus){
+
               if(setLastFocusNext && columnModal[maxFocus[0].hasta]?.length > 0){
                 let dataRow   = refData.current.__hotInstance.getSourceData()[rowIndex]
                 let rowCount  = refData?.current?.hotInstance?.getSourceData()?.length;

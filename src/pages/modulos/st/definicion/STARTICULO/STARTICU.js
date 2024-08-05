@@ -10,30 +10,16 @@ const FormName     = 'STARTICU';
 const TituloList   = "Articulos";
 const idComp       = `GRID_${FormName}`
 
-var id_cabecera    	  = '';
-const set_id_cabecera = (e)=>{
-  id_cabecera = e;
-}
-const get_id_cabecera = ()=>{
-  return id_cabecera;
-}
-var indice = 0
+
 const setIndice = (e) => {
   Main.setIndiceCabecera(e,idComp);
-  indice = e
-}
-const getIndice = () => {
-  return indice
 }
 
 // CANTIDAD DE REGISTRO POR GET
 const data_len = 100;
-var mitad_data    	 = data_len / 2;
-const set_mitad_data = (e)=>{
-  mitad_data = e;
-}
 // BANDERA
 var bandPost_Cab_Det = true;
+const url_img_base   = process.env.REACT_APP_BASEURL+process.env.REACT_APP_IMG+`articulo/`
 
 const MainST = memo(({history, location, match}) => {
 
@@ -47,8 +33,10 @@ const MainST = memo(({history, location, match}) => {
   // USE REF
   const refData	            = React.useRef();
   const buttonSaveRef       = React.useRef();
+  const banRef              = React.useRef({uploadImg:[]})
   const refAdd              = React.useRef({bandNew:false});
-  const refCab              = React.useRef({ data: [], dataCan:[]   , delete:[]   , activateCambio:false
+  const refCab              = React.useRef({ indice:0     , id_cabecera:'', mitad_data: data_len / 2,
+                                             data: []     , dataCan:[]    , delete:[] , activateCambio:false
                                            , dataCanDet:[], deleteDet:[]});
   const refModalData        = React.useRef()
   const refModal            = React.useRef({  modalColumn : []
@@ -60,6 +48,9 @@ const MainST = memo(({history, location, match}) => {
                                           })
   // bloqueo
   const bloqueoArticulo      = React.useRef();
+  
+  const [previewImage , setPreviewImage] = React.useState('');
+  const [fileList     , setFileList    ] = React.useState([]);
 
   React.useEffect(()=>{
     document.getElementById(`form-cab-${FormName}`)?.addEventListener('click', function (e){
@@ -90,13 +81,16 @@ const MainST = memo(({history, location, match}) => {
 	});
   const inicialForm = async (f7_delete = false, idFocus = 'DESCRIPCION')=>{
     setIndice(0);
+    refCab.current.indice = 0;
+    if(fileList.length > 0)setFileList([])
+    banRef.current.uploadImg  = []
     form.resetFields()
-    var newKey 					    = Main.uuidID();
-    let valor  						  = JSON.parse(JSON.stringify(objetoInicialCab));
-    valor.ID							  = newKey;
-    valor.COD_EMPRESA	      = cod_empresa;		
-    valor.COD_USUARIO_ALTA 	= sessionStorage.cod_usuario;
-    valor.FEC_ALTA				  = Main.moment().format('DD/MM/YYYY HH:mm:ss');        
+    var newKey 					      = Main.uuidID();
+    let valor  						    = JSON.parse(JSON.stringify(objetoInicialCab));    
+    valor.ID							    = newKey;
+    valor.COD_EMPRESA	        = cod_empresa;		
+    valor.COD_USUARIO_ALTA 	  = sessionStorage.cod_usuario;
+    valor.FEC_ALTA				    = Main.moment().format('DD/MM/YYYY HH:mm:ss');        
     if(!f7_delete) form.setFieldsValue({...valor,MANEJA_COSTO : valor.MANEJA_COSTO === 'S' ? true : false});    
     else Main.desactivarSpinner();
 
@@ -112,6 +106,7 @@ const MainST = memo(({history, location, match}) => {
 		document.getElementById("mensaje").textContent 				= "";   
   }
   const guardar = async()=>{
+  
     var permisoActualizacion = false;
     var permisoIsertar 	     = false;
     
@@ -150,13 +145,20 @@ const MainST = memo(({history, location, match}) => {
 
     // FILTER CAB
     let url_get_cab_cod     = `${mainUrl.url_buscar_cod_articulo}${cod_empresa}`
-    let infoCab      	      = await Main.GeneraUpdateInsertCab(refCab.current.data,'COD_ARTICULO',url_get_cab_cod,false,true);
+    let rowCab              = refCab.current.data[refCab.current.indice];
+    let infoCab      	      = await Main.GeneraUpdateInsertCab([rowCab],'COD_ARTICULO',url_get_cab_cod,false,true);
     var aux_cab	            = infoCab.rowsAux;
     var updateInserData     = infoCab.updateInsert;
     if(!permisoActualizacion) permisoActualizacion = infoCab.actualizar;
     if(!permisoIsertar)       permisoIsertar 	     = infoCab.insertar  ;
     var delete_cab          = refCab.current.delete[0] !== undefined && refCab.current.delete?.length > 0  ? refCab.current.delete : []
-   
+    if(infoCab.insertar){
+      if(infoCab.insertar && (Object.keys(banRef.current.uploadImg).length > 0)){
+        let extencion = banRef.current.uploadImg.name.split('.')[1];
+        infoCab.updateInsert[0].NAME_IMG = infoCab.updateInsert[0].COD_ARTICULO+'.'+extencion
+      }
+    }
+
     var dependencia_det        = [];
     var add_cab_and_det        = ['COD_EMPRESA','COD_ARTICULO'];
     let url_get_det_cod        = undefined
@@ -197,7 +199,7 @@ const MainST = memo(({history, location, match}) => {
 
     var data = {
       updateInserData      ,
-      aux_updateInserData  : refCab.current.dataCan[getIndice()],
+      aux_updateInserData  : refCab.current.dataCan[refCab.current.indice],
       delete_cab	         , 
 
       updateInserDataDet   ,
@@ -217,7 +219,9 @@ const MainST = memo(({history, location, match}) => {
           if(resp.data.ret === 1){
             Main.desactivarSpinner()
             Main.setModifico(FormName)
-            
+            if(infoCab.actualizar || infoCab.insertar){          
+              saveImg(infoCab.updateInsert[0].COD_ARTICULO)
+            } 
             Main.message.success({
               content  : `Procesado correctamente!!`,
               className: 'custom-class',
@@ -236,10 +240,13 @@ const MainST = memo(({history, location, match}) => {
             refCab.current.deleteDet = []
 
             let keyPamas = await getParmas(true)
-            keyPamas.COD_ARTICULO = infoCab.rowsAux[getIndice()].COD_ARTICULO
+            keyPamas.COD_ARTICULO = infoCab.rowsAux[refCab.current.indice].COD_ARTICULO
             setTimeout(()=>{
               getDataCab(true,keyPamas)
             },4)
+        
+          }else if(!resp.data.p_mensaje && banRef.current.uploadImg && banRef.current.uploadImg.name.length > 0 && infoCab.actualizar){
+            saveImg(infoCab.updateInsert[0].COD_ARTICULO);
           }else{
             Main.desactivarSpinner();
             Main.alert(resp.data.p_mensaje, '¡Atención!', 'alert', 'OK')
@@ -292,14 +299,14 @@ const MainST = memo(({history, location, match}) => {
       Main.modifico(FormName)
       let rowValue    = Main.g_getRowFocus(idComp);
       let rowIndex    = index.index ? index.index + 1 : rowValue[0].rowIndex === 0 ? rowValue[0].rowIndex + 1  : rowValue[0].rowIndex === -1 ? 0 : rowValue[0].rowIndex;
-      let newRow      = await getParamsDetalle(false,getIndice());
+      let newRow      = await getParamsDetalle(false,refCab.current.indice);
 
       refData.current.hotInstance.alter('insert_row', rowIndex);
       refData.current.hotInstance.view.settings.data[rowIndex] = newRow;
 
       refData.current.hotInstance.updateSettings({      
         cellRow:rowIndex,
-      });  
+      });
 
       habilitar_columna(rowIndex)
 
@@ -315,7 +322,7 @@ const MainST = memo(({history, location, match}) => {
       setTimeout(()=>{
         Main.activarSpinner()
         form.resetFields();
-        refCab.current.delete[0] = refCab.current.data[getIndice()]
+        refCab.current.delete[0] = refCab.current.data[refCab.current.indice]
         inicialForm(true,'DESCRIPCION',true)
         Main.modifico(FormName)
       },10)
@@ -365,13 +372,14 @@ const MainST = memo(({history, location, match}) => {
     valor.ID	               = newKey;
     valor.COD_EMPRESA	       = refCab.current.data[indexRow === false ? 0 : indexRow].COD_EMPRESA
     valor.COD_ARTICULO       = refCab.current.data[indexRow === false ? 0 : indexRow].COD_ARTICULO    
-    valor.idCabecera         = form.getFieldsValue('ID');
+    valor.idCabecera         = form.getFieldValue('ID');
     return valor;
   }
   const getDetalle = async (idCabecera, data = false,indexRow = 0,f7 = false)=>{
 
     let dataParams = data ? data : {COD_EMPRESA  : cod_empresa,COD_ARTICULO:form.getFieldValue('COD_ARTICULO')}
     var content = [];
+    let bandera = false;
     try {
       var info = await Main.Request(mainUrl.url_list_relaciones,'POST',dataParams);
     } catch (error) {
@@ -381,32 +389,31 @@ const MainST = memo(({history, location, match}) => {
     if(info?.data?.rows?.length === 0 || info?.data?.rows === undefined){
       let valor = await getParamsDetalle(idCabecera,indexRow)
       content   = [valor]
-      setTimeout(()=>{
-        habilitar_columna(0)  
-      },100)      
+      bandera   = true;
     }else{
       content = info.data.rows;
     }
     refCab.current.dataCanDet = JSON.parse(JSON.stringify(content));
     refData.current?.hotInstance.loadData(content)
+    setTimeout(()=>{
+      if(bandera) habilitar_columna(0);
+      else habilitar_columna('-1')
+    })
     Main.setFocusedRowIndex(0,undefined,refData,idComp);
     ver_bloqueo(f7)
   }
   const habilitar_columna = (rowIndex)=>{
-    const meta = refData.current.hotInstance.getCellMetaAtRow(rowIndex);
-    if(meta.length > 0){
-      meta[0].readOnly = false
-      meta[1].readOnly = false
-      meta[2].readOnly = false
-      meta[3].readOnly = false
-      meta[4].readOnly = false
-      meta[5].readOnly = false
-      meta[6].readOnly = false  
-      meta[7].readOnly = false 
-      meta[8].readOnly = false  
-    }  
-    refData.current.hotInstance.setCellMetaObject(rowIndex, meta);
-    refData.current.hotInstance.updateSettings({});
+    refData.current.hotInstance.updateSettings({
+      cells(row, col) {
+        const cellProperties = {};
+          if(rowIndex === row && !Main._.isUndefined(refData.current.hotInstance.getData()[row]) ){
+            cellProperties.readOnly = false;
+          }else{ 
+            cellProperties.readOnly = true;
+          }
+        return cellProperties;
+      }
+    }); 
   }
   const manejaF7 = (idFocus)=>{
     Main.activarSpinner()
@@ -416,6 +423,7 @@ const MainST = memo(({history, location, match}) => {
       if(!Main.getViewBuscar(FormName))Main.setBuscar(FormName,true);
       Main.desactivarSpinner()
       inicialForm(true,idFocus)
+      setFileList([])
     },10)
   }
   const getData = async (data, url) => {
@@ -460,8 +468,9 @@ const MainST = memo(({history, location, match}) => {
           refCab.current.data    = response;
           refCab.current.dataCan = JSON.parse(JSON.stringify(response));
           setIndice(0);
+          refCab.current.indice = 0;
           setTimeout(()=>{
-            postQueryCab(response[0],buttonF8,getIndice())                    
+            postQueryCab(response[0],buttonF8,refCab.current.indice)                    
           })
         }else{
           Main.desactivarSpinner();
@@ -510,12 +519,25 @@ const MainST = memo(({history, location, match}) => {
     }
   }
   const loadForm = async (data = [] , indice = false)=>{
-    let index  = await indice ? indice : getIndice()
+    let index  = await indice ? indice : refCab.current.indice
     let value  = await data[index] === undefined ? data : data[index];
+  
+    if(Main.nvl(value.NAME_IMG,'-1') !== '-1' && value.NAME_IMG !== form.getFieldValue('NAME_IMG')){
+      setFileList([{
+        url:url_img_base+`${cod_empresa}/`+value.NAME_IMG
+      }])
+    }else if(value.NAME_IMG !== form.getFieldValue('NAME_IMG')){
+      if(fileList.length > 0){
+        setFileList([])
+        banRef.current.uploadImg = []
+      }
+    }
+
     form.setFieldsValue({
       ...value,
       MANEJA_COSTO : value.MANEJA_COSTO === 'S' ? true : false    
     });
+    
     Main.desactivarSpinner()
     getDetalle(false, { COD_EMPRESA  : value.COD_EMPRESA
                       , COD_ARTICULO : value.COD_ARTICULO},indice); 
@@ -531,14 +553,14 @@ const MainST = memo(({history, location, match}) => {
     refCab.current.delete         = []
     refCab.current.deleteDet      = []
     Main.setBuscar(FormName,false);
-    if(refCab.current.data[getIndice()].insertDefault || refCab.current.data[getIndice()].inserted){
+    if(refCab.current.data[refCab.current.indice].insertDefault || refCab.current.data[refCab.current.indice].inserted){
       Main.desactivarSpinner()
       inicialForm()
     }else{
       refCab.current.data       = JSON.parse(JSON.stringify(refCab.current.dataCan))
       refCab.current.dataCan    = JSON.parse(JSON.stringify(refCab.current.data));
       Main.desactivarSpinner()      
-      loadForm(refCab.current.data,getIndice())      
+      loadForm(refCab.current.data,refCab.current.indice)      
       setTimeout(()=>{
         document.getElementById('DESCRIPCION').focus();  
       },200)
@@ -567,13 +589,18 @@ const MainST = memo(({history, location, match}) => {
         rightData();
         break;
       case 'next-left':
-        if(refCab.current.data.length > 1){setIndice(0);leftData();} 
+        if(refCab.current.data.length > 1){
+          setIndice(0);
+          refCab.current.indice = 0;
+          leftData();
+        } 
         else Main.desactivarSpinner();
         break;
       case 'next-right':
         if(refCab.current.data.length > 1){
           let index =  refCab.current.data.length - 1
           setIndice(index);
+          refCab.current.indice = index;
           postQueryCab(refCab.current.data[index],false,index);
           document.getElementById("indice").textContent = refCab.current.data.length;
         }
@@ -585,7 +612,7 @@ const MainST = memo(({history, location, match}) => {
   }
   const leftData = async() => {
     if(!refCab.current.activateCambio){
-      var index = getIndice() - 1;
+      var index = refCab.current.indice - 1;
       if(index < 0){
         index = 0;
         document.getElementById("mensaje").textContent = "Haz llegado al primer registro";
@@ -594,8 +621,9 @@ const MainST = memo(({history, location, match}) => {
       }
       document.getElementById("indice").textContent = index + 1;
       setIndice(index);
-      var row = refCab.current.data[getIndice()]
-      if( id_cabecera !== row.ID ) id_cabecera = row.ID;
+      refCab.current.indice = index;
+      var row = refCab.current.data[refCab.current.indice]
+      if( refCab.current.id_cabecera !== row.ID ) refCab.current.id_cabecera = row.ID;
       loadForm(refCab.current.data);
       Main.quitarClaseRequerido();
     }else{
@@ -605,14 +633,15 @@ const MainST = memo(({history, location, match}) => {
   const rightData = async() => {
     if(!refCab.current.activateCambio){
       if(refCab.current.data.length !== 1){
-        var index = getIndice() + 1;
-        if( get_id_cabecera() !== refCab.current.data[index]?.ID && !Main._.isUndefined(refCab.current.data[index]?.ID)){
-          set_id_cabecera(refCab.current.data[index].ID);
+        var index = refCab.current.indice + 1;
+        if( refCab.current.id_cabecera !== refCab.current.data[index]?.ID && !Main._.isUndefined(refCab.current.data[index]?.ID)){
+          refCab.current.id_cabecera = refCab.current.data[index].ID
           setIndice(index);
+          refCab.current.indice = index;
           postQueryCab(refCab.current.data[index],false,index)
           document.getElementById("mensaje").textContent = "";
           document.getElementById("indice").textContent  = index + 1;
-          if(getIndice() > mitad_data && bandPost_Cab_Det){
+          if(refCab.current.indice > refCab.current.mitad_data && bandPost_Cab_Det){
             bandPost_Cab_Det = false;
             let params = { INDICE  : refCab.current.data.length, 
                            LIMITE  : data_len
@@ -624,7 +653,7 @@ const MainST = memo(({history, location, match}) => {
                   bandPost_Cab_Det = true;
                   refCab.current.data      = [ ...refCab.current.data, ...response ];
                   refCab.current.dataCan   = JSON.parse(JSON.stringify([refCab.current.data]))
-                  set_mitad_data(refCab.current.data.length / 2);
+                  refCab.current.mitad_data = refCab.current.data.length / 2
                   Main.desactivarSpinner();
                 })
             } catch (error) {
@@ -648,18 +677,20 @@ const MainST = memo(({history, location, match}) => {
     if(e.keyCode === 40){e.preventDefault(); Main.activarSpinner(); rightData();}
     if(e.keyCode === 38){e.preventDefault(); Main.activarSpinner(); leftData(); }
   }
-  const typeEvent = ()=>{
-    if(refCab.current.data[getIndice()]['insertDefault']){
-      refCab.current.data[getIndice()].insertDefault      = false;
-      refCab.current.data[getIndice()].inserted 		      = true;
-      refCab.current.data[getIndice()].COD_USUARIO_ALTA	  = sessionStorage.getItem('cod_usuario');
-      refCab.current.data[getIndice()].FEC_ALTA           = Main.moment().format('DD/MM/YYYY');
+  const typeEvent = (extecionUlr = false)=>{
+    if(refCab.current.data[refCab.current.indice]['insertDefault']){
+      refCab.current.data[refCab.current.indice].insertDefault      = false;
+      refCab.current.data[refCab.current.indice].inserted 		      = true;
+      refCab.current.data[refCab.current.indice].COD_USUARIO_ALTA	  = sessionStorage.getItem('cod_usuario');
+      refCab.current.data[refCab.current.indice].FEC_ALTA           = Main.moment().format('DD/MM/YYYY');      
     }
-    if(!refCab.current.data[getIndice()]['updated'] && refCab.current.data[getIndice()]['inserted'] !== true){
-      refCab.current.data[getIndice()]['updated']         = true;
-      refCab.current.data[getIndice()].COD_USUARIO_MODI	  = sessionStorage.cod_usuario;
-      refCab.current.data[getIndice()].FEC_MODI           = Main.moment().format('DD/MM/YYYY');
+    if(!refCab.current.data[refCab.current.indice]['updated'] && refCab.current.data[refCab.current.indice]['inserted'] !== true){
+      refCab.current.data[refCab.current.indice]['updated']         = true;
+      refCab.current.data[refCab.current.indice].COD_USUARIO_MODI	  = sessionStorage.cod_usuario;
+      refCab.current.data[refCab.current.indice].FEC_MODI           = Main.moment().format('DD/MM/YYYY');
       refCab.current.activateCambio = true;      
+      if(extecionUlr === '-1') refCab.current.data[refCab.current.indice].NAME_IMG = '';
+      else if(extecionUlr) refCab.current.data[refCab.current.indice].NAME_IMG = refCab.current.data[refCab.current.indice].COD_ARTICULO+'.'+extecionUlr;
       Main.modifico(FormName);
     } 
   }
@@ -679,7 +710,7 @@ const MainST = memo(({history, location, match}) => {
   const handleInputChange = (e) => {
     Main.modifico(FormName)
     try {
-      refCab.current.data[getIndice()][e?.target?.id ? e?.target?.id : e.target.name ] = e?.target?.value;  
+      refCab.current.data[refCab.current.indice][e?.target?.id ? e?.target?.id : e.target.name ] = e?.target?.value;  
     } catch (error) {
       console.log(error)
     }
@@ -789,7 +820,7 @@ const MainST = memo(({history, location, match}) => {
             ...form.getFieldsValue(),
             [key]: data[key]
           });
-          refCab.current.data[getIndice()][key] = data[key]
+          refCab.current.data[refCab.current.indice][key] = data[key]
         }
       }
       Main.modifico(FormName)
@@ -825,7 +856,7 @@ const MainST = memo(({history, location, match}) => {
           ...form.getFieldsValue(),
           [x]: ''
         });
-        refCab.current.data[getIndice()][x] = '';
+        refCab.current.data[refCab.current.indice][x] = '';
       });
       // eslint-disable-next-line
       valorValida.rel.map((x) => {
@@ -833,7 +864,7 @@ const MainST = memo(({history, location, match}) => {
           ...form.getFieldsValue(),
           [x]: ''
         });
-        refCab.current.data[getIndice()][x] = '';
+        refCab.current.data[refCab.current.indice][x] = '';
       });
       if (valorValida.next !== ""){
         if (valorValida?.idFocus) document.getElementById(valorValida.next).focus();
@@ -866,7 +897,7 @@ const MainST = memo(({history, location, match}) => {
                 ...form.getFieldsValue(),
                 [x]: resp.data.outBinds[x]
               });
-              refCab.current.data[getIndice()][x] = resp.data.outBinds[x];
+              refCab.current.data[refCab.current.indice][x] = resp.data.outBinds[x];
             })
             // eslint-disable-next-line
             valorValida.rel.map(x => {
@@ -874,7 +905,7 @@ const MainST = memo(({history, location, match}) => {
                 ...form.getFieldsValue(),
                 [x]: ''
               });
-              refCab.current.data[getIndice()][x] = null;
+              refCab.current.data[refCab.current.indice][x] = null;
             });
             if (valorValida?.idFocus) document.getElementById(valorValida.next).focus();
             else if (valorValida?.idSelect) document.getElementById(valorValida.next).select();
@@ -940,7 +971,40 @@ const MainST = memo(({history, location, match}) => {
       bloqueoArticulo.current.input.readOnly = !f7;
     },50)
   }
-
+  // ----------------------------------------------------------------------------------------------
+  const saveImg = async (COD_ARTICULO)=>{
+    if(fileList && fileList.length > 0 && fileList[0].uid !== '-1' && (banRef.current.uploadImg.name && banRef.current.uploadImg.name.length > 0)){
+      try {
+        
+        let extemcionImg    = banRef.current.uploadImg.name.split('.')[1]; 
+        let urlImg          = mainUrl.url_saveImg+`${COD_ARTICULO}.${extemcionImg}`;
+        await Main.RequestImg(urlImg, 'POST', banRef.current.uploadImg).then(async(resp) => {
+          if(resp.status === 200){
+            banRef.current.uploadImg = [];
+          }
+        });  
+      } catch (error) {
+        console.log(error);
+      }      
+    }
+  }
+  const onChange = ({ fileList: newFileList }) => {
+    setFileList(newFileList)
+    if(newFileList && newFileList.length > 0 ) typeEvent(newFileList[0].name.split('.')[1])
+    else typeEvent(newFileList.length === 0 ? '-1' : newFileList[0].name.split('.')[1])
+  };
+   const handleupload = async (file, fileList) => {
+    banRef.current.uploadImg = file;
+  }
+  const onPreview = async (file) => {
+    let src = file.url;
+    if (!src) {
+      if (!file.url && !file.preview) {
+        file.url = await Main.getBase64(file.originFileObj);
+      }
+    }
+    setPreviewImage(file.url);
+  };
 
   return (
     <>
@@ -995,7 +1059,12 @@ const MainST = memo(({history, location, match}) => {
                setLastFocusNext={setLastFocusNext}
                setfocusRowIndex={setfocusRowIndex}
                setUpdateEdit={setUpdateEdit}
-
+               setPreviewImage={setPreviewImage}
+               previewImage={previewImage}
+               fileList={fileList}
+               onChangeImg={onChange}
+               handleupload={handleupload}
+               onPreview={onPreview}
              />
 
           </Main.Paper>

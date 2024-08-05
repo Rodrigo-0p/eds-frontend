@@ -27,12 +27,12 @@ export const objetoInicialCab = {
   IND_MANEJA_LOTES    : '',
   TIP_CAMBIO_US	      : '',
   COD_ALTERNO         : '',
-  FEC_ALTA           	:'',
+  FEC_ALTA           	: '',
   IND_PRECIOS         : '',
   IND_ENVASE          : '',
-  FEC_ULTIMA_VENTA	  :'',
+  FEC_ULTIMA_VENTA	  : '',
   COD_USUARIO_ALTA    : '',
-  FEC_MODI	          :'',
+  FEC_MODI	          : '',
   COD_USUARIO_MODI    : '',
   NRO_REGISTRO        : '',
   IND_COMPRA          : '',
@@ -87,6 +87,7 @@ export const objetoInicialCab = {
   CANTIDAD_CONT	      : '',
   TIPO_COMPRA         : '',
   TIP_NEG             : '',
+  NAME_IMG            : '',
   // ---
   insertDefault       : true,
 }

@@ -18,14 +18,14 @@ const url_valida_iva	        = '/st/starticu/valida/iva'           ;
 const url_valida_um	          = '/st/starticu/valida/um'            ;
 
 // LIST
-const url_list_cab             = '/st/starticu/list/articulo'        ;
-const url_list_relaciones      = '/st/starticu/list/relaciones'      ; 
-const url_postQueryCab         = '/st/starticu/list/postqueryCab'    ;        
+const url_list_cab             = '/st/starticu/list/articulo'       ;
+const url_list_relaciones      = '/st/starticu/list/relaciones'     ; 
+const url_postQueryCab         = '/st/starticu/list/postqueryCab'   ;        
 // AUTO NRO_COMPROBANTE 
-const url_buscar_cod_articulo  = '/st/starticu/cod_articulo/' ; 
+const url_buscar_cod_articulo  = '/st/starticu/cod_articulo/'       ; 
 // ABM
-const url_abm                  = '/st/starticu'                      ;
-
+const url_abm                  = '/st/starticu'                     ;
+const url_saveImg              = `/st/starticu/saveImg/${sessionStorage.getItem('cod_empresa')}/`    ;
 
 const main ={
   // BUSCADOR
@@ -53,6 +53,7 @@ const main ={
   , url_list_relaciones
   // ABM
   , url_abm
+  , url_saveImg
 }
 
 export default main;

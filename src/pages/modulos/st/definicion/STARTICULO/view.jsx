@@ -38,9 +38,20 @@ export const columns = [
 ]
 const columnNavigationEnter = [1,2,3,4,5,6,7,8];
 
-const STARTICU = memo(({form     , refGrid  , FormName     , idComp     , dataRef,
-                        handleInputChange   , handleKeyDown, handleKeyUp, bloqueoArticulo,
-                        handleCheckbox      , setfocusRowIndex, setLastFocusNext,setUpdateEdit}) => {
+
+const STARTICU = memo(({form     , refGrid  , FormName        , idComp          , dataRef        ,
+                        handleInputChange   , handleKeyDown   , handleKeyUp     , bloqueoArticulo,
+                        handleCheckbox      , setfocusRowIndex, setLastFocusNext,setUpdateEdit   ,
+                        setPreviewImage     , previewImage    , fileList        , onChangeImg    ,
+                        handleupload        , onPreview       }) => {
+
+  // const maxFocus = [{
+  //   id:idComp          ,
+  //   hasta:"IND_BASICO"     ,
+  //   newAddRow:true     ,
+  //   nextId:''
+  // }];
+                          
   return (
     <Main.Form size="small" autoComplete="off" form={form} style={{ marginTop: '1px', paddingLeft: '10px', paddingRight: '10px', paddingTop: '10px' }}>
       <Main.Row gutter={[4, 2]}>
@@ -170,10 +181,33 @@ const STARTICU = memo(({form     , refGrid  , FormName     , idComp     , dataRe
               colorButtom={false}
               dataCabecera={dataRef}
               columnModal={columnModal}
+              // maxFocus={maxFocus}
               setLastFocusNext={setLastFocusNext}
               setUpdateEdit={setUpdateEdit}
+              nextValida={true} //configuración para ejecutar setfocusRowIndex
             />
         </Main.Col>
+
+        <Main.Col  id={`form-cab-${FormName}`} span={5}>
+          <Main.Fieldset
+            anchoContenedor="100%"
+            alineacionTitle="left"
+            alineacionContenedor="left"
+            margenTop="25px"
+            tamañoTitle="13px"
+            title="Usuario"
+            contenedor={
+
+              <Main.Row>
+                <Main.Col span={24}>
+                  <Main.Form.Item name="COD_USUARIO_ALTA">
+                    <Main.Input className="search_input" disabled />
+                  </Main.Form.Item>
+                </Main.Col>
+              </Main.Row>          
+            }              
+          />
+        </Main.Col>  
 
       </Main.Col>
       
@@ -229,31 +263,53 @@ const STARTICU = memo(({form     , refGrid  , FormName     , idComp     , dataRe
               </Main.Col>
             </Main.Row>          
           }
-              
         />
-      </Main.Col>
-      
-      <Main.Col  id={`form-cab-${FormName}`} span={5}>
-        <Main.Fieldset
+         <Main.Fieldset
           anchoContenedor="100%"
           alineacionTitle="left"
           alineacionContenedor="left"
+          padding="0px 10px"
           margenTop="0px"
           tamañoTitle="13px"
-          title="Usuario"
+          title="Articulo(Img)"
           contenedor={
+            <div style={{marginTop:'-21px' , height:'180px'}}>
+              <Main.Image
+                className="NoViewpreviewImg"
+                alt="example"
+                width={200}
+                preview={{
+                  visible: previewImage.length > 0 ? true : false,
+                  onVisibleChange: (e) => setPreviewImage(false),
+                }}
+                src={previewImage}
+              />
 
-            <Main.Row>
-              <Main.Col span={24}>
-                <Main.Form.Item name="COD_USUARIO_ALTA">
-                  <Main.Input className="search_input" disabled />
-                </Main.Form.Item>
-              </Main.Col>
-            </Main.Row>          
-          }
-              
-        />
-      </Main.Col>      
+              <Main.ImgCrop 
+                modalTitle='Editar Imagen'
+                showGrid 
+                rotationSlider 
+                aspectSlider 
+                showReset
+              >
+                <Main.Upload
+                  className={`${FormName}_upload`}
+                  // style={{width:'100%',height: '160px'}}
+                  action={Main.Igmpredefault}
+                  listType="picture-card"
+                  fileList={fileList}
+                  onChange={onChangeImg}
+                  beforeUpload={handleupload}
+                  onPreview={onPreview}
+                >
+                  {fileList.length < 1 && '+ Upload'}
+                </Main.Upload>
+                
+              </Main.ImgCrop>
+            </div>
+          }/>
+      </Main.Col>
+      
         
       <Main.Col span={24} style={{ position: '',margenTop:'42px' , bottom:'5px', width: '80%', fontSize:'12px' }} >
         <div className='total_registro_pg'>
