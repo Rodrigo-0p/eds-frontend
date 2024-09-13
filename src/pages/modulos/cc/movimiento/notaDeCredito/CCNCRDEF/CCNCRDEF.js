@@ -11,7 +11,7 @@ const FormName   = "CCNCRDEF";
 const TituloList = "Nota de Crédito Definitiva"
 const idComp     = `GRID_${FormName}`;
 let data_len     = 100
-const MainCc = memo(() => {
+const MainCc = memo(({history, location}) => {
 
   const [form]              = Main.Form.useForm()
   const cod_empresa         = sessionStorage.getItem('cod_empresa');
@@ -20,7 +20,9 @@ const MainCc = memo(() => {
   const defaultOpenKeys     = Main.DireccionMenu(FormName);
   const defaultSelectedKeys = Main.Menu(FormName);
   // USESTATE
-  const [ shows, setShows ] = React.useState(false);
+  const [ shows        , setShows         ] = React.useState(false);
+  const [ activateAtras, setActivateAtras ] = React.useState(false);
+
   // REF
   const buttonSaveRef       = React.useRef();
   const refGrid	            = React.useRef();
@@ -58,7 +60,18 @@ const MainCc = memo(() => {
   });
 
   React.useEffect(()=>{
-    inicialForm();
+    if(location.state !== undefined){
+      setActivateAtras(true)
+      let rowData = getParmas(true);
+      rowData.COD_EMPRESA     = location.state.COD_EMPRESA;
+      rowData.TIP_COMPROBANTE = location.state.TIP_COMPROBANTE;
+      rowData.NRO_COMPROBANTE = location.state.NRO_COMPROBANTE;
+      setTimeout(()=>{
+        getDataCab(false,rowData);
+      })
+    }else{
+      inicialForm();
+    }
     // eslint-disable-next-line
   },[])
   let idGrid = {
@@ -607,7 +620,7 @@ const MainCc = memo(() => {
             refCab.current.data[indice] = {...refCab.current.data[indice], ...resp.data}
             refCab.current.dataCan[indice] = JSON.parse(JSON.stringify(refCab.current.data[indice]));
             loadForm(refCab.current.data,indice);            
-            if(buttonF8) document.getElementById('COD_PERSONA').focus() 
+            if(buttonF8) document.getElementById('COD_CLIENTE').focus() 
           }          
           Main.desactivarSpinner();          
         }); 
@@ -1167,6 +1180,24 @@ const MainCc = memo(() => {
     }
   }
 
+  const funcionAtras = async()=>{
+    if(!refCab.current.activateCambio){
+      setActivateAtras(false)
+      setTimeout(()=>{
+        history.push({ 
+          pathname     :`${location.rutaAtras}`,
+          rowData      : location.rowData,
+          rows         : location.state,
+          rowIndex     : location.rowIndex    ? location.rowIndex    : 0,
+          tabkey       : location.tabkey      ? location.tabkey      : 0,
+          columnIndex  : location.columnIndex ? location.columnIndex : 0,
+        })
+      })      
+    }else{
+      Main.alert('Hay cambios pendientes. ¿Desea guardar los cambios?','Atencion!','confirm','Guardar','Cancelar',guardar,funcionCancelar)
+    }
+  }
+
   return (
     <Main.Spin spinning={false} delay={500}>
       <Main.FormModalSearch
@@ -1204,6 +1235,8 @@ const MainCc = memo(() => {
             refs={{ref:buttonSaveRef}}
             funcionBuscar={funcionBuscar}
             NavigateArrow={navigateArrow}
+            activateAtras={activateAtras}
+            funcionAtras={funcionAtras}
           />
 
           <CCNCRDEF 

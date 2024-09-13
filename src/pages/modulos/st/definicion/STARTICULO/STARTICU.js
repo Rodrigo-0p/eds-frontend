@@ -977,7 +977,7 @@ const MainST = memo(({history, location, match}) => {
       try {
         
         let extemcionImg    = banRef.current.uploadImg.name.split('.')[1]; 
-        let urlImg          = mainUrl.url_saveImg+`${COD_ARTICULO}.${extemcionImg}`;
+        let urlImg          = mainUrl.url_saveImg+sessionStorage.getItem('cod_empresa')`/${COD_ARTICULO}.${extemcionImg}`;
         await Main.RequestImg(urlImg, 'POST', banRef.current.uploadImg).then(async(resp) => {
           if(resp.status === 200){
             banRef.current.uploadImg = [];

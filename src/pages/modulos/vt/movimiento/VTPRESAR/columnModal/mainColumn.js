@@ -69,7 +69,7 @@ const column_codVenta = [
 ]
 const column_cliente = [
   { data: 'COD_CLIENTE'         , title: 'Código'      , className:'htreft' },
-  { data: 'DESC_CLIENTE'        , title: 'Descrición'  , className:'htreft' },
+  { data: 'NOM_CLIENTE'         , title: 'Descrición'  , className:'htreft' },
 ]
 const column_Subcliente = [
   { data: 'COD_SUBCLIENTE'      , title: 'Código'      , className:'htreft' },

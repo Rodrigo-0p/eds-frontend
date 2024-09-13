@@ -31,17 +31,17 @@ var validaInput = [
   },{
     input: 'COD_CLIENTE',
     url: mainUrl.url_valida_cliente,  
-    out:['DESC_CLIENTE','RUC','TELEFONO','SEXO','DIRECCION' , 'DIREC_ELECTRONICA','ES_FISICA'],
+    out:['NOM_CLIENTE','RUC','TELEFONO','SEXO','DIRECCION' , 'DIREC_ELECTRONICA','ES_FISICA'],
     data:['COD_EMPRESA'],
     rel:[],
-    next: 'COD_SUBCLIENTE', 
+    next: 'COD_CLIENTE', 
     // ---
     requerido : false ,
     valor_ant : null  ,
     validaNull: true  ,
     idFocus   : true  ,
     idSelect   : false ,
-    nextEjecute: false ,
+    nextEjecute: true ,
   },{
     input: 'COD_SUBCLIENTE',
     url: mainUrl.url_valida_subClien,  

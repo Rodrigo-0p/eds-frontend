@@ -239,7 +239,7 @@ const MainCM = memo(({history, location}) => {
         }
       });
     } catch (error) {
-      Main.desactivarSpinner()
+      Main.desactivarSpinner();
       console.log(error)
     }
     // eslint-disable-next-line 

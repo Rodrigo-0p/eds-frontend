@@ -1463,6 +1463,7 @@ const MainCM = memo(({history, location}) => {
         history.push({ 
           pathname     :`${location.rutaAtras}`,
           rowData      : location.rowData,
+          rows         : location.state,
           rowIndex     : location.rowIndex    ? location.rowIndex    : 0,
           tabkey       : location.tabkey      ? location.tabkey      : 0,
           columnIndex  : location.columnIndex ? location.columnIndex : 0,

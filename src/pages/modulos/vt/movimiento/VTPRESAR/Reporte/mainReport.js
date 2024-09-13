@@ -1,11 +1,11 @@
-// import Main  from "../../../../../../components/utils/Main";
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import Main  from '../../../../../../componente/util/main'
-import Firma from '../firma/Firma.png'
+import Firma from '../firma/Firma.png';
 const logo  = process.env.REACT_APP_BASEURL + sessionStorage.getItem("ruta_logo");
 
 const main_presupuesto = async(data,cabecera)=>{
+  
 // Crea un nuevo objeto jsPDF
     let doc = new jsPDF('', 'pt', 'A4');
     let totalPagesExp   = "{total_pages_count_string}";

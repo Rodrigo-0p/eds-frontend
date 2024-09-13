@@ -155,28 +155,28 @@ const view = memo(({form, refGrid, FormName, idComp, handleKeyDown , dataRef ,re
             
             <Main.Col span={24}>
               <Main.Form.Item label={<label style={{ width: '52px' }}><span style={{ color: 'red' }}>*</span>Cliente</label>}>
-                <Main.Form.Item name="COD_CLIENTE" style={{ width: '52px', display: 'inline-block', marginRight: '4px' }}>
+                <Main.Form.Item name="COD_CLIENTE" style={{ width: '90px', display: 'inline-block', marginRight: '4px' }}>
                     <Main.Input className={`${FormName}_BLOQUEO requerido`} 
                         onKeyDown={handleKeyDown} 
                         onChange={handleInputChange} 
                         onKeyUp={handleKeyUp}
                       />
                 </Main.Form.Item>
-                <Main.Form.Item name="DESC_CLIENTE" style={{ width: 'calc(100% - 56px)', display: 'inline-block' }}>
-                    <Main.Input disabled/>
+                <Main.Form.Item name="NOM_CLIENTE" style={{ width: 'calc(100% - 94px)', display: 'inline-block' }}>
+                    <Main.Input onChange={handleInputChange} onKeyDown={handleKeyDown}  readOnly={true} />
                 </Main.Form.Item>
               </Main.Form.Item>
             </Main.Col>
             <Main.Col span={24}>
               <Main.Form.Item label={<label style={{ width: '52px' }}>Sub Client.</label>}>
-                <Main.Form.Item name="COD_SUBCLIENTE" style={{ width: '52px', display: 'inline-block', marginRight: '4px' }}>
+                <Main.Form.Item name="COD_SUBCLIENTE" style={{ width: '90px', display: 'inline-block', marginRight: '4px' }}>
                     <Main.Input className={`${FormName}_BLOQUEO`} 
                         onKeyDown={handleKeyDown} 
                         onChange={handleInputChange} 
                         onKeyUp={handleKeyUp}
                       />
                 </Main.Form.Item>
-                <Main.Form.Item name="DESC_SUBCLIENTE" style={{ width: 'calc(100% - 56px)', display: 'inline-block' }}>
+                <Main.Form.Item name="DESC_SUBCLIENTE" style={{ width: 'calc(100% - 94px)', display: 'inline-block' }}>
                     <Main.Input disabled/>
                 </Main.Form.Item>
               </Main.Form.Item>
@@ -267,19 +267,19 @@ const view = memo(({form, refGrid, FormName, idComp, handleKeyDown , dataRef ,re
 
               <Main.Col span={24}>
                 <Main.Form.Item className='form-items' name="RUC" type="text" label={<label style={{ marginLeft: '20px' }}>R.U.C/CI</label>} >
-                  <Main.Input className='search_input' readOnly={true}/>
+                  <Main.Input  readOnly={true} onKeyDown={handleKeyDown} className='search_input'/>
                 </Main.Form.Item>
               </Main.Col>
 
               <Main.Col span={24}>
                 <Main.Form.Item className='form-items' name="TELEFONO" type="text" label={<label style={{ marginLeft: '19px' }}>Teléfono</label>} >
-                    <Main.Input readOnly={true} className='search_input'/>
+                    <Main.Input readOnly={true} onKeyDown={handleKeyDown} className='search_input'/>
                 </Main.Form.Item>
               </Main.Col>
 
               <Main.Col span={24}>
                 <Main.Form.Item name="SEXO" label={<label style={{ width: '60px' }}>Sexo</label>}>
-                  <Main.Select disabled>
+                  <Main.Select>
                     <Main.Select.Option value="M">Masculino </Main.Select.Option>
                     <Main.Select.Option value="F">Femenino  </Main.Select.Option>                        
                   </Main.Select>

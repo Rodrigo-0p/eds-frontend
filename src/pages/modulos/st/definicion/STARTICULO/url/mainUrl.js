@@ -25,7 +25,7 @@ const url_postQueryCab         = '/st/starticu/list/postqueryCab'   ;
 const url_buscar_cod_articulo  = '/st/starticu/cod_articulo/'       ; 
 // ABM
 const url_abm                  = '/st/starticu'                     ;
-const url_saveImg              = `/st/starticu/saveImg/${sessionStorage.getItem('cod_empresa')}/`    ;
+const url_saveImg              = `/st/starticu/saveImg/`    ;
 
 const main ={
   // BUSCADOR

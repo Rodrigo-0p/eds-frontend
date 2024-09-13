@@ -26,7 +26,7 @@ const getIndice = () => {
 const data_len = 100;
 var mitad_data    	 = data_len / 2;
 
-const MaiST = memo(() => {
+const MaiST = memo(({history, location}) => {
 
   const [form]              = Main.Form.useForm()
   const defaultOpenKeys     = Main.DireccionMenu(FormName);
@@ -34,7 +34,8 @@ const MaiST = memo(() => {
   const cod_empresa         = sessionStorage.cod_empresa;
 
   // USESTATE
-  const [shows, setShows] = React.useState(false);
+  const [shows         , setShows] = React.useState(false);
+  const [ activateAtras, setActivateAtras ] = React.useState(false);
   // USE REF
   const refData	            = React.useRef();
   const buttonSaveRef       = React.useRef();
@@ -53,8 +54,14 @@ const MaiST = memo(() => {
                                             })
 
   React.useEffect(()=>{
-
-    const hot = refData.current.hotInstance;
+    if(location.state !== undefined){
+      setActivateAtras(true);
+      let data = getParmas(true);
+      data.COD_EMPRESA     = location.state.COD_EMPRESA;
+      data.NRO_COMPROBANTE = location.state.NRO_COMPROBANTE;
+      getDataCab(false,data);
+    }else{
+      const hot = refData.current.hotInstance;
       hot.updateSettings({
         afterValidate(e){
           setTimeout( ()=> {
@@ -62,8 +69,8 @@ const MaiST = memo(() => {
           }, 100 );
         }, 
       });
-
-    inicialForm()
+      inicialForm();
+    }
     // eslint-disable-next-line
   },[])
 
@@ -1015,6 +1022,17 @@ const MaiST = memo(() => {
     b_cabecera.SUM_DESCUENTO_VAR = sum_descuento_var; 
     refCab.current.data = [b_cabecera]; 
   }
+  const funcionAtras = async()=>{    
+    setActivateAtras(false)
+    setTimeout(()=>{
+      history.push({ 
+        pathname     :`${location.rutaAtras}`,
+        rows         : location.state,
+        rowIndex     : location.rowIndex    ? location.rowIndex    : 0,
+        columnIndex  : location.columnIndex ? location.columnIndex : 0,
+      })
+    })      
+  }
 
   return (
     <>
@@ -1052,7 +1070,8 @@ const MaiST = memo(() => {
               refs={{ref:buttonSaveRef}}
               funcionBuscar={funcionBuscar}
               NavigateArrow={NavigateArrow}
-              // reporte={renvio}            
+              activateAtras={activateAtras}
+              funcionAtras={funcionAtras}   
             />  
             <VTPEDIDO
               form={form}

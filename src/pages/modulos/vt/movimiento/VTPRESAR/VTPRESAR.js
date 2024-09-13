@@ -390,7 +390,7 @@ const MainVT = memo(() => {
     let indice = banRef.current.indice;
     form.resetFields();
     Main.setCambiosPendiente(idComp,false);
-    banRef.current.bandNew = false;
+    banRef.current.bandNew  = false;
     mainInput.restablecerValida();
     Main.activarSpinner();
     Main.setModifico(FormName);
@@ -587,11 +587,11 @@ const MainVT = memo(() => {
     }  
   }
   const manejaF7 = (idFocus)=>{
+    refCab.current.activateCambio = false;
     Main.activarSpinner()
     form.resetFields(); 
     banRef.current.b_bloqueo = false;
     banRef.current.indice = 0;
-    refCab.current.activateCambio = false    
     refGrid.current?.hotInstance.loadData([]) 
     banRef.current.refFec_comp    = '';
     setTimeout(()=>{    
@@ -602,28 +602,9 @@ const MainVT = memo(() => {
     })
   }
   const onkeyDown = async (e)=>{
-    if(banRef.current.b_bloqueo) e.preventDefault();
+    
     if(e.target.id === 'FEC_COMPROBANTE') banRef.current.refFec_comp   = e.target.value;
-    if (['Enter', 'Tab'].includes(e.key)) {
-      // let indice = banRef.current.indice;
-      e.preventDefault()
-      switch (e.target.id) {
-        case "NRO_COMPROBANTE":
-          document.getElementById('FEC_COMPROBANTE').focus();
-          break;
-        case "FEC_COMPROBANTE":
-          setTimeout(()=>{
-            document.getElementsByClassName('ant-picker-dropdown')[0].style.visibility = 'collapse'
-          })
-          document.getElementById('COD_VENDEDOR').focus();
-        break;
-        default:
-          break;
-      }
-      if (['COD_VENDEDOR','COD_CONDICION_VENTA','COD_CLIENTE','COD_SUBCLIENTE','COD_MONEDA','COD_LISTA_PRECIO'].includes(e.target.id) && !banRef.current.b_bloqueo) {
-       ValidarUnico(e.target.id, e.target.value);
-      }
-    }else if (['F7', 'F8'].includes(e.key)) {
+    if (['F7', 'F8'].includes(e.key)) {
       e.preventDefault();
       if(!refCab.current.activateCambio){
         Main.setModifico(FormName)
@@ -636,6 +617,37 @@ const MainVT = memo(() => {
       }else{
         Main.alert('Hay cambios pendientes. ¿Desea guardar los cambios?','Atencion!','confirm','Guardar','Cancelar',guardar,funcionCancelar)
       }
+    } else if (['Enter', 'Tab'].includes(e.key)) {
+      // let indice = banRef.current.indice;
+      e.preventDefault()
+      switch (e.target.id) {
+        case "NRO_COMPROBANTE":
+          document.getElementById('FEC_COMPROBANTE').focus();
+          break;
+        case "FEC_COMPROBANTE":
+          setTimeout(()=>{
+            document.getElementsByClassName('ant-picker-dropdown')[0].style.visibility = 'collapse'
+          })
+          document.getElementById('COD_VENDEDOR').focus();
+        break;
+        case "NOM_CLIENTE":
+          document.getElementById('COD_SUBCLIENTE').focus();
+        break;
+        // case "RUC":
+        //   document.getElementById('TELEFONO').focus();
+        // break;
+        // case "TELEFONO":
+        //   document.getElementById('COD_SUBCLIENTE').focus();
+        // break;
+        default:
+          break;
+      }
+      if (['COD_VENDEDOR','COD_CONDICION_VENTA','COD_CLIENTE','COD_SUBCLIENTE','COD_MONEDA','COD_LISTA_PRECIO'].includes(e.target.id) && !banRef.current.b_bloqueo) {
+       ValidarUnico(e.target.id, e.target.value);
+      }
+    } else if(banRef.current.b_bloqueo){
+      e.preventDefault();
+      return
     }else if (e.key === 'F9' && ['COD_VENDEDOR','COD_CONDICION_VENTA','COD_CLIENTE','COD_SUBCLIENTE','COD_MONEDA','COD_LISTA_PRECIO'].includes(e.target.id) && !banRef.current.b_bloqueo) {
       e.preventDefault()
       let aux = [];
@@ -683,7 +695,7 @@ const MainVT = memo(() => {
       refCab.current.data[indice]['updated']           = true;
       refCab.current.data[indice].COD_USUARIO_MODIFIC	 = sessionStorage.cod_usuario;
       refCab.current.data[indice].FEC_ESTADO           =  Main.moment().format('DD/MM/YYYY').toString();
-      refCab.current.activateCambio = true;
+      if(activateCancelar)refCab.current.activateCambio = true;
     }
     if(activateCancelar)Main.modifico(FormName);
   }
@@ -723,6 +735,15 @@ const MainVT = memo(() => {
         Main.setFocusedRowIndex(0,undefined,refGrid,idComp);
         if(focus)refGrid?.current?.hotInstance?.selectCell(0,0);
       },10)
+    }else if(value.input === "COD_CLIENTE"){
+      if(Main.nvl(form.getFieldValue('NOM_CLIENTE'),'X') !== 'X'){
+        document.getElementById('COD_SUBCLIENTE').select();
+      }else{
+        document.getElementById("NOM_CLIENTE").readOnly   = false;
+        // document.getElementById("RUC").readOnly = false;
+        // document.getElementById("TELEFONO").readOnly = false;
+        document.getElementById("NOM_CLIENTE").focus()
+      }
     }
   }
   const ValidarUnico = async (input, value) => {
