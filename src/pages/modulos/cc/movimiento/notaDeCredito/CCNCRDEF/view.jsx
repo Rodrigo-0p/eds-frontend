@@ -240,7 +240,7 @@ const CCNCRDEF = memo((props) => {
             columns={mainColumn.columnDet}
             FormName={props.FormName}
             idComp={props.idComp}// id del componente
-            height={140}
+            height={120}
             maxFocus={maxFocus}
             setLastFocusNext={props.setLastFocusNext}
             setfocusRowIndex={props.setfocusRowIndex}

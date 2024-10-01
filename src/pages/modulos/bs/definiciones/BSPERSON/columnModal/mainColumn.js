@@ -1,6 +1,6 @@
 const columns_persona = [
 	{ data: 'COD_PERSONA'  		    , title: 'Codigo'       , className:'htLeft'  },
-	{ data: 'DESC_PERSONA' 		    , title: 'Descripción'  , className:'htLeft'  },
+	{ data: 'NOMBRE' 					    , title: 'Descripción'  , className:'htLeft'  },
 ];
 
 const columns_tipoSociedad = [

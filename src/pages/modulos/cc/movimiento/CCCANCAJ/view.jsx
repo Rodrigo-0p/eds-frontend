@@ -24,7 +24,7 @@ const CCCANCAJ = memo((props) => {
           columns={mainColumn.columns}
           FormName={props.FormName}
           idComp={props.idComp}// id del componente
-          height={480}
+          height={470}
           buttomAccion={props.buttomAccion}
           validaAllExterno={props.validaRow}
           f7_and_F8={props.handleonkeydown}

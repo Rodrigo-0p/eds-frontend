@@ -647,8 +647,7 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
         return
       }
     }
-    
-    if(f7_and_F8 && [118,119].includes(e.keyCode))f7_and_F8(e);
+    if(f7_and_F8 && [118,119,117].includes(e.keyCode))f7_and_F8(e);
     else if(e.keyCode === 118) e.preventDefault();
 
     if([38,40].includes(e?.keyCode) && e.repeat){
@@ -1137,7 +1136,7 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
           refKeyDown.current.KeyDown = true;
           refData.current.hotInstance.removeHook('beforeKeyDown',KeyDown);          
         })
-      }else if(columnModal.urlValidar && columnModal.urlValidar.length > 0){
+      }else if(columnModal.urlValidar && columnModal.urlValidar.length > 0 && columnModal.urlValidar[0][nameColum]){
         if(!columnModal.urlValidar[0][nameColum] || evet1.length === 0 || validate){
           refData.current.hotInstance.selectCell(rowIndex, currentColumn); // Cambiar la celda seleccionada
           if(columns[currentColumn]?.editFocus){            
@@ -1156,11 +1155,11 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
             const totalColumns = refData.current.hotInstance.countCols() - 1;
             let row           = g_getRowFocus(idComp)[0];
             if(totalColumns === row.columnIndex_ant || totalColumns === rowIndex){
-              refData.current.hotInstance.selectCell(row.rowIndex_ant, totalColumns === row.columnIndex_ant ? row.columnIndex_ant : rowIndex )
               refData.current.hotInstance.deselectCell();              
-              refData.current.hotInstance.removeHook("beforeKeyDown", KeyDown);
-              refKeyDown.current.KeyDown = true;
               setTimeout(()=>{
+                refData.current.hotInstance.removeHook("beforeKeyDown", KeyDown);
+                refData.current.hotInstance.selectCell(row.rowIndex_ant, totalColumns === row.columnIndex_ant ? row.columnIndex_ant : rowIndex )                
+                refKeyDown.current.KeyDown = true;
                 nextFocus(rowIndex);
               },5)
             }
@@ -1170,11 +1169,11 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
         const totalColumns = refData.current.hotInstance.countCols() - 1;
         let rowIndex       = g_getRowFocus(idComp)[0];
         if(totalColumns === rowIndex.columnIndex){
-          refData.current.hotInstance.deselectCell();
-          refData.current.hotInstance.selectCell(rowIndex.rowIndex, rowIndex.columnIndex);
-          refData.current.hotInstance.removeHook("beforeKeyDown", KeyDown);
-          refKeyDown.current.KeyDown = true;
+          refData.current.hotInstance.deselectCell();          
           setTimeout(()=>{            
+            refData.current.hotInstance.removeHook("beforeKeyDown", KeyDown);
+            refData.current.hotInstance.selectCell(rowIndex.rowIndex, rowIndex.columnIndex);
+            refKeyDown.current.KeyDown = true;
             nextFocus(rowIndex);            
           },15)
         }
@@ -1185,9 +1184,9 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
       let rowIndex       = g_getRowFocus(idComp)[0];
       if(totalColumns === rowIndex.columnIndex){
         refData.current.hotInstance.deselectCell();
-        refData.current.hotInstance.removeHook("beforeKeyDown", KeyDown);
         refKeyDown.current.KeyDown = true;
         setTimeout(()=>{
+          refData.current.hotInstance.removeHook("beforeKeyDown", KeyDown);
           nextFocus(rowIndex);          
         },15)
       }

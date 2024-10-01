@@ -178,14 +178,22 @@ const [mdiasant  , setMdiasant ] = React.useState('N')
 
     // FILTER CAB
     var dependencia         = [];
-    let url_get_cod         = `${mainUrl.url_buscar_cod_proveedor}${cod_empresa}`
-    let infoCab            	= await Main.GeneraUpdateInsertCab(update_insert,'COD_PROVEEDOR',url_get_cod,dependencia,true,false,true);
+    // let url_get_cod         = `${mainUrl.url_buscar_cod_proveedor}${cod_empresa}`
+    let url_get_cod         = undefined
+    let infoCab            	= await Main.GeneraUpdateInsertCab(update_insert,'COD_PROVEEDOR',url_get_cod,dependencia,false,false,true);
     var updateInserData     = infoCab.updateInsert;
     if(!permisoActualizacion) permisoActualizacion = infoCab.actualizar;
     if(!permisoIsertar)       permisoIsertar 	     = infoCab.insertar ;
     exitInsertedBand        = infoCab.insertar;
     var deleteCab           = refCab.current.delete[0] !== undefined && refCab.current.delete?.length > 0  ? refCab.current.delete : []
   
+    if(infoCab.insertar){
+      // eslint-disable-next-line 
+      updateInserData.map((itmes)=>{
+        itmes.COD_PROVEEDOR = itmes.COD_PERSONA
+      })
+    }
+
     var bandPermiso = false
     if(permisoActualizacion){
       let Permiso  = Main.VerificaPermiso(FormName)
@@ -382,7 +390,7 @@ const [mdiasant  , setMdiasant ] = React.useState('N')
   }
 
   const setfocusRowIndex = React.useCallback((valor,row,col)=>{
-    if(valor){
+    if(Main.nvl(row,'N') !== 'N' && Main.nvl(valor,'N') !== 'N'){
       let valor2 = form.getFieldsValue()
       if(valor.COD_PROVEEDOR !== valor2.COD_PROVEEDOR){        
         if(!refData.current.hotInstance.view.settings.data[valor.rowIndex].MODIFICA_DIAS_ANT){
@@ -409,6 +417,7 @@ const [mdiasant  , setMdiasant ] = React.useState('N')
 
   const nextFocus = React.useCallback((row)=>{
     setTimeout(async()=>{
+      refData.current.hotInstance.deselectCell();
       document.getElementById('COD_PROVEEDOR_REF').focus();
     },5);
   },[])
@@ -650,8 +659,6 @@ const [mdiasant  , setMdiasant ] = React.useState('N')
     }else if(!refData.current.hotInstance.view.settings.data[rowValue.rowIndex]['updated'] && 
               refData.current.hotInstance.view.settings.data[rowValue.rowIndex]['inserted'] !== true){
        refData.current.hotInstance.view.settings.data[rowValue.rowIndex]['updated']         = true;
-       refData.current.hotInstance.view.settings.data[rowValue.rowIndex].MODIFICADO_POR	    = sessionStorage.getItem('cod_usuario');
-       refData.current.hotInstance.view.settings.data[rowValue.rowIndex].FEC_MODIFICACION   = Main.moment().format('DD/MM/YYYY');
        refData.current.activateCambio = true;
        Main.modifico(FormName);
     } 
@@ -662,6 +669,10 @@ const [mdiasant  , setMdiasant ] = React.useState('N')
     typeEvent(rowValue.rowIndex)
   }
 
+  const f6_add = React.useCallback((e)=>{
+    e.preventDefault();
+    if(e.keyCode === 117) addRow();
+  },[])
   
   return (
     <>
@@ -711,7 +722,8 @@ const [mdiasant  , setMdiasant ] = React.useState('N')
               setfocusRowIndex={setfocusRowIndex}
               nextFocus={nextFocus}
               handleKeydown={handleKeydown}
-              handleInputChange={handleInputChange}              
+              handleInputChange={handleInputChange}
+              f6_add={f6_add}
             />
 
           </Main.Paper>

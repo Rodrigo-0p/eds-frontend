@@ -53,270 +53,267 @@ const STARTICU = memo(({form     , refGrid  , FormName        , idComp          
   // }];
                           
   return (
-    <Main.Form size="small" autoComplete="off" form={form} style={{ marginTop: '1px', paddingLeft: '10px', paddingRight: '10px', paddingTop: '10px' }}>
+    <Main.Form size="small" autoComplete="off" form={form} style={{ paddingLeft: '10px', paddingRight: '10px' }}>
       <Main.Row gutter={[4, 2]}>
 
-      <Main.Col span={16}>
-        <Main.Row id={`form-cab-${FormName}`} gutter={[2, 2]}>
+        <Main.Col span={16}>
+          <Main.Row id={`form-cab-${FormName}`} gutter={[2, 2]}>
 
-          <Main.Col span={24}>
-            <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Articulo</label>}>
-              <Main.Form.Item name="COD_ARTICULO" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
-                  <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} ref={bloqueoArticulo} onKeyUp={handleKeyUp} />
+            <Main.Col span={24}>
+              <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Articulo</label>}>
+                <Main.Form.Item name="COD_ARTICULO" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
+                    <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} ref={bloqueoArticulo} onKeyUp={handleKeyUp} />
+                </Main.Form.Item>
+                <Main.Form.Item name="DESCRIPCION" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
+                    <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp}  className='requerido'  />
+                </Main.Form.Item>
               </Main.Form.Item>
-              <Main.Form.Item name="DESCRIPCION" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
-                  <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp}  className='requerido'  />
+            </Main.Col>
+
+            <Main.Col  span={24}>
+              <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Proveedor</label>}>
+                <Main.Form.Item name="COD_PROVEEDOR_DFLT" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
+                    <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className='requerido'  />
+                </Main.Form.Item>
+                <Main.Form.Item name="DESC_PROVEEDOR" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
+                    <Main.Input disabled />
+                </Main.Form.Item>
               </Main.Form.Item>
-            </Main.Form.Item>
+            </Main.Col>
+
+            <Main.Col  span={24}>
+              <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Marca</label>}>
+                <Main.Form.Item name="COD_MARCA" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
+                    <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className='requerido'  />
+                </Main.Form.Item>
+                <Main.Form.Item name="DESC_MARCA" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
+                    <Main.Input disabled />
+                </Main.Form.Item>
+              </Main.Form.Item>
+            </Main.Col>
+
+            <Main.Col  span={24}>
+              <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Linea</label>}>
+                <Main.Form.Item name="COD_LINEA" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
+                    <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className='requerido'  />
+                </Main.Form.Item>
+                <Main.Form.Item name="DESC_LINEA" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
+                    <Main.Input disabled />
+                </Main.Form.Item>
+              </Main.Form.Item>
+            </Main.Col>
+
+
+            <Main.Col  span={24}>
+              <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Categoria</label>}>
+                <Main.Form.Item name="COD_CATEGORIA" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
+                    <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className='requerido'  />
+                </Main.Form.Item>
+                <Main.Form.Item name="DESC_CATEGORIA" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
+                    <Main.Input disabled />
+                </Main.Form.Item>
+              </Main.Form.Item>
+            </Main.Col>
+
+            <Main.Col  span={24}>
+              <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Rubro</label>}>
+                <Main.Form.Item name="COD_RUBRO" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
+                    <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className='requerido' />
+                </Main.Form.Item>
+                <Main.Form.Item name="DESC_RUBRO" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
+                    <Main.Input disabled />
+                </Main.Form.Item>
+              </Main.Form.Item>
+            </Main.Col>
+
+            <Main.Col  span={17}>
+              <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Grupo</label>}>
+                <Main.Form.Item name="COD_GRUPO" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
+                    <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp}  className='requerido' />
+                </Main.Form.Item>
+                <Main.Form.Item name="DESC_GRUPO" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
+                    <Main.Input disabled />
+                </Main.Form.Item>
+              </Main.Form.Item>
+            </Main.Col>
+            
+            <Main.Col  span={7}>
+              <Main.Form.Item className='form-items' name="PROCESAR" type="text" label={<label style={{ marginLeft: '20px' }}>PROCESAR</label>} >
+                <Main.Input 
+                onKeyUp={handleKeyUp} 
+                onKeyDown={handleKeyDown} 
+                className='search_input'  />
+              </Main.Form.Item>
+            </Main.Col>
+        
+            <Main.Col  span={12}>
+              <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Iva</label>}>
+                <Main.Form.Item name="COD_IVA" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
+                    <Main.Input  onKeyDown={handleKeyDown} onChange={handleInputChange}  className='requerido'/>
+                </Main.Form.Item>
+                <Main.Form.Item name="DESC_IVA" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
+                    <Main.Input disabled />
+                </Main.Form.Item>
+              </Main.Form.Item>
+            </Main.Col>
+
+            <Main.Col  span={5} style={{marginLeft:'12px'}}>
+              <Main.Form.Item name="MANEJA_COSTO"
+                  valuePropName="checked"
+                  onKeyDown={handleKeyDown}
+                  onChange={(e) => handleCheckbox(e, ["S", "N"])}
+                  >
+                  <Main.Checkbox> Maneja Costo  </Main.Checkbox>
+              </Main.Form.Item>
+            </Main.Col>
+
+          </Main.Row>
+
+          <Main.Col id={`form-det-${FormName}`} style={{marginTop:'5px'}} span={24}>
+            <Main.HandsontableGrid
+                refData={refGrid}
+                columns={columns}
+                FormName={FormName}
+                idComp={idComp}// id del componente
+                height={220}
+                setfocusRowIndex={setfocusRowIndex}
+                columnNavigationEnter={columnNavigationEnter}
+                colorButtom={false}
+                dataCabecera={dataRef}
+                columnModal={columnModal}
+                // maxFocus={maxFocus}
+                setLastFocusNext={setLastFocusNext}
+                setUpdateEdit={setUpdateEdit}
+                nextValida={true} //configuración para ejecutar setfocusRowIndex
+              />
           </Main.Col>
 
-          <Main.Col  span={24}>
-            <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Proveedor</label>}>
-              <Main.Form.Item name="COD_PROVEEDOR_DFLT" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
-                  <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className='requerido'  />
-              </Main.Form.Item>
-              <Main.Form.Item name="DESC_PROVEEDOR" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
-                  <Main.Input disabled />
-              </Main.Form.Item>
-            </Main.Form.Item>
-          </Main.Col>
+          <Main.Col  id={`form-cab-${FormName}`} span={5}>
+            <Main.Fieldset
+              anchoContenedor="100%"
+              alineacionTitle="left"
+              alineacionContenedor="left"
+              margenTop="11px"
+              tamañoTitle="13px"
+              title="Usuario"
+              contenedor={
 
-          <Main.Col  span={24}>
-            <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Marca</label>}>
-              <Main.Form.Item name="COD_MARCA" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
-                  <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className='requerido'  />
-              </Main.Form.Item>
-              <Main.Form.Item name="DESC_MARCA" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
-                  <Main.Input disabled />
-              </Main.Form.Item>
-            </Main.Form.Item>
-          </Main.Col>
-
-          <Main.Col  span={24}>
-            <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Linea</label>}>
-              <Main.Form.Item name="COD_LINEA" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
-                  <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className='requerido'  />
-              </Main.Form.Item>
-              <Main.Form.Item name="DESC_LINEA" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
-                  <Main.Input disabled />
-              </Main.Form.Item>
-            </Main.Form.Item>
-          </Main.Col>
-
-
-          <Main.Col  span={24}>
-            <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Categoria</label>}>
-              <Main.Form.Item name="COD_CATEGORIA" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
-                  <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className='requerido'  />
-              </Main.Form.Item>
-              <Main.Form.Item name="DESC_CATEGORIA" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
-                  <Main.Input disabled />
-              </Main.Form.Item>
-            </Main.Form.Item>
-          </Main.Col>
-
-          <Main.Col  span={24}>
-            <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Rubro</label>}>
-              <Main.Form.Item name="COD_RUBRO" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
-                  <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp} className='requerido' />
-              </Main.Form.Item>
-              <Main.Form.Item name="DESC_RUBRO" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
-                  <Main.Input disabled />
-              </Main.Form.Item>
-            </Main.Form.Item>
-          </Main.Col>
-
-          <Main.Col  span={17}>
-            <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Grupo</label>}>
-              <Main.Form.Item name="COD_GRUPO" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
-                  <Main.Input onKeyDown={handleKeyDown} onChange={handleInputChange} onKeyUp={handleKeyUp}  className='requerido' />
-              </Main.Form.Item>
-              <Main.Form.Item name="DESC_GRUPO" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
-                  <Main.Input disabled />
-              </Main.Form.Item>
-            </Main.Form.Item>
-          </Main.Col>
-          
-          <Main.Col  span={7}>
-            <Main.Form.Item className='form-items' name="PROCESAR" type="text" label={<label style={{ marginLeft: '20px' }}>PROCESAR</label>} >
-              <Main.Input 
-              onKeyUp={handleKeyUp} 
-              onKeyDown={handleKeyDown} 
-              className='search_input'  />
-            </Main.Form.Item>
-          </Main.Col>
-      
-          <Main.Col  span={12}>
-            <Main.Form.Item label={<label style={{ width: '82px' }}><span style={{ color: 'red' }}>*</span>Iva</label>}>
-              <Main.Form.Item name="COD_IVA" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
-                  <Main.Input  onKeyDown={handleKeyDown} onChange={handleInputChange}  className='requerido'/>
-              </Main.Form.Item>
-              <Main.Form.Item name="DESC_IVA" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
-                  <Main.Input disabled />
-              </Main.Form.Item>
-            </Main.Form.Item>
-          </Main.Col>
-
-          <Main.Col  span={5} style={{marginLeft:'12px'}}>
-            <Main.Form.Item name="MANEJA_COSTO"
-                valuePropName="checked"
-                onKeyDown={handleKeyDown}
-                onChange={(e) => handleCheckbox(e, ["S", "N"])}
-                >
-                <Main.Checkbox> Maneja Costo  </Main.Checkbox>
-            </Main.Form.Item>
-          </Main.Col>
-
-        </Main.Row>
-
-        <Main.Col id={`form-det-${FormName}`} style={{marginTop:'12px'}} span={24}>
-          <Main.HandsontableGrid
-              refData={refGrid}
-              columns={columns}
-              FormName={FormName}
-              idComp={idComp}// id del componente
-              height={220}
-              setfocusRowIndex={setfocusRowIndex}
-              columnNavigationEnter={columnNavigationEnter}
-              colorButtom={false}
-              dataCabecera={dataRef}
-              columnModal={columnModal}
-              // maxFocus={maxFocus}
-              setLastFocusNext={setLastFocusNext}
-              setUpdateEdit={setUpdateEdit}
-              nextValida={true} //configuración para ejecutar setfocusRowIndex
+                <Main.Row>
+                  <Main.Col span={24}>
+                    <Main.Form.Item name="COD_USUARIO_ALTA">
+                      <Main.Input className="search_input" disabled />
+                    </Main.Form.Item>
+                  </Main.Col>
+                </Main.Row>          
+              }              
             />
-        </Main.Col>
+          </Main.Col>  
 
-        <Main.Col  id={`form-cab-${FormName}`} span={5}>
+        </Main.Col>
+      
+        <Main.Col  id={`form-cab-${FormName}`} span={7}>
           <Main.Fieldset
             anchoContenedor="100%"
             alineacionTitle="left"
             alineacionContenedor="left"
-            margenTop="25px"
-            tamañoTitle="13px"
-            title="Usuario"
+            margenTop="0px"
+            tamañoTitle="15px"
+            title="Costos Gs"
             contenedor={
 
               <Main.Row>
                 <Main.Col span={24}>
-                  <Main.Form.Item name="COD_USUARIO_ALTA">
+
+                  <Main.Form.Item name="COSTO_ULT_ANT_GS" label={<label style={{ width: '90px' }}>Ultimo Anterior</label>}>
+                    <Main.Input className="search_input" disabled />
+                  </Main.Form.Item>
+                  <Main.Form.Item name="COSTO_PROM_ANT_GS" label={<label style={{ width: '90px' }}>Promedio Anterior</label>}>
+                    <Main.Input className="search_input" disabled />
+                  </Main.Form.Item>
+                  <Main.Form.Item name="COSTO_ULTIMO_GS" label={<label style={{ width: '90px' }}>Ultimo</label>}>
+                    <Main.Input className="search_input" disabled />
+                  </Main.Form.Item>
+                  <Main.Form.Item name="COSTO_PROM_GS" label={<label style={{ width: '90px' }}>Promedio</label>}>
+                    <Main.Input className="search_input" disabled />
+                  </Main.Form.Item>
+                
+                  <Main.Divider className={`${FormName}_Divider`} orientation="left">Costos U$S.</Main.Divider>
+                
+                  <Main.Form.Item name="COSTO_ULT_ANT_US" label={<label style={{ width: '90px' }}>Ultimo Anterior</label>}>
+                    <Main.Input className="search_input" disabled />
+                  </Main.Form.Item>
+                  <Main.Form.Item name="COSTO_PROM_ANT_US" label={<label style={{ width: '90px' }}>Promedio Anterior</label>}>
+                    <Main.Input className="search_input" disabled />
+                  </Main.Form.Item>
+                  <Main.Form.Item name="COSTO_ULTIMO_US" label={<label style={{ width: '90px' }}>Ultimo</label>}>
+                    <Main.Input className="search_input" disabled />
+                  </Main.Form.Item>
+                  <Main.Form.Item name="COSTO_PROM_US" label={<label style={{ width: '90px' }}>Promedio</label>}>
+                    <Main.Input className="search_input" disabled />
+                  </Main.Form.Item>
+                
+                  <Main.Divider className={`${FormName}_Divider`} orientation="left">Fechas de.</Main.Divider>
+              
+                  <Main.Form.Item name="FEC_ULTIMA_COMP" label={<label style={{ width: '90px' }}>Última Compra</label>}>
+                    <Main.Input className="search_input" disabled />
+                  </Main.Form.Item>
+                  <Main.Form.Item name="FEC_ULTIMA_VENTA" label={<label style={{ width: '90px' }}>Última Venta</label>}>
                     <Main.Input className="search_input" disabled />
                   </Main.Form.Item>
                 </Main.Col>
               </Main.Row>          
-            }              
+            }
           />
-        </Main.Col>  
+          <Main.Fieldset
+            anchoContenedor="100%"
+            alineacionTitle="left"
+            alineacionContenedor="left"
+            padding="0px 10px"
+            margenTop="0px"
+            tamañoTitle="13px"
+            title="Articulo(Img)"
+            contenedor={
+              <div style={{marginTop:'-21px' , height:'180px'}}>
+                <Main.Image
+                  className="NoViewpreviewImg"
+                  alt="example"
+                  width={200}
+                  preview={{
+                    visible: previewImage.length > 0 ? true : false,
+                    onVisibleChange: (e) => setPreviewImage(false),
+                  }}
+                  src={previewImage}
+                />
 
-      </Main.Col>
-      
-      <Main.Col  id={`form-cab-${FormName}`} span={7}>
-        <Main.Fieldset
-          anchoContenedor="100%"
-          alineacionTitle="left"
-          alineacionContenedor="left"
-          margenTop="0px"
-          tamañoTitle="15px"
-          title="Costos Gs"
-          contenedor={
-
-            <Main.Row>
-              <Main.Col span={24}>
-
-                <Main.Form.Item name="COSTO_ULT_ANT_GS" label={<label style={{ width: '90px' }}>Ultimo Anterior</label>}>
-                  <Main.Input className="search_input" disabled />
-                </Main.Form.Item>
-                <Main.Form.Item name="COSTO_PROM_ANT_GS" label={<label style={{ width: '90px' }}>Promedio Anterior</label>}>
-                  <Main.Input className="search_input" disabled />
-                </Main.Form.Item>
-                <Main.Form.Item name="COSTO_ULTIMO_GS" label={<label style={{ width: '90px' }}>Ultimo</label>}>
-                  <Main.Input className="search_input" disabled />
-                </Main.Form.Item>
-                <Main.Form.Item name="COSTO_PROM_GS" label={<label style={{ width: '90px' }}>Promedio</label>}>
-                  <Main.Input className="search_input" disabled />
-                </Main.Form.Item>
-              
-                <Main.Divider className={`${FormName}_Divider`} orientation="left">Costos U$S.</Main.Divider>
-              
-                <Main.Form.Item name="COSTO_ULT_ANT_US" label={<label style={{ width: '90px' }}>Ultimo Anterior</label>}>
-                  <Main.Input className="search_input" disabled />
-                </Main.Form.Item>
-                <Main.Form.Item name="COSTO_PROM_ANT_US" label={<label style={{ width: '90px' }}>Promedio Anterior</label>}>
-                  <Main.Input className="search_input" disabled />
-                </Main.Form.Item>
-                <Main.Form.Item name="COSTO_ULTIMO_US" label={<label style={{ width: '90px' }}>Ultimo</label>}>
-                  <Main.Input className="search_input" disabled />
-                </Main.Form.Item>
-                <Main.Form.Item name="COSTO_PROM_US" label={<label style={{ width: '90px' }}>Promedio</label>}>
-                  <Main.Input className="search_input" disabled />
-                </Main.Form.Item>
-              
-                <Main.Divider className={`${FormName}_Divider`} orientation="left">Fechas de.</Main.Divider>
-            
-                <Main.Form.Item name="FEC_ULTIMA_COMP" label={<label style={{ width: '90px' }}>Última Compra</label>}>
-                  <Main.Input className="search_input" disabled />
-                </Main.Form.Item>
-                <Main.Form.Item name="FEC_ULTIMA_VENTA" label={<label style={{ width: '90px' }}>Última Venta</label>}>
-                  <Main.Input className="search_input" disabled />
-                </Main.Form.Item>
-              </Main.Col>
-            </Main.Row>          
-          }
-        />
-         <Main.Fieldset
-          anchoContenedor="100%"
-          alineacionTitle="left"
-          alineacionContenedor="left"
-          padding="0px 10px"
-          margenTop="0px"
-          tamañoTitle="13px"
-          title="Articulo(Img)"
-          contenedor={
-            <div style={{marginTop:'-21px' , height:'180px'}}>
-              <Main.Image
-                className="NoViewpreviewImg"
-                alt="example"
-                width={200}
-                preview={{
-                  visible: previewImage.length > 0 ? true : false,
-                  onVisibleChange: (e) => setPreviewImage(false),
-                }}
-                src={previewImage}
-              />
-
-              <Main.ImgCrop 
-                modalTitle='Editar Imagen'
-                showGrid 
-                rotationSlider 
-                aspectSlider 
-                showReset
-              >
-                <Main.Upload
-                  className={`${FormName}_upload`}
-                  // style={{width:'100%',height: '160px'}}
-                  action={Main.Igmpredefault}
-                  listType="picture-card"
-                  fileList={fileList}
-                  onChange={onChangeImg}
-                  beforeUpload={handleupload}
-                  onPreview={onPreview}
+                <Main.ImgCrop 
+                  modalTitle='Editar Imagen'
+                  showGrid 
+                  rotationSlider 
+                  aspectSlider 
+                  showReset
                 >
-                  {fileList.length < 1 && '+ Upload'}
-                </Main.Upload>
-                
-              </Main.ImgCrop>
-            </div>
-          }/>
-      </Main.Col>
+                  <Main.Upload
+                    className={`${FormName}_upload`}
+                    // style={{width:'100%',height: '160px'}}
+                    action={Main.Igmpredefault}
+                    listType="picture-card"
+                    fileList={fileList}
+                    onChange={onChangeImg}
+                    beforeUpload={handleupload}
+                    onPreview={onPreview}
+                  >
+                    {fileList.length < 1 && '+ Upload'}
+                  </Main.Upload>
+                  
+                </Main.ImgCrop>
+              </div>
+            }/>
+        </Main.Col>
       
-        
-      <Main.Col span={24} style={{ position: '',margenTop:'42px' , bottom:'5px', width: '80%', fontSize:'12px' }} >
-        <div className='total_registro_pg'>
+        <div className={`${FormName}_total_registro_pg`}>
           Registro: <span id="indice"></span> / <span id="total_registro"></span> <span id="mensaje"></span>
         </div>
-      </Main.Col>
-    
+  
       </Main.Row>
       
     </Main.Form>

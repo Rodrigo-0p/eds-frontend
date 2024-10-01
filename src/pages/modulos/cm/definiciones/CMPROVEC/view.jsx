@@ -30,7 +30,7 @@ export const columns = [
 
 const columnNavigationEnter = [1,3,4];
 
-const CMPROVE = ({ refs, FormName, form, setfocusRowIndex,nextFocus,idComp ,handleKeydown,handleInputChange }) => {
+const CMPROVE = ({ refs, FormName, form, setfocusRowIndex,nextFocus,idComp ,handleKeydown,handleInputChange ,f6_add}) => {
 
   React.useEffect(() => {
     // refs.current.hotInstance.loadData(data)
@@ -56,6 +56,7 @@ const CMPROVE = ({ refs, FormName, form, setfocusRowIndex,nextFocus,idComp ,hand
         nextFocus={nextFocus}
         columBuscador={"COD_PROVEEDOR"}
         columnModal={columnModal}
+        f7_and_F8={f6_add}
       />
       <Main.Form autoComplete="off" size="small" form={form} style={{ marginTop: '10px', paddingBottom: '15px' }}>
         <Main.Row>

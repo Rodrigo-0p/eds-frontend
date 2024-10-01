@@ -72,7 +72,7 @@ const MainBs = memo(() => {
     // eslint-disable-next-line
   },[])
 
-  const initialForm = (f7_delete = false, idFocus = 'COD_PERSONA') => {
+  const initialForm = (f7_delete = false, idFocus = 'NOMBRE') => {
     setIndice(0);
     var newKey 					    = Main.uuidID();
     let valor  						  = JSON.parse(JSON.stringify(objetoinicial));
@@ -93,7 +93,7 @@ const MainBs = memo(() => {
     document.getElementById("indice").textContent         = "1"
 		document.getElementById("total_registro").textContent = "?";
 		document.getElementById("mensaje").textContent 				= "";
-    bloqueoInput()
+    bloqueoInput(!f7_delete)
   }
   const guardar = async () => {
     var permisoActualizacion = false;
@@ -108,12 +108,21 @@ const MainBs = memo(() => {
 
     // FILTER
     var dependencia      = [];
-    let url_get_cab_cod  = `${mainUrl.url_buscar_cod_persona}${cod_empresa}`
-    let info          	 = await Main.GeneraUpdateInsertCab([refCab.current.data[getIndice()]],'COD_PERSONA',url_get_cab_cod,dependencia,true,false,true);
+    // let url_get_cab_cod  = `${mainUrl.url_buscar_cod_persona}${cod_empresa}`
+    let url_get_cab_cod  = undefined;
+    let info          	 = await Main.GeneraUpdateInsertCab([refCab.current.data[getIndice()]],'COD_PERSONA',url_get_cab_cod,dependencia,false,false,true);
     var updateInserData  = info.updateInsert;
     if(!permisoActualizacion) permisoActualizacion = info.actualizar;
-    if(!permisoIsertar)       permisoIsertar 	    = info.insertar;
+    if(!permisoIsertar)       permisoIsertar 	     = info.insertar;
     var deleteCab        = refCab.current.delete;
+
+    if(info.insertar){
+      // eslint-disable-next-line 
+      updateInserData.map((itmes)=>{
+        if(itmes.COD_IDENT === 'RUC') itmes.COD_PERSONA = `${itmes.NRO_DOCUMENTO}-${itmes.NRO_DIG_VER}`;
+        else itmes.COD_PERSONA = itmes.NRO_DOCUMENTO
+      })
+    }
 
     var bandPermiso = false
     if(permisoActualizacion){
@@ -461,7 +470,7 @@ const MainBs = memo(() => {
         Main.alert('Hay cambios pendientes. ¿Desea guardar los cambios?','Atencion!','confirm','Guardar','Cancelar',guardar,funcionCancelar)
     	}
     }else{
-      manejaF7('COD_PERSONA')
+      manejaF7('NOMBRE')
     };
     Main.setBuscar(FormName,!e)
   }
@@ -697,14 +706,14 @@ const MainBs = memo(() => {
     }    
   }
   //***************** CONTROL DE BLOQUEO ***********/
-  const bloqueoInput = ()=>{
+  const bloqueoInput = (f7 = true)=>{
 
     if(!refCab.current.data[getIndice()].inserted && !refCab.current.data[getIndice()].insertDefault){
       refCodPersona.current.input.readOnly = true;
       refNroDocumen.current.input.readOnly = permisoEspecial.includes("MODIFICA_DOCUMENTO") ? false : true;
     }else{
       refNroDocumen.current.input.readOnly = false;
-      refCodPersona.current.input.readOnly = false;
+      refCodPersona.current.input.readOnly = f7;
     }
 
     if(form.getFieldValue('COD_IDENT') === 'CI' || form.getFieldValue('COD_IDENT') === ''){

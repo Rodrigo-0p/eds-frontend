@@ -977,7 +977,8 @@ const MainST = memo(({history, location, match}) => {
       try {
         
         let extemcionImg    = banRef.current.uploadImg.name.split('.')[1]; 
-        let urlImg          = mainUrl.url_saveImg+sessionStorage.getItem('cod_empresa')`/${COD_ARTICULO}.${extemcionImg}`;
+        let vcod_empresa    = sessionStorage.getItem('cod_empresa');
+        let urlImg          = mainUrl.url_saveImg+vcod_empresa+`/${COD_ARTICULO}.${extemcionImg}`;
         await Main.RequestImg(urlImg, 'POST', banRef.current.uploadImg).then(async(resp) => {
           if(resp.status === 200){
             banRef.current.uploadImg = [];
@@ -1028,11 +1029,12 @@ const MainST = memo(({history, location, match}) => {
       <Main.Spin spinning={false} delay={500}>
         <Main.AntLayout defaultOpenKeys={defaultOpenKeys} defaultSelectedKeys={defaultSelectedKeys}>
           <Main.Paper className="paper-style">
-          <div className="paper-header">
-            <Main.Title level={4} className="title-color">
-              {TituloList}<div level={5} style={{ float: 'right', marginTop: '10px', marginRight: '5px', fontSize: '10px' }} className="title-color">{FormName}</div>
-            </Main.Title>
-          </div>
+            <Main.Helmet title={`${process.env.REACT_APP_TITULO} - ${TituloList}`} />
+            <div className="paper-header">
+              <Main.Title level={4} className="title-color">
+                {TituloList}<div level={5} style={{ float: 'right', margin:'5px', fontSize: '10px' }} className="title-color">{FormName}</div>
+              </Main.Title>
+            </div>
             <Main.HeaderMenu
               AddForm={()=>addRow()}
               SaveForm={guardar}

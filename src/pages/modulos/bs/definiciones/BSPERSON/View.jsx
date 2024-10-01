@@ -13,7 +13,9 @@ const BSPERSON = memo(({handleKeyDow  , handleKeyUp , handleInputChange,  form, 
         <Main.Row gutter={[8, 2]}>
           <Main.Col span={4}>
             <Main.Form.Item className='form-items' name="COD_PERSONA" type="text" label={<label style={{ marginLeft: '5px' }}>Codigo</label>} >
-              <Main.Input onKeyUp={handleKeyUp} onChange={handleInputChange} onKeyDown={handleKeyDow} ref={refs.refCodPersona} className='search_input' name="COD_PERSONA" />
+              <Main.Input className='search_input' name="COD_PERSONA"ref={refs.refCodPersona} onKeyDown={handleKeyDow} onKeyUp={handleKeyUp}
+                // onChange={handleInputChange}   
+               />
             </Main.Form.Item>
           </Main.Col>
           <Main.Col span={12}>
@@ -199,7 +201,7 @@ const BSPERSON = memo(({handleKeyDow  , handleKeyUp , handleInputChange,  form, 
 
           </Main.Col>
 
-          <Main.Col span={24} style={{ position: 'absolute', bottom: '40px', width: '80%',}}>
+          <Main.Col span={24} style={{ position: 'absolute', bottom: '50px', width: '80%',}}>
             <Main.Row>
               <Main.Col span={6}>
                 <Main.Form.Item name="ALTA_POR" label={<label style={{ width: '100px' }}>Creado Por</label>}>

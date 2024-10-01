@@ -111,7 +111,7 @@ const STENVIO = memo(({refGrid         ,form    ,FormName,  idComp, handleKeyDow
   }];
                       
   return (
-    <Main.Form size="small" autoComplete="off" form={form} style={{ marginTop: '1px', paddingLeft: '10px', paddingRight: '10px', paddingTop: '10px' }}>
+    <Main.Form size="small" autoComplete="off" form={form} style={{ marginTop: '1px', paddingLeft: '10px', paddingRight: '10px', paddingTop: '5px' }}>
       <Main.Row gutter={[4, 2]}>
 
         <Main.Col span={12} onClick={()=>setClickCell('CAB')}>
@@ -276,7 +276,7 @@ const STENVIO = memo(({refGrid         ,form    ,FormName,  idComp, handleKeyDow
             columns={columns}
             FormName={FormName}
             idComp={idComp}// id del componente
-            height={361}
+            height={355}
             setfocusRowIndex={setfocusRowIndex}
             columnNavigationEnter={columnNavigationEnter}
             setLastFocusNext={setLastFocusNext}

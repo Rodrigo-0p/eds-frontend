@@ -30,3 +30,11 @@
   opacity: 0;
   position: absolute;
 }
+
+.STARTICU_total_registro_pg{
+  color: #96a2b2;
+  float: left;
+  margin-top: -20px;
+  padding-bottom: 5px;
+  font-size: 12px;
+} 
