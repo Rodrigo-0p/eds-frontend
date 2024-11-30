@@ -343,7 +343,7 @@ const MainCc = memo(() => {
         ...form.getFieldsValue(), 
         TOT_COMPROBANTE : Main.currency(columnSum, { separator:'.',decimal:',',precision:p_decimales,symbol:''}).format(),
       });    
-  } 
+    } 
   }  
   const setfocusRowIndex = React.useCallback((valor,row,col)=>{
     if(!Main._.isNull(valor)){

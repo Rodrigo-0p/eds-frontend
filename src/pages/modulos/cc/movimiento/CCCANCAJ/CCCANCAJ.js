@@ -90,7 +90,10 @@ const MainCc = memo(({history, location}) => {
       console.log(error);
     }
   }
-  const funcionBuscar = ()=>{
+  const funcionBuscar = (e)=>{
+    let keyFuncion = (e)=>{return e};
+    let evento = {keyCode:e ? 119 : 118 , preventDefault:keyFuncion,target:{value:''}}
+    handleonkeydown(evento)
   }
   const cancelar = ()=>{
     Main.setModifico(FormName);
@@ -99,7 +102,7 @@ const MainCc = memo(({history, location}) => {
   const handleRadioChange = (e)=>{
     inicialForm(null,0,0,e.target.value)
   }
-  const handleonkeydown = React.useCallback((e)=>{    
+  const handleonkeydown = React.useCallback((e)=>{ 
     const hotInstance = refGrid.current.hotInstance;
     e.preventDefault();
     if(hotInstance){
@@ -108,6 +111,7 @@ const MainCc = memo(({history, location}) => {
       const selected = hotInstance?.getSelected() ? hotInstance?.getSelected()[0] : [0,0,0,0];
       if(e.keyCode === 118 && columnIndex.includes(selected[1])){
         Main.activarSpinner()
+        Main.setBuscar(FormName,true);
         hotInstance.loadData([]);
         let valor  = JSON.parse(JSON.stringify(mainInicial.objetoInicial));
         banRef.current.objetoF7 = valor
@@ -124,6 +128,7 @@ const MainCc = memo(({history, location}) => {
       }else if(columnIndex.includes(selected[1])){
         try {
           let data = banRef.current.objetoF7; 
+          Main.setBuscar(FormName,false);
           let nameColumn   = mainColumn.columns[selected[1]].data;       
           data[nameColumn] = e.target.value && e.target.value.length  > 0 ? 
                                                         e.target.value.trim().length             > 0 ? 
@@ -232,10 +237,28 @@ const MainCc = memo(({history, location}) => {
   }
   const openF4 = ()=>{
     console.log('entro aquiii',);
-    let data    = Main.nvl(refGrid.current.hotInstance.getSourceData(),[]);
-    let vFilter = data.filter(value => value.IND_AUTORIZAR === 'D');
-    console.log('esto es lo que trajo ',vFilter);
+    let data           = Main.nvl(refGrid.current.hotInstance.getSourceData(),[]);
+    let vind_autorizar = data.filter(value => value.IND_AUTORIZAR === 'D');
 
+    if(vind_autorizar.length > 0){
+      let url_form  = '/cc/ccmovcaj';
+      history.push({
+        TIP_PLANILLA : 'NIN',
+        COD_MONEDA   : vind_autorizar[0].COD_MONEDA,
+        COD_CLIENTE  : vind_autorizar[0].COD_CLIENTE,
+        NRO_PLANILLA : null ,
+        EXISTE       : 'N'  ,   
+        ORIGEN       : 'C' ,
+        pathname     : url_form,
+        rutaAtras    : '/cc/cccancaj',
+        state        : vind_autorizar,
+        rowData      : [],          
+        tabkey       : '',
+        columnIndex  : 0,
+        rowIndex     : 0,
+      })    
+    }
+    
     // declare verror   exception;
     //     vmensaje varchar2(400);
     // BEGIN

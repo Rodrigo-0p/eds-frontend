@@ -44,7 +44,6 @@ const MainCM = memo(({history, location}) => {
                                             , url_buscador: ''
                                             });
   React.useEffect(()=>{
-    setTimeout(async()=>{
       if(location.state !== undefined){
         setActivateAtras(true)
         let rowData = getParmas(true);
@@ -58,7 +57,6 @@ const MainCM = memo(({history, location}) => {
       }else{
         inicialForm();
       }
-    },65);
     // eslint-disable-next-line
   },[])
 
@@ -88,35 +86,42 @@ const MainCM = memo(({history, location}) => {
 		}
   }
   const inicialForm = async(f7_delete = false, idFocus = 'COD_SUCURSAL')=>{
-    let result_preForm = await get_PreFrom();
-    banRef.current.indice = 0;
-    let valor   = {...objetoInicialCab}
-    if(Object.keys(result_preForm).length > 0) valor   = {...valor, ...result_preForm}
-    form.resetFields();
-    let newKey = Main.uuidID()
-    valor.ID							  = newKey;
-    valor.COD_EMPRESA       = sessionStorage.cod_empresa;
-    valor.COD_SUCURSAL      = sessionStorage.cod_sucursal;
-    valor.DESC_SUCURSAL     = sessionStorage.desc_sucursal;
-    let date                = Main.moment().format('DD/MM/YYYY').toString();
-    valor.FEC_COMPROBANTE   = Main.dayjs(date,'DD/MM/YYYY');
-    valor.FEC_RECEPCION     = Main.dayjs(date,'DD/MM/YYYY');
-    if(!f7_delete) form.setFieldsValue(valor);
-    else Main.desactivarSpinner();
-    valor.FEC_COMPROBANTE   = Main.moment(valor.FEC_COMPROBANTE).format('DD/MM/YYYY');
-    valor.FEC_RECEPCION     = Main.moment(valor.FEC_RECEPCION).format('DD/MM/YYYY');
-    refCab.current.data     = [valor]
-    refCab.current.dataCan  = JSON.parse(JSON.stringify([valor]));
-    
-    if(!f7_delete)getDetalle(newKey,false,0);
-    else refGrid.current?.hotInstance.loadData([])
-
-    setTimeout( ()=> {				
-      document.getElementById(idFocus).select();
-		},20);
-    document.getElementById("indice").textContent         = "1"
-		document.getElementById("total_registro").textContent = "?";
-		document.getElementById("mensaje").textContent 				= "";
+    try {
+      let result_preForm = await get_PreFrom();
+      banRef.current.indice = 0;
+      let valor   = {...objetoInicialCab}
+      if(Object.keys(result_preForm).length > 0) valor   = {...valor, ...result_preForm}
+      form.resetFields();
+      let newKey = Main.uuidID()
+      valor.ID							  = newKey;
+      valor.COD_EMPRESA       = sessionStorage.cod_empresa;
+      valor.COD_SUCURSAL      = sessionStorage.cod_sucursal;
+      valor.DESC_SUCURSAL     = sessionStorage.desc_sucursal;
+      let date                = Main.moment().format('DD/MM/YYYY').toString();
+      valor.FEC_COMPROBANTE   = Main.dayjs(date,'DD/MM/YYYY');
+      valor.FEC_RECEPCION     = Main.dayjs(date,'DD/MM/YYYY');
+      if(!f7_delete) form.setFieldsValue(valor);
+      else Main.desactivarSpinner();
+      valor.FEC_COMPROBANTE   = Main.moment(valor.FEC_COMPROBANTE).format('DD/MM/YYYY');
+      valor.FEC_RECEPCION     = Main.moment(valor.FEC_RECEPCION).format('DD/MM/YYYY');
+      refCab.current.data     = [valor]
+      refCab.current.dataCan  = JSON.parse(JSON.stringify([valor]));
+      
+      if(!f7_delete)getDetalle(newKey,false,0);
+      else refGrid.current?.hotInstance.loadData([])
+  
+      setTimeout( ()=> {				
+        if(document.getElementById(idFocus)){
+          document.getElementById(idFocus).select();
+          document.getElementById("indice").textContent         = "1"
+          document.getElementById("total_registro").textContent = "?";
+          document.getElementById("mensaje").textContent 				= ""; 
+        }
+      },20);      
+    } catch (error) {
+      console.log(error)
+      Main.desactivarSpinner()
+    }    
   }
   const getParamsDetalle = async (idCabecera = false, indexRow = 0)=>{
     var newKey            = Main.uuidID();
@@ -132,9 +137,9 @@ const MainCM = memo(({history, location}) => {
     return valor;
   }
   const getDetalle = async (idCabecera, data = false,indexRow = 0,guardar = false)=>{
-    let dataParams = data ? data : await getParamsDetalle(idCabecera,indexRow);
-    var content = [];
     try {
+      let dataParams = data ? data : await getParamsDetalle(idCabecera,indexRow);
+      var content = [];
       var info = await Main.Request(mainUrl.url_list_detalle,'POST',dataParams);
       if(info?.data?.rows?.length === 0 || info?.data?.rows === undefined) content = [dataParams];
       else content = info.data.rows
@@ -145,16 +150,17 @@ const MainCM = memo(({history, location}) => {
       setTimeout(()=>{                
         ver_bloqueo();
         addClassAddGrid()
-        setTimeout(()=>Main.setFocusedRowIndex(0,undefined,refGrid,idComp),10);
+        if(refGrid.current) setTimeout(()=>Main.setFocusedRowIndex(0,undefined,refGrid,idComp),10);
         if(guardar)refGrid.current.hotInstance.selectCell(0,0);
       },15);
     } catch (error) {
+      Main.desactivarSpinner()
       console.error(error);
     }
   }
   const addClassAddGrid = async ()=>{  
     try {
-      let row = await refGrid.current.hotInstance.getSourceData();
+      let row = await  refGrid.current ? refGrid.current.hotInstance.getSourceData() : [];
       for (let a = 0; a < row.length; a++) {
         const items = row[a];
         if(items.IND_NUEVO === 'S'){
@@ -1131,34 +1137,42 @@ const MainCM = memo(({history, location}) => {
     } 
   }  
   const ver_bloqueo= async(f7 = false) =>{
-    let p_bloqueo_aux = form.getFieldValue('ESTADO') !== 'P' ? true : false;
-    let p_bloqueo     = form.getFieldValue('NRO_COMPROBANTE') === '' || form.getFieldValue('NRO_COMPROBANTE') === undefined ? false : true;
-    let input         = document.getElementsByClassName(`${FormName}_BLOQUEO`);
-    let input_aux     = document.getElementsByClassName(`${FormName}_BLOQUEO_AUX`);
+    try {
+      let p_bloqueo_aux = form.getFieldValue('ESTADO') !== 'P' ? true : false;
+      let p_bloqueo     = form.getFieldValue('NRO_COMPROBANTE') === '' || form.getFieldValue('NRO_COMPROBANTE') === undefined ? false : true;
+      let input         = document.getElementsByClassName(`${FormName}_BLOQUEO`);
+      let input_aux     = document.getElementsByClassName(`${FormName}_BLOQUEO_AUX`);
+      
+      for (let i = 0; i < input.length; i++) {
+        const element = input[i];
+        element.readOnly = p_bloqueo;
+      }
+  
+      for (let i = 0; i < input_aux.length; i++) {
+        const element = input_aux[i];
+        element.readOnly = p_bloqueo_aux;
+      }
+  
+      banRef.current.b_bloqueo     = p_bloqueo;
+      banRef.current.b_bloqueo_aux = p_bloqueo_aux;
+      let nro_comprobante = document.getElementsByClassName(`${FormName}_BLOQUEO_NRO_COMP`)
+      if(nro_comprobante && nro_comprobante.length > 0){
+        document.getElementsByClassName(`${FormName}_BLOQUEO_NRO_COMP`)[0].readOnly = !f7
+        Main.setBloqueoFecha(`${FormName}_FEC_COMPROBANTE`,p_bloqueo);
+        Main.setBloqueoFecha(`${FormName}_FEC_EMBARQUE`   ,p_bloqueo_aux);
+        Main.setBloqueoFecha(`${FormName}_FEC_RECEPCION`  ,p_bloqueo_aux);
     
-    for (let i = 0; i < input.length; i++) {
-      const element = input[i];
-      element.readOnly = p_bloqueo;
+        Main.setBloqueoRadio(`${FormName}_IND_TIPO_FACTURA`,p_bloqueo);   
+    
+    
+        setTimeout(()=>{
+          habilitar_columna()
+        },1); 
+      }      
+    } catch (error) {
+      Main.desactivarSpinner()
+      console.log(error);
     }
-
-    for (let i = 0; i < input_aux.length; i++) {
-      const element = input_aux[i];
-      element.readOnly = p_bloqueo_aux;
-    }
-
-    banRef.current.b_bloqueo     = p_bloqueo;
-    banRef.current.b_bloqueo_aux = p_bloqueo_aux;
-    document.getElementsByClassName(`${FormName}_BLOQUEO_NRO_COMP`)[0].readOnly = !f7
-    Main.setBloqueoFecha(`${FormName}_FEC_COMPROBANTE`,p_bloqueo);
-    Main.setBloqueoFecha(`${FormName}_FEC_EMBARQUE`   ,p_bloqueo_aux);
-    Main.setBloqueoFecha(`${FormName}_FEC_RECEPCION`  ,p_bloqueo_aux);
-
-    Main.setBloqueoRadio(`${FormName}_IND_TIPO_FACTURA`,p_bloqueo);   
-
-
-    setTimeout(()=>{
-      habilitar_columna()
-    },1);
   }
   const habilitar_columna = (vbloqueo)=>{
     vbloqueo = form.getFieldValue('ESTADO') !== 'P' ? true : false;

@@ -94,15 +94,21 @@ const MainVT = memo(() => {
     }
 
     // FILTER CAB
-    var dependencia         = [];
-    let url_get_cod         = `${mainUrl.url_buscar_cod_vededor}${cod_empresa}`
-    let infoCab            	= await Main.GeneraUpdateInsertCab(update_insert,'COD_VENDEDOR',url_get_cod,dependencia,true,false,true);
+    var dependencia         = [{'COD_PERSONA':'COD_PERSONA_ANT'}];
+    // let url_get_cod         = `${mainUrl.url_buscar_cod_vededor}${cod_empresa}`
+    let url_get_cod         = undefined
+    let infoCab            	= await Main.GeneraUpdateInsertCab(update_insert,'COD_VENDEDOR',url_get_cod,dependencia,false,false,true);
     var updateInserData     = infoCab.updateInsert;
     if(!permisoActualizacion) permisoActualizacion = infoCab.actualizar;
     if(!permisoIsertar)       permisoIsertar 	     = infoCab.insertar ;
     exitInsertedBand        = infoCab.insertar;
     var deleteCab           = refCab.current.delete[0] !== undefined && refCab.current.delete?.length > 0  ? refCab.current.delete : []
   
+    if(infoCab.insertar){
+      // eslint-disable-next-line 
+      updateInserData.map((itmes)=>itmes.COD_VENDEDOR = itmes.COD_PERSONA)
+    }
+
     var bandPermiso = false
     if(permisoActualizacion){
       let Permiso  = Main.VerificaPermiso(FormName)

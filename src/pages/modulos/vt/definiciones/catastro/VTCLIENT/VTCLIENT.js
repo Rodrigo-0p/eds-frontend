@@ -12,20 +12,9 @@ const FormName   = 'VTCLIENT';
 const TituloList = "Catastro Cliente";
 const idComp     = `GRID_${FormName}`
 
-var id_cabecera    	  = '';
-const set_id_cabecera = (e)=>{
-  id_cabecera = e;
-}
-const get_id_cabecera = ()=>{
-  return id_cabecera;
-}
-var indice = 0
+
 const setIndice = (e) => {
-  Main.setIndiceCabecera(e,idComp);
-  indice = e
-}
-const getIndice = () => {
-  return indice
+  Main.setIndiceCabecera(e,idComp);  
 }
 
 // CANTIDAD DE REGISTRO POR GET
@@ -76,7 +65,8 @@ const MainVt = memo(() => {
   //  UseRef
   const buttonSaveRef       = React.useRef();
   const refGrid             = React.useRef();
-  const refCab              = React.useRef({ data: [], dataCan:[]   , delete:[]   , activateCambio:false
+  const refCab              = React.useRef({ indice:0, bandNew:false , id_cabecera:'',
+                                             data: [], dataCan:[]   , delete:[]   , activateCambio:false
                                                      , dataCanDet:[], deleteDet:[]});
   const refModalData        = React.useRef()
   const refModal            = React.useRef({  modalColumn : []
@@ -103,6 +93,7 @@ const MainVt = memo(() => {
   // -----------------------------------------------------------------------------------------------
   const inicialForm = async (f7_delete = false, idFocus = 'COD_PERSONA')=>{
     setIndice(0);
+    refCab.current.indice   = 0
     var newKey 					    = Main.uuidID();
     let params              = await getPreForm()
     let valor  						  = JSON.parse(JSON.stringify(objetoinicialCab));
@@ -140,7 +131,7 @@ const MainVt = memo(() => {
     var update_insert_detalle = []
     if(refGrid.current.hotInstance) update_insert_detalle = refGrid.current.hotInstance.getSourceData();   
     
-    if(refGrid.current){
+    if(refGrid.current && refCab.current.delete.length === 0){
       let idGrid = {
         grid:{
           [idComp] : refGrid,
@@ -166,12 +157,14 @@ const MainVt = memo(() => {
 
     // FILTER CAB
     var dependencia_cab     = [];
-    // var rowCab              = refCab.current.data[getIndice()];
-    let url_get_cab_cod     = `${mainUrl.url_cod_cliente}${cod_empresa}`
-    let infoCab      	      = await Main.GeneraUpdateInsertCab(refCab.current.data,'COD_CLIENTE',url_get_cab_cod,dependencia_cab,true,false,true);
+    // var rowCab              = refCab.current.data[refCab.current.indice];
+    // let url_get_cab_cod     = `${mainUrl.url_cod_cliente}${cod_empresa}`
+    let url_get_cab_cod     = undefined;
+    let infoCab      	      = await Main.GeneraUpdateInsertCab(refCab.current.data,'COD_CLIENTE',url_get_cab_cod,dependencia_cab,false,false,true);
     var aux_cab	            = infoCab.rowsAux;
     var updateInserData     = infoCab.updateInsert;
-    let keyCabecera 			  = infoCab.rowsAux.length > 0 ?  infoCab.rowsAux[getIndice()]?.COD_CLIENTE : null;
+    // let keyCabecera 			  = infoCab.rowsAux.length > 0 ?  infoCab.rowsAux[refCab.current.indice]?.COD_CLIENTE : null;
+    let keyCabecera 			  = refCab.current.data[refCab.current.indice].COD_CLIENTE
     if(!permisoActualizacion) permisoActualizacion = infoCab.actualizar;
     if(!permisoIsertar)       permisoIsertar 	    = infoCab.insertar  ;
     var delete_cab          = refCab.current.delete[0] !== undefined && refCab.current.delete?.length > 0  ? refCab.current.delete : []
@@ -185,13 +178,20 @@ const MainVt = memo(() => {
         if(v_limite_credito > p_limite_credito){
           if(items.CAD_LIMITE_SUPERIOR === 'N'){
             bandLimiteCred = true
-            refCab.current.data[getIndice()].LIMITE_CREDITO = p_limite_credito
+            refCab.current.data[refCab.current.indice].LIMITE_CREDITO = p_limite_credito
             form.setFieldsValue({...form.getFieldsValue(),LIMITE_CREDITO : p_limite_credito});
             Main.alert('Usted no posee permiso para ingresar este limite de credito', '¡Atención!', 'alert', 'OK');
           }
         }
+        if(items.inserted){
+          aux_cab.map((items)=>items.COD_CLIENTE = items.COD_PERSONA);
+          items.COD_CLIENTE = items.COD_PERSONA;
+          keyCabecera       = items.COD_PERSONA;
+        } 
       }
     }
+
+    
     if(bandLimiteCred) return
     // FILTER DET
     var dependencia_det        = [];
@@ -234,7 +234,7 @@ const MainVt = memo(() => {
 
     var data = {
       updateInserData      ,
-      aux_updateInserData : refCab.current.dataCan[getIndice()],
+      aux_updateInserData : refCab.current.dataCan[refCab.current.indice],
       delete_cab	         , 
 
       updateInserDataDet   ,
@@ -327,7 +327,7 @@ const MainVt = memo(() => {
       Main.modifico(FormName)
       let rowValue    = Main.g_getRowFocus(idComp);
       let rowIndex    = index.index ? index.index + 1 : rowValue[0].rowIndex === 0 ? rowValue[0].rowIndex + 1  : rowValue[0].rowIndex === -1 ? 0 : rowValue[0].rowIndex;
-      let newRow      = await getParamsDetalle(false,getIndice());
+      let newRow      = await getParamsDetalle(false,refCab.current.indice);
 
       refGrid.current.hotInstance.alter('insert_row', rowIndex);
       refGrid.current.hotInstance.view.settings.data[rowIndex] = newRow;
@@ -350,7 +350,7 @@ const MainVt = memo(() => {
       setTimeout(()=>{
         Main.activarSpinner()
         form.resetFields();
-        refCab.current.delete[0] = refCab.current.data[getIndice()]
+        refCab.current.delete[0] = refCab.current.data[refCab.current.indice]
         inicialForm(true,'COD_PERSONA',true)
         Main.modifico(FormName)
       },10)
@@ -407,7 +407,7 @@ const MainVt = memo(() => {
     refCab.current.delete         = []
     refCab.current.deleteDet      = []
     Main.setBuscar(FormName,false);
-    if(refCab.current.data[getIndice()].insertDefault || refCab.current.data[getIndice()].inserted){
+    if(refCab.current.data[refCab.current.indice].insertDefault || refCab.current.data[refCab.current.indice].inserted){
       Main.desactivarSpinner()
       inicialForm()
     }else{
@@ -415,7 +415,7 @@ const MainVt = memo(() => {
       refCab.current.dataCan    = JSON.parse(JSON.stringify(refCab.current.data));
       mainInput.restablecerValida();
       Main.desactivarSpinner()
-      loadForm(refCab.current.data,getIndice())      
+      loadForm(refCab.current.data,refCab.current.indice)      
     }
   }
   const funcionBuscar = (e)=>{
@@ -441,13 +441,18 @@ const MainVt = memo(() => {
          rightData();
         break;
       case 'next-left':
-        if(refCab.current.data.length > 1){setIndice(0);leftData();} 
+        if(refCab.current.data.length > 1){
+          setIndice(0);
+          refCab.current.indice = 0;
+          leftData();
+        } 
         else Main.desactivarSpinner();
         break;
       case 'next-right':
         if(refCab.current.data.length > 1){
           let index =  refCab.current.data.length - 1
           setIndice(index);
+          refCab.current.indice = index
           postQueryCab(refCab.current.data[index],false,index);
           document.getElementById("indice").textContent = refCab.current.data.length;
         }
@@ -459,7 +464,7 @@ const MainVt = memo(() => {
   }
   const leftData = async() => {
 		if(!refCab.current.activateCambio){
-			var index = getIndice() - 1;
+			var index = refCab.current.indice - 1;
 			if(index < 0){
 				index = 0;
 				document.getElementById("mensaje").textContent = "Haz llegado al primer registro";
@@ -468,8 +473,9 @@ const MainVt = memo(() => {
 			}
 			document.getElementById("indice").textContent = index + 1;
 			setIndice(index);
-			var row = refCab.current.data[getIndice()]
-			if( id_cabecera !== row.ID ) id_cabecera = row.ID;
+      refCab.current.indice = index
+			var row = refCab.current.data[refCab.current.indice]
+			if( refCab.current.id_cabecera !== row.ID ) refCab.current.id_cabecera = row.ID;
 			loadForm(refCab.current.data);
 			Main.quitarClaseRequerido();
 		}else{
@@ -479,14 +485,15 @@ const MainVt = memo(() => {
 	const rightData = async() => {
 		if(!refCab.current.activateCambio){
 			if(refCab.current.data.length !== 1){
-				var index = getIndice() + 1;
-        if( get_id_cabecera() !== refCab.current.data[index]?.ID && !Main._.isUndefined(refCab.current.data[index]?.ID)){
-          set_id_cabecera(refCab.current.data[index].ID);
+				var index = refCab.current.indice + 1;
+        if( refCab.current.id_cabecera !== refCab.current.data[index]?.ID && !Main._.isUndefined(refCab.current.data[index]?.ID)){
+          refCab.current.id_cabecera = refCab.current.data[index].ID;
           setIndice(index);
+          refCab.current.indice = index;
           postQueryCab(refCab.current.data[index],false,index)
           document.getElementById("mensaje").textContent = "";
           document.getElementById("indice").textContent  = index + 1;
-          if(getIndice() > mitad_data && bandPost_Cab_Det){
+          if(refCab.current.indice > mitad_data && bandPost_Cab_Det){
             bandPost_Cab_Det = false;
             let params = { INDICE  : refCab.current.data.length, 
                            LIMITE  : data_len
@@ -555,8 +562,9 @@ const MainVt = memo(() => {
         refCab.current.data    = response;
         refCab.current.dataCan = JSON.parse(JSON.stringify(response));
         setIndice(0);
+        refCab.current.indice = 0;
         setTimeout(()=>{
-          postQueryCab(response[0],buttonF8,getIndice())                    
+          postQueryCab(response[0],buttonF8,refCab.current.indice)                    
         })
       }else{
         Main.desactivarSpinner();
@@ -601,7 +609,7 @@ const MainVt = memo(() => {
     }
   }
   const loadForm = async (data = [] , indice = false)=>{
-    let index  = await indice ? indice : getIndice()
+    let index  = await indice ? indice : refCab.current.indice
     let value  = await data[index] === undefined ? data : data[index];
     value.DESC_CIUDAD = ''
     value.BARRIO      = ''
@@ -648,7 +656,7 @@ const MainVt = memo(() => {
     setTimeout(()=>{
       form.setFieldsValue({
         ...form.getFieldsValue(),
-        IND_SUB_CLIENTE   : refCab.current.data[getIndice()].IND_SUB_CLIENTE === 'S' ? true : false,
+        IND_SUB_CLIENTE   : refCab.current.data[refCab.current.indice].IND_SUB_CLIENTE === 'S' ? true : false,
         DIRECCION         : content[0].DIRECCION         ? content[0].DIRECCION         : '',
         EMAIL             : content[0].EMAIL             ? content[0].EMAIL             : '',
         DESC_CIUDAD       : content[0].DESC_CIUDAD       ? content[0].DESC_CIUDAD       : '',
@@ -699,11 +707,11 @@ const MainVt = memo(() => {
     
       switch (e.target.id) {
         case 'LIMITE_CREDITO':
-          let p_limite_credito = Main.numerico(refCab.current.dataCan[getIndice()].LIMITE_CREDITO_ANT)
+          let p_limite_credito = Main.numerico(refCab.current.dataCan[refCab.current.indice].LIMITE_CREDITO_ANT)
           let v_limite_credito = Main.numerico(e.target.value)
           if(v_limite_credito > p_limite_credito){
-            if(refCab.current.data[getIndice()].CAD_LIMITE_SUPERIOR === 'N'){
-              refCab.current.data[getIndice()].LIMITE_CREDITO = p_limite_credito
+            if(refCab.current.data[refCab.current.indice].CAD_LIMITE_SUPERIOR === 'N'){
+              refCab.current.data[refCab.current.indice].LIMITE_CREDITO = p_limite_credito
               form.setFieldsValue({...form.getFieldsValue(),LIMITE_CREDITO : p_limite_credito});
               Main.alert('Usted no posee permiso para ingresar este limite de credito', '¡Atención!', 'alert', 'OK');
             }else{
@@ -748,7 +756,7 @@ const MainVt = memo(() => {
       e.preventDefault()
       let aux = '';
 
-      if(e.target.id === 'COD_CAUSAL' && refCab.current.data[getIndice()].BLOQUEAR_CLIENTE !== 'S'){
+      if(e.target.id === 'COD_CAUSAL' && refCab.current.data[refCab.current.indice].BLOQUEAR_CLIENTE !== 'S'){
         Main.alert('Usted no tiene permiso para bloquear el cliente', '¡Atención!', 'alert', 'OK');
         return
       }
@@ -808,7 +816,7 @@ const MainVt = memo(() => {
           ...form.getFieldsValue(),
           [x]: ''
         });
-        refCab.current.data[getIndice()][x] = '';
+        refCab.current.data[refCab.current.indice][x] = '';
       });
       // eslint-disable-next-line
       valorValida.rel.map((x) => {
@@ -816,7 +824,7 @@ const MainVt = memo(() => {
           ...form.getFieldsValue(),
           [x]: ''
         });
-        refCab.current.data[getIndice()][x] = '';
+        refCab.current.data[refCab.current.indice][x] = '';
       });
       if (valorValida.next !== ""){
         if (valorValida?.idFocus) document.getElementById(valorValida.next).focus();
@@ -841,6 +849,7 @@ const MainVt = memo(() => {
            data = { ...data, [x]:value, } }
           );
         data = { ...data, valor };
+        data.COD_EMPRESA = sessionStorage.getItem('cod_empresa')
         await Main.Request(valorValida.url, 'POST', data).then((resp) => {
           if (resp.data.outBinds.ret === 1) {
             valorValida.valor_ant = valor
@@ -850,7 +859,7 @@ const MainVt = memo(() => {
                 ...form.getFieldsValue(),
                 [x]: resp.data.outBinds[x]
               });
-              refCab.current.data[getIndice()][x] = resp.data.outBinds[x];
+              refCab.current.data[refCab.current.indice][x] = resp.data.outBinds[x];
             })
             // eslint-disable-next-line
             valorValida.rel.map(x => {
@@ -858,7 +867,7 @@ const MainVt = memo(() => {
                 ...form.getFieldsValue(),
                 [x]: ''
               });
-              refCab.current.data[getIndice()][x] = null;
+              refCab.current.data[refCab.current.indice][x] = null;
             });
             if (valorValida?.idFocus) document.getElementById(valorValida.next).focus();
             else if (valorValida?.idSelect) document.getElementById(valorValida.next).select();
@@ -886,7 +895,7 @@ const MainVt = memo(() => {
             ...form.getFieldsValue(),
             [key]: data[key]
           });
-          refCab.current.data[getIndice()][key] = data[key]
+          refCab.current.data[refCab.current.indice][key] = data[key]
         }
       }
       Main.modifico(FormName)
@@ -909,16 +918,16 @@ const MainVt = memo(() => {
     }
   }
   const typeEvent = ()=>{
-    if(refCab.current.data[getIndice()]['insertDefault']){
-      refCab.current.data[getIndice()].insertDefault      = false;
-      refCab.current.data[getIndice()].inserted 		      = true;
-      refCab.current.data[getIndice()].COD_USUARIO_ALTA	  = sessionStorage.getItem('cod_usuario');
-      refCab.current.data[getIndice()].FEC_ALTA           = Main.moment().format('DD/MM/YYYY');
+    if(refCab.current.data[refCab.current.indice]['insertDefault']){
+      refCab.current.data[refCab.current.indice].insertDefault      = false;
+      refCab.current.data[refCab.current.indice].inserted 		      = true;
+      refCab.current.data[refCab.current.indice].COD_USUARIO_ALTA	  = sessionStorage.getItem('cod_usuario');
+      refCab.current.data[refCab.current.indice].FEC_ALTA           = Main.moment().format('DD/MM/YYYY');
     }
-    if(!refCab.current.data[getIndice()]['updated'] && refCab.current.data[getIndice()]['inserted'] !== true){
-      refCab.current.data[getIndice()]['updated']         = true;
-      refCab.current.data[getIndice()].COD_USUARIO_MODI	  = sessionStorage.cod_usuario;
-      refCab.current.data[getIndice()].FEC_MODI           = Main.moment().format('DD/MM/YYYY');
+    if(!refCab.current.data[refCab.current.indice]['updated'] && refCab.current.data[refCab.current.indice]['inserted'] !== true){
+      refCab.current.data[refCab.current.indice]['updated']         = true;
+      refCab.current.data[refCab.current.indice].COD_USUARIO_MODI	  = sessionStorage.cod_usuario;
+      refCab.current.data[refCab.current.indice].FEC_MODI           = Main.moment().format('DD/MM/YYYY');
       refCab.current.activateCambio = true;      
       Main.modifico(FormName);
     } 
@@ -939,7 +948,7 @@ const MainVt = memo(() => {
   const handleInputChange = (e) => {
     Main.modifico(FormName)
     try {
-      refCab.current.data[getIndice()][e?.target?.id ? e?.target?.id : e.target.name ] = e?.target?.value;  
+      refCab.current.data[refCab.current.indice][e?.target?.id ? e?.target?.id : e.target.name ] = e?.target?.value;  
     } catch (error) {
       console.log(error)
     }
@@ -949,7 +958,7 @@ const MainVt = memo(() => {
     const { id, value} = e.target
     Main.modifico(FormName)
     try {
-      refCab.current.data[getIndice()][id] = Main.numerico(value);
+      refCab.current.data[refCab.current.indice][id] = Main.numerico(value);
     } catch (error) {
       console.log(error)
     }
@@ -965,7 +974,7 @@ const MainVt = memo(() => {
       bandNew = true;
       form.setFieldsValue({
         ...form.getFieldsValue(),
-        IND_SUB_CLIENTE   : refCab.current.data[getIndice()].IND_SUB_CLIENTE === 'S' ? true : false,
+        IND_SUB_CLIENTE   : refCab.current.data[refCab.current.indice].IND_SUB_CLIENTE === 'S' ? true : false,
         DIRECCION         : valor.DIRECCION,
         EMAIL             : valor.EMAIL,
         DESC_CIUDAD       : valor.DESC_CIUDAD,

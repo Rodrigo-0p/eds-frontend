@@ -48,19 +48,19 @@ const columnModal = {
     },
     COD_PAIS:{
       depende_de:[],
-      dependencia_de:[{id:'COD_PROVINCIA',label: 'Dpto.' ,  remove:true},
-                      {id:'COD_CIUDAD'   ,label: 'Ciudad',  remove:true}
+      dependencia_de:[{id:'COD_PROVINCIA',label: 'Dpto.' ,  remove:false},
+                      {id:'COD_CIUDAD'   ,label: 'Ciudad',  remove:false}
                       ],
       depende_ex_cab:[],
     },
     COD_PROVINCIA:{
-      depende_de    :[{id:'COD_PAIS'    ,label: 'Dpto.' , remove:true}],
-      dependencia_de:[{id:'COD_CIUDAD'  ,label: 'Ciudad', remove:true}],
+      depende_de    :[{id:'COD_PAIS'    ,label: 'Dpto.' , remove:false}],
+      dependencia_de:[{id:'COD_CIUDAD'  ,label: 'Ciudad', remove:false}],
       depende_ex_cab:[],
     },
     COD_CIUDAD:{
-      depende_de    :[{id:'COD_PAIS'     ,label: 'Dpto.', remove:true},
-                      {id:'COD_PROVINCIA',label: 'Dpto.', remove:true}
+      depende_de    :[{id:'COD_PAIS'     ,label: 'Dpto.', remove:false},
+                      {id:'COD_PROVINCIA',label: 'Dpto.', remove:false}
                      ],
       dependencia_de:[],
       depende_ex_cab:[],

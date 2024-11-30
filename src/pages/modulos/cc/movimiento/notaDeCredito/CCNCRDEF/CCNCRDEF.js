@@ -197,45 +197,60 @@ const MainCc = memo(({history, location}) => {
       exitInsertedBand
     }
     try {
-      await Main.Request(mainUrl.url_abm,"POST",data).then(async(resp) => {
-        Main.desactivarSpinner()
-        if(resp.data.ret === 1){
-          
-          Main.setModifico(FormName)
-          Main.message.success({
-            content  : resp.data.p_mensaje !== '' && resp.data.p_mensaje !== 'OK'? resp.data.p_mensaje : 'Procesado correctamente!!',
-            className: 'custom-class',
-            duration : 2,
-            style    : {
-            marginTop: '4vh',
-            },
-          });
-          
-          // eslint-disable-next-line
-          mainInput.validaInput.map( item => {
-            item.valor_ant = null;
-          });
-          
-          refCab.current.delete         = []
-          refCab.current.deleteDet      = []
-          
-          refCab.current.data        = infoCab.rowsAux
-          refCab.current.dataCan     = JSON.parse(JSON.stringify(refCab.current.data));
+      if(updateInserData.length   > 0 || delete_cab.length > 0 ||
+        updateInserDataDet.length > 0 || delete_Det.length > 0
+      ){
+        await Main.Request(mainUrl.url_abm,"POST",data).then(async(resp) => {
+          Main.desactivarSpinner()
+          if(resp.data.ret === 1){
+            
+            Main.setModifico(FormName)
+            Main.message.success({
+              content  : resp.data.p_mensaje !== '' && resp.data.p_mensaje !== 'OK'? resp.data.p_mensaje : 'Procesado correctamente!!',
+              className: 'custom-class',
+              duration : 2,
+              style    : {
+              marginTop: '4vh',
+              },
+            });
+            
+            // eslint-disable-next-line
+            mainInput.validaInput.map( item => {
+              item.valor_ant = null;
+            });
+            
+            refCab.current.delete         = []
+            refCab.current.deleteDet      = []
+            
+            refCab.current.data        = infoCab.rowsAux
+            refCab.current.dataCan     = JSON.parse(JSON.stringify(refCab.current.data));
 
-          if(refCab.current.delete.length > 0){
-            setTimeout(()=>inicialForm()); 
+            if(refCab.current.delete.length > 0){
+              setTimeout(()=>inicialForm()); 
+            }else{
+              postQueryCab(infoCab.rowsAux[banRef.current.indice],false,banRef.current.indice);
+            } 
+            setTimeout(()=>{
+              document.getElementById('NRO_COMPROBANTE').focus()
+              refCab.current.activateCambio = false;
+            })
+            
           }else{
-            postQueryCab(infoCab.rowsAux[banRef.current.indice],false,banRef.current.indice);
-          } 
-          setTimeout(()=>{
-            document.getElementById('NRO_COMPROBANTE').focus()
-            refCab.current.activateCambio = false;
-          })
-          
-        }else{
-          Main.alert(resp.data.p_mensaje, '¡Atención!', 'alert', 'OK')
-        }            
-      });
+            Main.alert(resp.data.p_mensaje, '¡Atención!', 'alert', 'OK')
+          }            
+        });
+      }else{
+        Main.message.info({
+          content  : `No encontramos cambios para guardar`,
+          className: 'custom-class',
+          duration : `${2}`,
+          style    : {
+              marginTop: '2vh',
+          },
+        });
+        Main.desactivarSpinner();
+        Main.setModifico(FormName);
+      }
     } catch (error) {
       Main.desactivarSpinner();
       console.log('Error en la funcion de Guardar ccncrdef',error)

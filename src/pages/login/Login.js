@@ -73,7 +73,7 @@ const Login = memo(({history}) => {
   const [form]  = Form.useForm();
   
   React.useEffect(()=>{
-    refUser.current.focus()
+    setTimeout(()=>refUser?.current?.focus(),100)    
   },[])
 
   if (sessionStorage.getItem("token")) {

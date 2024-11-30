@@ -119,9 +119,6 @@ const MaiST = memo(() => {
     refCab.current.data     = [valor]
     refCab.current.dataCan  = JSON.parse(JSON.stringify([valor]));
     
-
-    console.log( refCab.current.data);
-    
     getDetalle(newKey,false,0,f7_delete);
     setTimeout( ()=> {				
       document.getElementById(idFocus).focus();
@@ -146,23 +143,25 @@ const MaiST = memo(() => {
   const getDetalle = async (idCabecera, data = false,indexRow = 0,f7 = false)=>{ 
 
     let post_query_params = {
-      COD_EMPRESA: cod_empresa,
-      COD_SUCURSAL: form.getFieldValue('COD_SUCURSAL'),
-      COD_DEPOSITO: form.getFieldValue('COD_DEPOSITO'),
-      COD_MONEDA: form.getFieldValue('COD_MONEDA'),
-    }
+      COD_EMPRESA       : cod_empresa,
+      COD_SUCURSAL      : form.getFieldValue('COD_SUCURSAL'),
+      COD_DEPOSITO      : form.getFieldValue('COD_DEPOSITO'),
+      COD_MONEDA        : form.getFieldValue('COD_MONEDA'),
+      COD_VENDEDOR      : form.getFieldValue('COD_VENDEDOR'),
+      COD_LISTA_PRECIO  : form.getFieldValue('COD_LISTA_PRECIO'),
+      COD_MONEDA        : form.getFieldValue('COD_MONEDA')
+    } 
 
     let post_query = await Main.Request(mainUrl.url_list_post_query,'POST',post_query_params);
 
-    console.log( post_query );
-
-    form.setFieldsValue({
-      ...form.getFieldsValue(),
-      DESC_SUCURSAL: post_query.data.DESC_SUCURSAL,
-      DESC_DEPOSITO: post_query.data.DESC_DEPOSITO,
-      DESC_MONEDA: post_query.data.DESC_MONEDA,
-      DECIMALES: post_query.data.DECIMALES,
-    }); 
+    if(post_query.data && Object.keys(post_query.data).length > 0){
+      Object.keys(post_query.data).map((Key_value)=>{
+        form.setFieldsValue({
+          ...form.getFieldsValue(),        
+          [Key_value]:post_query.data[Key_value]
+        }); 
+      })      
+    }    
 
     let dataParams = data ? data : { COD_EMPRESA  : cod_empresa
                                   ,  NRO_COMPROBANTE:form.getFieldValue('NRO_COMPROBANTE')
@@ -647,10 +646,7 @@ const MaiST = memo(() => {
       refModal.current.ModalTitle   = items.title;
       refModal.current.modalColumn  = items.column;
       refModal.current.url_buscador = items.url;
-      // console.log( items );
       let info = await mainInput.validaInput.find( item  => item.input == e.target.id );
-      // console.log( info );
-      // console.log( info.data );
       let dataparams = {};
       for (let i = 0; i < info.data.length; i++) {
         const element = info.data[i];
@@ -658,8 +654,6 @@ const MaiST = memo(() => {
         dataparams = { ...dataparams, [key]: form.getFieldValue(`${element}`) ? form.getFieldValue(`${element}`) : '' }
       }
       dataparams.cod_empresa = cod_empresa;
-      // dataparams.valor = "";
-
       refModal.current.dataParams = dataparams;
       Main.activarSpinner();
       let aux = await getData( refModal.current.dataParams, items.url  );
@@ -703,8 +697,8 @@ const MaiST = memo(() => {
           if(getIndice() > mitad_data && refBandera.current.bandPost_Cab_Det){
             refBandera.current.bandPost_Cab_Det = false;
             let params = { INDICE  : refCab.current.data.length, 
-                            LIMITE  : data_len
-                          };  
+                           LIMITE  : data_len
+                         };  
             try {
               await Main.Request(mainUrl.url_list_cab,'POST',params)
                 .then(async (resp) => {              

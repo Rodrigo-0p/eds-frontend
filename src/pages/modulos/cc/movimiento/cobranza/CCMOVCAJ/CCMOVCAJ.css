@@ -1,0 +1,23 @@
+.CARD_CCMOVCAJ > .ant-card-body{
+  padding: 5px !important;
+}
+
+.tab_CCMOVCAJ > .ant-tabs-nav .ant-tabs-tab, .ant-tabs-card > div > .ant-tabs-card.ant-tabs-small > .ant-tabs-nav .ant-tabs-tab {
+  padding: 2px 9px !important;
+}
+
+.Button_CCMOVCAJ{
+  width: 99%;
+  height: 88% !important;
+  margin: 9px 5px 0px 4px;
+  background-color: #ffffff00;
+  box-shadow: 0 2px 0 rgb(78 132 175 / 0%);
+  color: #727993;
+  font-weight: 700;
+  border-color: #0a4b55;
+}
+
+.GRIDDET_CCMOVCAJ_htDatepickerHolder{
+  visibility: hidden;
+  position: fixed !important;
+}

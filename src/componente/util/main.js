@@ -32,6 +32,7 @@ import Fieldset                      from './Fieldset/Fieldset';
 import dayjs 												 from 'dayjs';
 import ImgCrop              				 from 'antd-img-crop';
 // Handsontable
+import HandsontableGridLarge				 from './handsontable/hadsontableLargeVolume/hadsontableLarge';
 import HandsontableGrid,{	
 		   g_getRowFocus  , setFocusedRowIndex
 		, setEventGlobal	, eventGlobal
@@ -41,7 +42,9 @@ import HandsontableGrid,{
 		, getCambiosPendiente  , limpiar_CambiosPendiente} 	
 																		from './handsontable/Handsontable';
 // eslint-disable-next-line
-import { hotTableRequerido } 			  from './handsontable/hotTableRequerido';
+import {  hotTableRequerido
+				, hotTableRequerido_allFormName
+				, hotTableRequerido_insert_update } 			  from './handsontable/hotTableRequerido';
 // FORM 1
 import {
 	message		, Spin	    , Row	    , Col	   ,
@@ -62,7 +65,7 @@ const mayuscula = (e) => {
 	e.target.value = ("" + e.target.value).toUpperCase();
 };
 
-const alert = (content = '',titulo = '',  type = 'info', desc_ok = 'Aceptar', desc_cancel = 'Cancelat', funcionAceptar = false , funcionCancelar= false,FormName = '') => {
+const alert = (content = '',titulo = '',  type = 'info', desc_ok = 'Aceptar', desc_cancel = 'Cancelar', funcionAceptar = false , funcionCancelar= false,FormName = '') => {
 	setTimeout(()=>{
 		Modal[type === 'alert' ? 'info' : type]({
 			title:<div className='titleModal'>{titulo}</div>,
@@ -75,7 +78,7 @@ const alert = (content = '',titulo = '',  type = 'info', desc_ok = 'Aceptar', de
 				if(funcionAceptar) funcionAceptar()
 				else Modal.destroyAll() 
 			},
-			okButtonProps:{className:`${FormName}_alert`},
+			okButtonProps:{className:`${FormName}_alert modal-ok_${FormName}`},
 			cancelText:desc_cancel,
 			onCancel() {
 				if(funcionCancelar) funcionCancelar()
@@ -281,7 +284,7 @@ const getData = async (data, url) => {
 const onKeyDownBloqueo = (e)=>{e.preventDefault()}
 
 const nvl = (value, defaultValue)=> {
-	return (value !== null && value !== undefined && value !== "") ? value : defaultValue;
+	return (value !== null && !_.isUndefined(value) && value !== undefined && value !== "") ? value : defaultValue;
 }
 
 const round = (number, decimals)=>{
@@ -311,7 +314,72 @@ const getBase64 = (file) => {
     // reader.onerror = error => reject(error);
   });
 }
+const aplicaMasc = (value) => {
+    
+	value = value.replace(/\D/g, '');// Elimina todos los caracteres no numéricos
 
+	if (value.length > 8) { 
+		value = value.slice(0, 8); // Limita la longitud a 8 dígitos
+	}
+
+	let formattedValue = '';// Construye el valor con la máscara aplicada
+
+	// Añade el día
+	if (value.length > 0) {
+		formattedValue += value.slice(0, 2);       // dd
+	}
+	if (value.length > 2) {
+		formattedValue += '/' + value.slice(2, 4); // mm
+	}
+	if (value.length > 4) {
+		formattedValue += '/' + value.slice(4, 8); // yyyy
+	}
+
+	return formattedValue;
+}
+const mascFecha = (e)=>new Promise((resuelve)=>{
+	const input          = e.target;
+	const oldValue       = input.value;
+	const cursorPosition = input.selectionStart;
+	
+	// Aplica la máscara al valor actual del input
+	const maskedValue = aplicaMasc(oldValue);
+	input.value = maskedValue;
+	
+	// Ajusta la posición del cursor después de aplicar la máscara
+	if (cursorPosition !== null) {
+			// Encuentra el nuevo cursor position después de la máscara
+			const oldMaskedValue    = aplicaMasc(oldValue.slice(0, cursorPosition));
+			const newCursorPosition = oldMaskedValue.length;
+	
+			input.selectionStart = input.selectionEnd = newCursorPosition;
+	}
+	resuelve(input.value)
+})
+const isValidDate = (dateString)=> {
+	let valor = {isDate:false,date:''}
+
+	const dateRegex = /^(\d{2})(\/)?(\d{2})\2(\d{4})$/;
+	if (!dateRegex.test(dateString)) {
+		return valor;
+	}
+
+	const [, day, , month, year] = dateString.match(dateRegex);
+
+	const dateObject = new Date(`${year}-${month}-${day}T00:00:00`);
+	
+	
+	if( dateObject.getDate()     === parseInt(day, 10)       &&
+			dateObject.getMonth()    === parseInt(month, 10) - 1 &&
+			dateObject.getFullYear() === parseInt(year, 10)){
+
+		let date     = `${day}/${month}/${year}`
+		valor.date   = date;     
+		valor.isDate = true
+	}
+
+	return valor
+}
 
 const Main = {
 	 Guardar	
@@ -383,6 +451,7 @@ const Main = {
 	, ModalHadsontable
 	// --------------------
 	, HandsontableGrid
+	, HandsontableGridLarge
 	, g_getRowFocus 
 	, setFocusedRowIndex
   , setEventGlobal	
@@ -396,6 +465,8 @@ const Main = {
 	, getCambiosPendiente
 	, limpiar_CambiosPendiente
 	, hotTableRequerido
+	, hotTableRequerido_allFormName
+	, hotTableRequerido_insert_update
 	, currency
 	, setBloqueoFecha
 	, getBloqueoFecha
@@ -415,6 +486,8 @@ const Main = {
 	, Igmpredefault
 	, ImgCrop
 	, Upload
+	, mascFecha
+	, isValidDate
 }
 
 

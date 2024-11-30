@@ -653,7 +653,7 @@ const MainVT = memo(() => {
       let aux = [];
       refModal.current.idInput = e.target.id
       let items = mainInput.ModalF9[e.target.id]
-      refModal.current.dataParams   = { cod_empresa, valor: 'null' }
+      refModal.current.dataParams   = { cod_empresa}
       refModal.current.ModalTitle   = items.title;
       refModal.current.modalColumn  = items.column;
       refModal.current.url_buscador = items.url;
