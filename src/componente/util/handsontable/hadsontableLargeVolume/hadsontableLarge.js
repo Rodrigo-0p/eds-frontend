@@ -8,9 +8,14 @@ import iconsReport             from '../../../../assets/icons/printer.png';
 import iconsRefresh            from '../../../../assets/icons/icons-refresh.svg';
 import _                       from 'underscore';
 import Handsontable            from 'handsontable' // No eliminar
+import numbro                  from 'numbro';
+import deDE                    from 'numbro/languages/de-DE';
+
 
 const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 const diasSemanaCorto = ["Dom", "Lun", "Mar", "Mier", "Juev", "Vier", "Sab"];
+numbro.registerLanguage(deDE);
+
 class KeyValueListEditor extends Handsontable.editors.HandsontableEditor {
   prepare(row, col, prop, td, value, cellProperties) {
     super.prepare(row, col, prop, td, value, cellProperties);

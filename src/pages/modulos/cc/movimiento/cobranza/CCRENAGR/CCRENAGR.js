@@ -67,6 +67,11 @@ const MainCc = memo(() => {
   }
   const inicialForm = async(idFocus = 'COD_CLIENTE')=>{
     let valor  = JSON.parse(JSON.stringify({...mainObjetInicial.objetoInicialCab}));
+    
+    valor.COD_EMPRESA  = sessionStorage.getItem('cod_empresa');
+    valor.COD_SUCURSAL = sessionStorage.getItem('cod_sucursal');
+    valor.COD_USUARIO  = sessionStorage.getItem('cod_usuario');
+
     let newKey = Main.uuidID()
     valor.ID	 = newKey;
     valor.COD_SUCURSAL = cod_sucursal;
@@ -119,8 +124,12 @@ const MainCc = memo(() => {
   const cancelar = ()=>{
     mainInput.restablecerValida()
     Main.setModifico(FormName);
-    refGrid.current?.hotInstance.loadData([]);
-    setTimeout(() =>inicialForm());    
+    if(Main.nvl(form.getFieldValue('COD_CLIENTE'),null) !== null){
+      buscarButton()
+    }else{
+      refGrid.current?.hotInstance.loadData([]);
+      setTimeout(() =>inicialForm());  
+    }
   }
   const setClickCell = ()=>{
     getTotal()

@@ -17,7 +17,7 @@ const CCRENAGR = memo(({refGrid         , form            , FormName, idComp,  h
         <Main.Row id={`form-cab-${FormName}`} gutter={[2,2]}>
           
           <Main.Col span={24}>
-            <Main.Form.Item label={<label style={{ width: '82px' }}>Sucursal</label>}>
+            <Main.Form.Item label={<label style={{ width: '60px' }}>Sucursal</label>}>
               <Main.Form.Item name="COD_SUCURSAL" style={{ width: '52px', display: 'inline-block', marginRight: '4px' }}>
                   <Main.Input onKeyDown={Main.onKeyDownBloqueo} readOnly={true} />
               </Main.Form.Item>
@@ -28,7 +28,7 @@ const CCRENAGR = memo(({refGrid         , form            , FormName, idComp,  h
           </Main.Col>
 
           <Main.Col span={24}>
-            <Main.Form.Item label={<label style={{ width: '82px' }}>Cobrador</label>}>
+            <Main.Form.Item label={<label style={{ width: '60px' }}>Cobrador</label>}>
               <Main.Form.Item name="COD_COBRADOR" style={{ width: '52px', display: 'inline-block', marginRight: '4px' }}>
                   <Main.Input onKeyDown={Main.onKeyDownBloqueo} readOnly={true} />
               </Main.Form.Item>
@@ -39,11 +39,11 @@ const CCRENAGR = memo(({refGrid         , form            , FormName, idComp,  h
           </Main.Col>
             
           <Main.Col span={24}>
-            <Main.Form.Item label={<label style={{ width: '82px' }}>Cliente</label>}>
-              <Main.Form.Item name="COD_CLIENTE" style={{ width: '52px', display: 'inline-block', marginRight: '4px' }}>
+            <Main.Form.Item label={<label style={{ width: '60px' }}>Cliente</label>}>
+              <Main.Form.Item name="COD_CLIENTE" style={{ width: '100px', display: 'inline-block', marginRight: '4px' }}>
                   <Main.Input onKeyDown={handleKeyDown} />
               </Main.Form.Item>
-              <Main.Form.Item name="DESC_CLIENTE" style={{ width: 'calc(100% - 57px)', display: 'inline-block' }}>
+              <Main.Form.Item name="DESC_CLIENTE" style={{ width: 'calc(100% - 105px)', display: 'inline-block' }}>
                   <Main.Input disabled/>
               </Main.Form.Item>
             </Main.Form.Item>
@@ -51,7 +51,7 @@ const CCRENAGR = memo(({refGrid         , form            , FormName, idComp,  h
           
           <Main.Col span={10}>
             <ConfigProvider locale={locale} >
-              <Main.Form.Item name="FECHA_DESDE" label={<label style={{width:'82px'}}>Periodo</label>}>
+              <Main.Form.Item name="FECHA_DESDE" label={<label style={{width:'60px'}}>Periodo</label>}>
                 <DatePicker
                   style={{width:'100%',height:'23px',textAlign:'right'}}
                   onKeyDown={(e)=>handleKeyDown(e)}
@@ -89,7 +89,7 @@ const CCRENAGR = memo(({refGrid         , form            , FormName, idComp,  h
           </Main.Col>
 
           <Main.Col span={24}>
-            <Main.Form.Item label={<label style={{ width: '82px' }}>Cuenta</label>}>
+            <Main.Form.Item label={<label style={{ width: '60px' }}>Cuenta</label>}>
               <Main.Form.Item name="NRO_CUENTA" style={{ width: '52px', display: 'inline-block', marginRight: '4px' }}>
                   <Main.Input onKeyDown={handleKeyDown} />
               </Main.Form.Item>

@@ -5,7 +5,7 @@ const columns = [
   { data: 'COD_CLIENTE'     , title: 'Cliente'    , width : 15  , className: 'htLeft'   , readOnly:true   },  
   { data: 'NOM_CLIENTE'     , title: 'Descripción', width : 100 , className: 'htLeft'   , readOnly:true    , textWrap:true }, 
   { data: 'SIGLAS'          , title: 'Mon.'       , width : 12  , className: 'htLeft'   , readOnly:true   },  
-  { data: 'SALDO_CUOTA'     , title: 'Monto'      , width : 30  , className: 'htRight'  , type:'numeric'   , format:{pattern: '0,0.000'}        , validaAllExterno:true},
+  { data: 'SALDO_CUOTA'     , title: 'Monto'      , width : 30  , className: 'htRight'  , type:'numeric'   , format:{pattern: '0,0',culture:'de-DE' } , validaAllExterno:true},
   { data: 'IND_AUTORIZAR'   , title: 'Aut.'       , width : 10  , className: 'htCenter' , readOnly:false   , type:'checkbox', checkbox:['D','N'], validaAllExterno:true},
   { data: 'IND_RUBRICAR'    , title: 'Rub.'       , width : 10  , className: 'htCenter' , readOnly:false   , type:'checkbox', checkbox:['R','N'], validaAllExterno:true},
   { data: 'BUTTON1'         , title: ''           , width : 9   , className: 'htCenter' , icon:"BI"        , type:'BUTTON'}

@@ -1,7 +1,8 @@
 import React                                from 'react';
 import { HotTable,HotColumn  }              from '@handsontable/react';
 import {registerLanguageDictionary, esMX }  from 'handsontable/i18n';
-
+import numbro                               from 'numbro';
+import deDE                                 from 'numbro/languages/de-DE';
 import Handsontable                         from 'handsontable' // No eliminar
 
 import iconsBinoculars                      from '../../../assets/icons/icons-binoculars.svg';
@@ -9,6 +10,8 @@ import iconsReport                          from '../../../assets/icons/printer.
 import IconSearch                           from '../../../assets/icons/icons-search.svg';
 
 import Main                                 from '../../util/main';
+
+
 
 import 'handsontable/dist/handsontable.full.min.css';
 import './handsontableGrid.css';
@@ -20,6 +23,8 @@ registerLanguageDictionary(esMX);
 let mes             = ["Enero"  , "Febrero","Marzo" , "Abril"    ,"Mayo"  , "Junio"  ,"Julio" ,"Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 let semana          = ["Domingo", "lunes"  ,"Martes", "Miercoles","Jueves", "Viernes","Sábado"];
 let diasSemanaCorto = ["Dom"    , "Lun"    ,"Mar"   , "Mier"     ,"Juev"  , "Vier"   , "Sab"  ];
+
+numbro.registerLanguage(deDE);
 
 
 class KeyValueListEditor extends Handsontable.editors.HandsontableEditor {
@@ -1669,7 +1674,7 @@ const HandsontableGrid = ({ refData                    , columns = []         , 
             className={col.className}
             readOnly={col.readOnly}
             columnSorting={col.sorter === true ? {headerAction:true} : {headerAction:false}}
-            numericFormat={ col.format ? col.format : { pattern:'0',culture:'de-DE' }}
+            numericFormat={ col.format ? col.format : { pattern:'0,0',culture:'de-DE' }}
           />     
         : col.type === 'BUTTON' ?
           <HotColumn

@@ -1,7 +1,7 @@
 const objetoInicialCab = {
-  COD_EMPRESA   : sessionStorage.cod_empresa,
-  COD_SUCURSAL  : sessionStorage.cod_sucursal,
-  COD_USUARIO   : sessionStorage.cod_usuario,
+  COD_EMPRESA   : sessionStorage.getItem('cod_empresa'),
+  COD_SUCURSAL  : sessionStorage.getItem('cod_sucursal'),
+  COD_USUARIO   : sessionStorage.getItem('cod_usuario'),
   DESC_SUCURSAL : '',
   DESC_CLIENTE  : '',
   // COD_SUBCLIENTE: 1,
